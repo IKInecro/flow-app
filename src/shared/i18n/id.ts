@@ -9,6 +9,7 @@ export const id: Record<string, string> = {
   'nav.source': 'Source',
   'nav.settings': 'Pengaturan',
   'nav.panel': 'Panel',
+  'top.command': 'Command palette (Ctrl+K)',
   'top.theme': 'Ganti tema',
   'top.untitled': 'Proyek tanpa judul',
   'top.saved': 'Tersimpan',

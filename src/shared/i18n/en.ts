@@ -9,6 +9,7 @@ export const en: Record<string, string> = {
   'nav.source': 'Source',
   'nav.settings': 'Settings',
   'nav.panel': 'Panel',
+  'top.command': 'Command palette (Ctrl+K)',
   'top.theme': 'Toggle theme',
   'top.untitled': 'Untitled project',
   'top.saved': 'Saved',

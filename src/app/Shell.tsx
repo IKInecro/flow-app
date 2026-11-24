@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { DesktopGate } from './DesktopGate'
 import { Sidebar } from './Sidebar'
 import { TopBar } from './TopBar'
+import { CommandPalette } from './CommandPalette'
 
 export function Shell() {
   return (
@@ -15,6 +16,7 @@ export function Shell() {
           </DesktopGate>
         </main>
       </div>
+      <CommandPalette />
     </div>
   )
 }

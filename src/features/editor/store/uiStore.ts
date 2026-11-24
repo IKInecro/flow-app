@@ -11,12 +11,14 @@ interface UiState {
   inspectorTab: InspectorTab
   inspectorPinned: boolean
   consoleMode: ConsoleMode
+  commandOpen: boolean
   selectedFunction: string
   selectedPath: string | null
   setSidebarPanel: (panel: SidebarPanel) => void
   setInspectorTab: (tab: InspectorTab) => void
   togglePinned: () => void
   setConsoleMode: (mode: ConsoleMode) => void
+  setCommandOpen: (open: boolean) => void
   select: (path: string | null) => void
   setSelectedFunction: (name: string) => void
   setTheme: (theme: Theme) => void
@@ -28,6 +30,7 @@ export const useUiStore = create<UiState>((set) => ({
   inspectorTab: 'properties',
   inspectorPinned: false,
   consoleMode: 'chat',
+  commandOpen: false,
   selectedFunction: 'Main',
   selectedPath: null,
 
@@ -35,6 +38,7 @@ export const useUiStore = create<UiState>((set) => ({
   setInspectorTab: (inspectorTab) => set({ inspectorTab }),
   togglePinned: () => set((state) => ({ inspectorPinned: !state.inspectorPinned })),
   setConsoleMode: (consoleMode) => set({ consoleMode }),
+  setCommandOpen: (commandOpen) => set({ commandOpen }),
   select: (selectedPath) => set({ selectedPath }),
   setSelectedFunction: (selectedFunction) => set({ selectedFunction, selectedPath: null }),
   setTheme: (theme) => {

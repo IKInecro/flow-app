@@ -11,6 +11,8 @@ import { FlowCanvas } from './canvas/FlowCanvas'
 import { FunctionPanel } from './inspector/FunctionPanel'
 import { Inspector } from './inspector/Inspector'
 import { SourcePanel } from '../codegen/SourcePanel'
+import { FileMenu } from './export/FileMenu'
+import { useShortcuts } from './useShortcuts'
 import { CallStack } from '../run/CallStack'
 import { ConsoleDock } from '../run/ConsoleDock'
 import { RunToolbar } from '../run/RunToolbar'
@@ -27,6 +29,7 @@ const SAVE_LABEL: Record<string, string> = {
 }
 
 export function EditorPage() {
+  useShortcuts()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const load = useProjectStore((state) => state.load)
@@ -106,6 +109,7 @@ export function EditorPage() {
           <span className={`editor__save editor__save--${saveState}`}>{SAVE_LABEL[saveState]}</span>
         </div>
         <div className="editor__actions">
+          <FileMenu />
           <button
             type="button"
             className="icon-button"
