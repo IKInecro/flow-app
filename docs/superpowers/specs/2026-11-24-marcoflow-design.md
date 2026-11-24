@@ -239,9 +239,26 @@ type RuntimeEvent =
   | { type: 'breakpoint'; path: string }
   | { type: 'callEnter'; function: string; args: Value[]; path: string }
   | { type: 'callExit'; function: string; returnValue?: Value }
+  | { type: 'snapshot'; frames: FrameSnapshot[] }
   | { type: 'error'; error: RuntimeError }
   | { type: 'done' }
+
+interface FrameSnapshot {
+  functionName: string
+  variables: VariableSnapshot[]
+}
+
+interface VariableSnapshot {
+  name: string
+  type: FlowType
+  value: string
+  arrayItems?: { index: number; value: string }[]
+}
 ```
+
+`snapshot` is emitted after every `nodeEnter` and `inputAccept` so the UI can
+update the variable watch and call stack without reaching into interpreter
+internals.
 
 - Input: generator yields `inputRequest`, UI resolves a promise with typed text;
   invalid conversion re-prompts with a friendly error.
