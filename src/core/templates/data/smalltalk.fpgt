@@ -1,0 +1,105 @@
+[Language]
+name = Smalltalk
+extension = st
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = Integer
+Real = Float
+String = String
+Boolean = Boolean
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = raisedTo:
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = =
+neq = ~=
+and = and:
+or = or:
+not = not
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = {names} := Array new: {size}.
+~array line = {names} := {zero}.
+
+[Assign]
+line = {target} := {expression}.
+
+[Input]
+line = {variable} := FillInTheBlankRequest new request.
+
+[Output]
+line = Transcript showln: {expression}.
+
+[If]
+line = ({condition}) ifTrue: [
+indent
+line = {then}
+dedent
+line = ] ifFalse: [
+indent
+line = {else}
+dedent
+line = ].
+
+[While]
+line = [ {condition} ] whileTrue: [
+indent
+line = {body}
+dedent
+line = ].
+
+[Do]
+line = [ 
+indent
+line = {body}
+dedent
+line = ] doWhileFalse: [ ~({condition}) ].
+
+[For]
+line = {start} to: {end} do: [ :{variable} |
+indent
+line = {body}
+dedent
+line = ].
+
+[Call]
+line = {function} value: {args}.
+
+[Comment]
+line = " {text} "
+
+[Breakpoint]
+line = " breakpoint "
+
+[Function]
+line = {name}: {params}
+indent
+line = {body}
+returns line = ^ {returnName}
+dedent
+
+[Param]
+line = {name}

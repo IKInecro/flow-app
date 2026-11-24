@@ -1,0 +1,101 @@
+[Language]
+name = Nim
+extension = nim
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int
+Real = float
+String = string
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = var {names}: array[{size}, {type}]
+~array line = var {names}: {type} = {zero}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = {variable} = parseInt(stdin.readLine())
+
+[Output]
+line = echo {expression}
+
+[If]
+line = if {condition}:
+indent
+line = {then}
+dedent
+else line = else:
+else indent
+else line = {else}
+else dedent
+
+[While]
+line = while {condition}:
+indent
+line = {body}
+dedent
+
+[Do]
+line = while true:
+indent
+line = {body}
+dedent
+
+[For]
+line = for {variable} in {start}..{end}:
+indent
+line = {body}
+dedent
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = # {text}
+
+[Breakpoint]
+line = # breakpoint
+
+[Function]
+line = proc {name}({params}): {returnType} =
+indent
+line = {body}
+returns line = return {returnName}
+dedent
+
+[Param]
+line = {name}: {type}

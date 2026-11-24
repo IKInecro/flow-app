@@ -1,0 +1,111 @@
+[Language]
+name = Fortran 2003
+extension = f90
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = integer
+Real = real
+String = character(len=:), allocatable
+Boolean = logical
+
+[Literals]
+line = "{value}"
+true = .true.
+false = .false.
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = **
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = /=
+and = .and.
+or = .or.
+not = .not.
+
+[Program]
+line = program {name}
+indent
+line = {main}
+dedent
+line = contains
+line = {functions}
+line = end program {name}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = {type}, dimension({size}) :: {names}
+~array line = {type} :: {names}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = read(*,*) {variable}
+
+[Output]
+line = print *, {expression}
+
+[If]
+line = if ({condition}) then
+indent
+line = {then}
+dedent
+else line = else
+else indent
+else line = {else}
+else dedent
+line = end if
+
+[While]
+line = do while ({condition})
+indent
+line = {body}
+dedent
+line = end do
+
+[Do]
+line = do
+indent
+line = {body}
+dedent
+line = if (.not. ({condition})) exit
+line = end do
+
+[For]
+line = do {variable} = {start}, {end}, {step}
+indent
+line = {body}
+dedent
+line = end do
+
+[Call]
+line = call {function}({args})
+
+[Comment]
+line = ! {text}
+
+[Breakpoint]
+line = ! breakpoint
+
+[Function]
+line = function {name}({params}) result({returnName})
+indent
+line = {body}
+dedent
+line = end function {name}
+
+[Param]
+line = {name}

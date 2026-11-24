@@ -1,0 +1,107 @@
+[Language]
+name = Bash
+extension = sh
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = integer
+Real = float
+String = string
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = **
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = #!/usr/bin/env bash
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = {names}=()
+~array line = {names}={zero}
+
+[Assign]
+line = {target}={expression}
+
+[Input]
+line = read -r {variable}
+
+[Output]
+line = echo {expression}
+
+[If]
+line = if (( {condition} )); then
+indent
+line = {then}
+dedent
+else line = else
+else indent
+else line = {else}
+else dedent
+line = fi
+
+[While]
+line = while (( {condition} )); do
+indent
+line = {body}
+dedent
+line = done
+
+[Do]
+line = while true; do
+indent
+line = {body}
+dedent
+line = done
+
+[For]
+line = for (( {variable} = {start}; {variable} <= {end}; {variable} += {step} )); do
+indent
+line = {body}
+dedent
+line = done
+
+[Call]
+line = {function} {args}
+
+[Comment]
+line = # {text}
+
+[Breakpoint]
+line = # breakpoint
+
+[Function]
+line = {name}() {
+indent
+line = {body}
+returns line = echo {returnName}
+dedent
+line = }
+
+[Param]
+line = {name}

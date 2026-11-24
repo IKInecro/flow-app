@@ -1,0 +1,111 @@
+[Language]
+name = Perl
+extension = pl
+call = {name}({args})
+index = {name}[{index}]
+variable = ${name}
+
+[Types]
+Integer = int
+Real = double
+String = string
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = my {names} = [({zero}) x {size}];
+~array line = my {names} = {zero};
+
+[Assign]
+line = {target} = {expression};
+
+[Input]
+line = chomp({variable} = <STDIN>);
+
+[Output]
+line = print {expression}, "\n";
+
+[If]
+line = if ({condition}) {
+indent
+line = {then}
+dedent
+line = }
+else line = else {
+else indent
+else line = {else}
+else dedent
+else line = }
+
+[While]
+line = while ({condition}) {
+indent
+line = {body}
+dedent
+line = }
+
+[Do]
+line = do {
+indent
+line = {body}
+dedent
+line = } while ({condition});
+
+[For]
+~step dec line = for ({variable} = {start}; {variable} >= {end}; {variable} -= {step}) {
+~step ~dec line = for ({variable} = {start}; {variable} <= {end}; {variable} += {step}) {
+step dec line = for ({variable} = {start}; {variable} >= {end}; {variable}--) {
+step ~dec line = for ({variable} = {start}; {variable} <= {end}; {variable}++) {
+indent
+line = {body}
+dedent
+line = }
+
+[Call]
+line = {function}({args});
+
+[Comment]
+line = # {text}
+
+[Breakpoint]
+line = # breakpoint
+
+[Function]
+line = sub {name} {
+indent
+line = {body}
+returns line = return {returnName};
+dedent
+line = }
+
+[Param]
+line = my {name}

@@ -1,0 +1,119 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`cpp renders the arrays sample 1`] = `
+"#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+  int a[3];
+  int i = 0;
+  for (i = 0; i <= 2; i++) {
+    a[i] = i * 2;
+    cout << a[i] << endl;
+  }
+  return 0;
+}
+"
+`;
+
+exports[`cpp renders the factorial sample 1`] = `
+"#include <iostream>
+#include <string>
+using namespace std;
+int Factorial(int n) {
+  int result = 0;
+  if (n <= 1) {
+    result = 1;
+  }
+  else {
+    result = n * Factorial(n - 1);
+  }
+  return result;
+}
+int main() {
+  cout << Factorial(5) << endl;
+  return 0;
+}
+"
+`;
+
+exports[`java renders the arrays sample 1`] = `
+"import java.util.Scanner;
+public class Arrays {
+  public static void main(String[] args) {
+    int[] a = new int[3];
+    int i = 0;
+    for (i = 0; i <= 2; i++) {
+      a[i] = i * 2;
+      System.out.println(a[i]);
+    }
+  }
+}
+"
+`;
+
+exports[`java renders the factorial sample 1`] = `
+"import java.util.Scanner;
+public class Factorial {
+  static int Factorial(int n) {
+    int result = 0;
+    if (n <= 1) {
+      result = 1;
+    }
+    else {
+      result = n * Factorial(n - 1);
+    }
+    return result;
+  }
+  public static void main(String[] args) {
+    System.out.println(Factorial(5));
+  }
+}
+"
+`;
+
+exports[`javascript renders the arrays sample 1`] = `
+"let a = new Array(3).fill(0);
+let i = 0;
+for (i = 0; i <= 2; i++) {
+  a[i] = i * 2;
+  console.log(a[i]);
+}
+"
+`;
+
+exports[`javascript renders the factorial sample 1`] = `
+"function Factorial(n) {
+  let result = 0;
+  if (n <= 1) {
+    result = 1;
+  }
+  else {
+    result = n * Factorial(n - 1);
+  }
+  return result;
+}
+console.log(Factorial(5));
+"
+`;
+
+exports[`python renders the arrays sample 1`] = `
+"a = [0] * 3
+i = 0
+for i in range(0, 2 + 1):
+  a[i] = i * 2
+  print(a[i])
+"
+`;
+
+exports[`python renders the factorial sample 1`] = `
+"def Factorial(n):
+  result = 0
+  if n <= 1:
+    result = 1
+  else:
+    result = n * Factorial(n - 1)
+  return result
+print(Factorial(5))
+"
+`;

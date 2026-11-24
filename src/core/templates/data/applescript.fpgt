@@ -1,0 +1,106 @@
+[Language]
+name = AppleScript
+extension = applescript
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int
+Real = double
+String = string
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = =
+neq = is not
+and = and
+or = or
+not = not
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = set {names} to {{}}
+~array line = set {names} to {zero}
+
+[Assign]
+line = set {target} to {expression}
+
+[Input]
+line = set {variable} to text returned of (display dialog "Input" default answer "")
+
+[Output]
+line = log {expression}
+
+[If]
+line = if {condition} then
+indent
+line = {then}
+dedent
+else line = else
+else indent
+else line = {else}
+else dedent
+line = end if
+
+[While]
+line = repeat while {condition}
+indent
+line = {body}
+dedent
+line = end repeat
+
+[Do]
+line = repeat
+indent
+line = {body}
+dedent
+line = end repeat
+
+[For]
+line = repeat with {variable} from {start} to {end}
+indent
+line = {body}
+dedent
+line = end repeat
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = -- {text}
+
+[Breakpoint]
+line = -- breakpoint
+
+[Function]
+line = on {name}({params})
+indent
+line = {body}
+returns line = return {returnName}
+dedent
+line = end {name}
+
+[Param]
+line = {name}

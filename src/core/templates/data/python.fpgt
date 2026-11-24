@@ -1,0 +1,109 @@
+[Language]
+name = Python
+extension = py
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int
+Real = float
+String = str
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = True
+false = False
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = **
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = and
+or = or
+not = not
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = {names} = [{zero}] * {size}
+~array line = {names} = {zero}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = {variable} = input()
+
+[Output]
+line = print({expression})
+
+[If]
+line = if {condition}:
+indent
+line = {then}
+dedent
+else line = else:
+else indent
+else line = {else}
+else dedent
+
+[While]
+line = while {condition}:
+indent
+line = {body}
+dedent
+
+[Do]
+line = while True:
+indent
+line = {body}
+indent
+line = if not ({condition}):
+indent
+line = break
+dedent
+dedent
+
+[For]
+~step dec line = for {variable} in range({start}, {end} - 1, -{step}):
+~step ~dec line = for {variable} in range({start}, {end} + 1, {step}):
+step dec line = for {variable} in range({start}, {end} - 1, -1):
+step ~dec line = for {variable} in range({start}, {end} + 1):
+indent
+line = {body}
+dedent
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = # {text}
+
+[Breakpoint]
+line = # breakpoint
+
+[Function]
+line = def {name}({params}):
+indent
+line = {body}
+returns line = return {returnName}
+dedent
+
+[Param]
+line = {name}

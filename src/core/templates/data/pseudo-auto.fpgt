@@ -1,0 +1,110 @@
+[Language]
+name = Pseudocode (Auto)
+extension = txt
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int
+Real = double
+String = string
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = True
+false = False
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = {functions}
+line = Main
+indent
+line = {main}
+dedent
+line = End
+
+[Main]
+line = {body}
+
+[Declare]
+array line = Declare {type} {names}[{size}]
+~array line = Declare {type} {names}
+
+[Assign]
+line = Set {target} = {expression}
+
+[Input]
+line = Input {variable}
+
+[Output]
+line = Display {expression}
+
+[If]
+line = If {condition} Then
+indent
+line = {then}
+dedent
+else line = Else
+else indent
+else line = {else}
+else dedent
+line = End If
+
+[While]
+line = While {condition}
+indent
+line = {body}
+dedent
+line = End While
+
+[Do]
+line = Do
+indent
+line = {body}
+dedent
+line = While {condition}
+
+[For]
+line = For {variable} = {start} To {end} Step {step}
+indent
+line = {body}
+dedent
+line = Next {variable}
+
+[Call]
+line = Call {function}({args})
+
+[Comment]
+line = // {text}
+
+[Breakpoint]
+line = // breakpoint
+
+[Function]
+line = Function {name}({params})
+indent
+line = {body}
+returns line = Return {returnName}
+dedent
+line = End Function
+
+[Param]
+line = {type} {name}

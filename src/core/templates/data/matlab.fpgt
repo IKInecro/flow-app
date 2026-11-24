@@ -1,0 +1,109 @@
+[Language]
+name = MATLAB
+extension = m
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int32
+Real = double
+String = char
+Boolean = logical
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = ~=
+and = &&
+or = ||
+not = ~
+
+[Program]
+line = {main}
+line = {functions}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = {names} = zeros(1, {size});
+~array line = {names} = {zero};
+
+[Assign]
+line = {target} = {expression};
+
+[Input]
+line = {variable} = input("");
+
+[Output]
+line = disp({expression});
+
+[If]
+line = if {condition}
+indent
+line = {then}
+dedent
+else line = else
+else indent
+else line = {else}
+else dedent
+line = end
+
+[While]
+line = while {condition}
+indent
+line = {body}
+dedent
+line = end
+
+[Do]
+line = while true
+indent
+line = {body}
+dedent
+line = if ~({condition})
+indent
+line = break;
+dedent
+line = end
+
+[For]
+line = for {variable} = {start}:{step}:{end}
+indent
+line = {body}
+dedent
+line = end
+
+[Call]
+line = {function}({args});
+
+[Comment]
+line = % {text}
+
+[Breakpoint]
+line = % breakpoint
+
+[Function]
+line = function {returnName} = {name}({params})
+indent
+line = {body}
+dedent
+line = end
+
+[Param]
+line = {name}

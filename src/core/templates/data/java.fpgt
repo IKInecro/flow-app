@@ -1,0 +1,119 @@
+[Language]
+name = Java
+extension = java
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int
+Real = double
+String = String
+Boolean = boolean
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = import java.util.Scanner;
+line = public class {name} {
+indent
+line = {functions}
+line = {main}
+dedent
+line = }
+
+[Main]
+line = public static void main(String[] args) {
+indent
+line = {body}
+dedent
+line = }
+
+[Declare]
+array line = {type}[] {names} = new {type}[{size}];
+~array line = {type} {names} = {zero};
+
+[Assign]
+line = {target} = {expression};
+
+[Input]
+line = {variable} = Integer.parseInt(new Scanner(System.in).nextLine());
+
+[Output]
+line = System.out.println({expression});
+
+[If]
+line = if ({condition}) {
+indent
+line = {then}
+dedent
+line = }
+else line = else {
+else indent
+else line = {else}
+else dedent
+else line = }
+
+[While]
+line = while ({condition}) {
+indent
+line = {body}
+dedent
+line = }
+
+[Do]
+line = do {
+indent
+line = {body}
+dedent
+line = } while ({condition});
+
+[For]
+~step dec line = for ({variable} = {start}; {variable} >= {end}; {variable} -= {step}) {
+~step ~dec line = for ({variable} = {start}; {variable} <= {end}; {variable} += {step}) {
+step dec line = for ({variable} = {start}; {variable} >= {end}; {variable}--) {
+step ~dec line = for ({variable} = {start}; {variable} <= {end}; {variable}++) {
+indent
+line = {body}
+dedent
+line = }
+
+[Call]
+line = {function}({args});
+
+[Comment]
+line = // {text}
+
+[Breakpoint]
+line = // breakpoint
+
+[Function]
+line = static {returnType} {name}({params}) {
+indent
+line = {body}
+returns line = return {returnName};
+dedent
+line = }
+
+[Param]
+line = {type} {name}{arraySuffix}

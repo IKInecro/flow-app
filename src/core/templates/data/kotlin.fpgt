@@ -1,0 +1,114 @@
+[Language]
+name = Kotlin
+extension = kt
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = Int
+Real = Double
+String = String
+Boolean = Boolean
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = fun main() {
+indent
+line = {body}
+dedent
+line = }
+
+[Declare]
+array line = var {names} = Array({size}) { {zero} }
+~array line = var {names}: {type} = {zero}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = {variable} = readLine()!!.toInt()
+
+[Output]
+line = println({expression})
+
+[If]
+line = if ({condition}) {
+indent
+line = {then}
+dedent
+line = }
+else line = else {
+else indent
+else line = {else}
+else dedent
+else line = }
+
+[While]
+line = while ({condition}) {
+indent
+line = {body}
+dedent
+line = }
+
+[Do]
+line = do {
+indent
+line = {body}
+dedent
+line = } while ({condition});
+
+[For]
+~step dec line = for ({variable} in {start} downTo {end} step {step}) {
+~step ~dec line = for ({variable} in {start}..{end} step {step}) {
+step dec line = for ({variable} in {start} downTo {end}) {
+step ~dec line = for ({variable} in {start}..{end}) {
+indent
+line = {body}
+dedent
+line = }
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = // {text}
+
+[Breakpoint]
+line = // breakpoint
+
+[Function]
+line = fun {name}({params}): {returnType} {
+indent
+line = {body}
+returns line = return {returnName}
+dedent
+line = }
+
+[Param]
+line = {name}: {type}

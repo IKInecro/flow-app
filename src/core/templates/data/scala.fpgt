@@ -1,0 +1,118 @@
+[Language]
+name = Scala
+extension = scala
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = Int
+Real = Double
+String = String
+Boolean = Boolean
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = object {name} {
+indent
+line = {functions}
+line = {main}
+dedent
+line = }
+
+[Main]
+line = def main(args: Array[String]): Unit = {
+indent
+line = {body}
+dedent
+line = }
+
+[Declare]
+array line = var {names} = Array.fill({size})({zero})
+~array line = var {names}: {type} = {zero}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = {variable} = scala.io.StdIn.readInt()
+
+[Output]
+line = println({expression})
+
+[If]
+line = if ({condition}) {
+indent
+line = {then}
+dedent
+line = }
+else line = else {
+else indent
+else line = {else}
+else dedent
+else line = }
+
+[While]
+line = while ({condition}) {
+indent
+line = {body}
+dedent
+line = }
+
+[Do]
+line = do {
+indent
+line = {body}
+dedent
+line = } while ({condition});
+
+[For]
+~step dec line = for ({variable} <- {start} to {end} by -{step}) {
+~step ~dec line = for ({variable} <- {start} to {end} by {step}) {
+step dec line = for ({variable} <- {start} to {end} by -1) {
+step ~dec line = for ({variable} <- {start} to {end}) {
+indent
+line = {body}
+dedent
+line = }
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = // {text}
+
+[Breakpoint]
+line = // breakpoint
+
+[Function]
+line = def {name}({params}): {returnType} = {
+indent
+line = {body}
+returns line = return {returnName}
+dedent
+line = }
+
+[Param]
+line = {name}: {type}

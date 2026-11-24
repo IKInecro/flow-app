@@ -1,0 +1,107 @@
+[Language]
+name = QBasic
+extension = bas
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = INTEGER
+Real = DOUBLE
+String = STRING
+Boolean = BOOLEAN
+
+[Literals]
+line = "{value}"
+true = TRUE
+false = FALSE
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = &&
+or = ||
+not = !
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+line = END
+
+[Declare]
+array line = DIM {names}({size}) AS {type}
+~array line = DIM {names} AS {type}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = INPUT {variable}
+
+[Output]
+line = PRINT {expression}
+
+[If]
+line = IF {condition} THEN
+indent
+line = {then}
+dedent
+else line = ELSE
+else indent
+else line = {else}
+else dedent
+line = END IF
+
+[While]
+line = WHILE {condition}
+indent
+line = {body}
+dedent
+line = WEND
+
+[Do]
+line = DO
+indent
+line = {body}
+dedent
+line = LOOP WHILE {condition}
+
+[For]
+line = FOR {variable} = {start} TO {end} STEP {step}
+indent
+line = {body}
+dedent
+line = NEXT {variable}
+
+[Call]
+line = {function} {args}
+
+[Comment]
+line = ' {text}
+
+[Breakpoint]
+line = ' breakpoint
+
+[Function]
+line = FUNCTION {name}({params})
+indent
+line = {body}
+returns line = {name} = {returnName}
+dedent
+line = END FUNCTION
+
+[Param]
+line = {name}

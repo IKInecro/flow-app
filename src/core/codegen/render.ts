@@ -24,6 +24,7 @@ interface RenderContext {
   literalFalse: string
   callSyntax: string
   indexSyntax: string
+  variableSyntax: string
 }
 
 const INDENT = '  '
@@ -87,7 +88,12 @@ function context(template: Template): RenderContext {
     literalFalse: sectionValue(template.sections, 'Literals', 'false') ?? 'false',
     callSyntax: sectionValue(template.sections, 'Language', 'call') ?? '{name}({args})',
     indexSyntax: sectionValue(template.sections, 'Language', 'index') ?? '{name}[{index}]',
+    variableSyntax: sectionValue(template.sections, 'Language', 'variable') ?? '{name}',
   }
+}
+
+function variableName(ctx: RenderContext, name: string): string {
+  return ctx.variableSyntax.replace(/\{name\}/g, name)
 }
 
 function mappedType(ctx: RenderContext, type: ScalarType | 'None'): string {
@@ -120,10 +126,12 @@ function parse(source: string): Expr | null {
 }
 
 function renderLValue(ctx: RenderContext, value: LValue): string {
-  if (value.index === undefined) return value.name
+  if (value.index === undefined) return variableName(ctx, value.name)
   const index = parse(value.index)
   const rendered = index ? renderExpression(ctx, index) : value.index
-  return ctx.indexSyntax.replace(/\{name\}/g, value.name).replace(/\{index\}/g, rendered)
+  return ctx.indexSyntax
+    .replace(/\{name\}/g, variableName(ctx, value.name))
+    .replace(/\{index\}/g, rendered)
 }
 
 function renderExpression(ctx: RenderContext, expr: Expr): string {
@@ -171,7 +179,7 @@ function renderNode(
         binary: false,
       }
     case 'identifier':
-      return { text: expr.name, precedence: 9, binary: false }
+      return { text: variableName(ctx, expr.name), precedence: 9, binary: false }
     case 'index': {
       const index = renderExpression(ctx, expr.index)
       return {
@@ -320,11 +328,12 @@ function renderStatement(
 
   switch (stmt.kind) {
     case 'declare':
-      fields.names = stmt.names.join(', ')
-      fields.name = stmt.names[0] ?? ''
+      fields.names = stmt.names.map((name) => variableName(ctx, name)).join(', ')
+      fields.name = stmt.names[0] ? variableName(ctx, stmt.names[0]) : ''
       fields.type = mappedType(ctx, stmt.type)
       fields.size = stmt.size
       fields.arraySuffix = stmt.isArray ? `[${stmt.size}]` : ''
+      fields.zero = zeroLiteral(ctx, stmt.type)
       if (stmt.isArray) flags.add('array')
       break
     case 'assign':
@@ -337,7 +346,7 @@ function renderStatement(
       break
     case 'output':
       fields.expression = condition(stmt.expression)
-      if (stmt.newline) flags.add('newline')
+      flags.add(stmt.newline ? 'newline' : 'nonewline')
       break
     case 'if':
       fields.condition = condition(stmt.condition)
@@ -354,7 +363,7 @@ function renderStatement(
       fields.body = nested(ctx, stmt.body, functionName, path, 'body', baseFlags)
       break
     case 'for':
-      fields.variable = stmt.variable
+      fields.variable = variableName(ctx, stmt.variable)
       fields.start = condition(stmt.start)
       fields.end = condition(stmt.end)
       fields.step = condition(stmt.step)
@@ -389,12 +398,23 @@ function renderStatement(
   return renderSection(ctx, section, fields, flags, stmtPathId(functionName, path))
 }
 
+function zeroLiteral(ctx: RenderContext, type: ScalarType | 'None'): string {
+  if (type === 'String') return ctx.literalString.replace(/\{value\}/g, '')
+  if (type === 'Boolean') return ctx.literalFalse
+  return '0'
+}
+
+function sanitizeName(name: string): string {
+  const cleaned = name.replace(/[^A-Za-z0-9_]/g, '_')
+  return cleaned && /^[A-Za-z_]/.test(cleaned) ? cleaned : 'Main'
+}
+
 function renderParam(ctx: RenderContext, fn: FunctionDef, index: number): string {
   const param = fn.params[index]
   if (!param) return ''
   const arraySuffix = param.isArray ? '[]' : ''
   const fields: Fields = {
-    name: param.name,
+    name: variableName(ctx, param.name),
     type: mappedType(ctx, param.type),
     arraySuffix,
   }
@@ -410,15 +430,17 @@ function renderFunction(
 ): Fragment {
   if (!ctx.template.sections.Function) return EMPTY
   const params = fn.params.map((_, index) => renderParam(ctx, fn, index)).join(', ')
+  const fnFlags = new Set(flags)
+  if (fn.returnType !== 'None') fnFlags.add('returns')
   const body = renderBody(ctx, fn.body, fn.name, '', flags)
   const fields: Fields = {
     name: fn.name,
     params,
     body,
     returnType: mappedType(ctx, fn.returnType),
-    returnName: fn.returnVariable,
+    returnName: fn.returnVariable ? variableName(ctx, fn.returnVariable) : '',
   }
-  return renderSection(ctx, 'Function', fields, flags)
+  return renderSection(ctx, 'Function', fields, fnFlags)
 }
 
 export function generate(
@@ -455,7 +477,11 @@ export function generate(
     appendFragment(functions, rendered)
   }
 
-  const programFields: Fields = { main: mainFragment, functions }
+  const programFields: Fields = {
+    main: mainFragment,
+    functions,
+    name: sanitizeName(program.meta.name || 'Main'),
+  }
   const output = renderSection(ctx, 'Program', programFields, flags)
 
   return {

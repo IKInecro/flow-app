@@ -10,6 +10,7 @@ import {
 import { FlowCanvas } from './canvas/FlowCanvas'
 import { FunctionPanel } from './inspector/FunctionPanel'
 import { Inspector } from './inspector/Inspector'
+import { SourcePanel } from '../codegen/SourcePanel'
 import { CallStack } from '../run/CallStack'
 import { ConsoleDock } from '../run/ConsoleDock'
 import { RunToolbar } from '../run/RunToolbar'
@@ -143,7 +144,7 @@ export function EditorPage() {
         </div>
       ) : null}
 
-      <div className="editor__body">
+      <div className={`editor__body ${inspectorTab === 'source' ? 'editor__body--source' : ''}`}>
         <ShapePalette />
         <FlowCanvas />
         <div className="editor__side">
@@ -154,6 +155,7 @@ export function EditorPage() {
                 ['functions', 'Function'],
                 ['variables', 'Variabel'],
                 ['callstack', 'Stack'],
+                ['source', 'Kode'],
               ] as const
             ).map(([tab, label]) => (
               <button
@@ -174,6 +176,8 @@ export function EditorPage() {
             <VariableWatch />
           ) : inspectorTab === 'callstack' ? (
             <CallStack />
+          ) : inspectorTab === 'source' ? (
+            <SourcePanel />
           ) : (
             <Inspector />
           )}

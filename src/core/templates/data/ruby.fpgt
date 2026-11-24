@@ -1,0 +1,109 @@
+[Language]
+name = Ruby
+extension = rb
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int
+Real = double
+String = string
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = **
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = !=
+and = and
+or = or
+not = not
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = {names} = Array.new({size}, {zero})
+~array line = {names} = {zero}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = {variable} = gets.to_i
+
+[Output]
+line = puts {expression}
+
+[If]
+line = if {condition}
+indent
+line = {then}
+dedent
+else line = else
+else indent
+else line = {else}
+else dedent
+line = end
+
+[While]
+line = while {condition}
+indent
+line = {body}
+dedent
+line = end
+
+[Do]
+line = begin
+indent
+line = {body}
+dedent
+line = end while {condition}
+
+[For]
+~step dec line = ({start}).downto({end}) do |{variable}|
+~step ~dec line = ({start}).step({end}, {step}) do |{variable}|
+step dec line = ({start}).downto({end}) do |{variable}|
+step ~dec line = ({start}).upto({end}) do |{variable}|
+indent
+line = {body}
+dedent
+line = end
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = # {text}
+
+[Breakpoint]
+line = # breakpoint
+
+[Function]
+line = def {name}({params})
+indent
+line = {body}
+returns line = return {returnName}
+dedent
+line = end
+
+[Param]
+line = {name}

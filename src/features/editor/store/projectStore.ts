@@ -25,6 +25,7 @@ interface ProjectState {
   create: (name: string) => void
   commit: (updater: (program: Program) => Program) => void
   setNodeOffset: (path: string, offset: { x: number; y: number }) => void
+  setTemplateId: (templateId: string) => void
   clearOffsets: () => void
   undo: () => void
   redo: () => void
@@ -136,6 +137,13 @@ export const useProjectStore = create<ProjectState>((set, get) => {
           nodeOffsets: { ...state.viewState.nodeOffsets, [path]: offset },
         },
       })
+      scheduleSave()
+    },
+
+    setTemplateId(templateId) {
+      const state = get()
+      if (!state.record || state.record.templateId === templateId) return
+      set({ record: { ...state.record, templateId } })
       scheduleSave()
     },
 

@@ -1,0 +1,115 @@
+[Language]
+name = Ada 95
+extension = adb
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = Integer
+Real = Float
+String = String
+Boolean = Boolean
+
+[Literals]
+line = "{value}"
+true = True
+false = False
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = **
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = =
+neq = /=
+and = and
+or = or
+not = not
+
+[Program]
+line = with Ada.Text_IO; use Ada.Text_IO;
+line = procedure {name} is
+indent
+line = {functions}
+dedent
+line = begin
+indent
+line = {main}
+dedent
+line = end {name};
+
+[Main]
+line = {body}
+
+[Declare]
+array line = {names} : array (0 .. {size}) of {type};
+~array line = {names} : {type} := {zero};
+
+[Assign]
+line = {target} := {expression};
+
+[Input]
+line = Get({variable});
+
+[Output]
+line = Put_Line({expression});
+
+[If]
+line = if {condition} then
+indent
+line = {then}
+dedent
+else line = else
+else indent
+else line = {else}
+else dedent
+line = end if;
+
+[While]
+line = while {condition} loop
+indent
+line = {body}
+dedent
+line = end loop;
+
+[Do]
+line = loop
+indent
+line = {body}
+dedent
+line = exit when not ({condition});
+line = end loop;
+
+[For]
+line = for {variable} in {start} .. {end} loop
+indent
+line = {body}
+dedent
+line = end loop;
+
+[Call]
+line = {function}({args});
+
+[Comment]
+line = -- {text}
+
+[Breakpoint]
+line = -- breakpoint
+
+[Function]
+line = function {name}({params}) return {returnType} is
+indent
+line = {body}
+returns line = return {returnName};
+dedent
+line = end {name};
+
+[Param]
+line = {name} : {type}

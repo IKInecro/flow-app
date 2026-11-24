@@ -1,0 +1,106 @@
+[Language]
+name = Lua
+extension = lua
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = int
+Real = double
+String = string
+Boolean = bool
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = ==
+neq = ~=
+and = and
+or = or
+not = not
+
+[Program]
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = local {names} = {{}}
+~array line = local {names} = {zero}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = {variable} = tonumber(io.read())
+
+[Output]
+line = print({expression})
+
+[If]
+line = if {condition} then
+indent
+line = {then}
+dedent
+else line = else
+else indent
+else line = {else}
+else dedent
+line = end
+
+[While]
+line = while {condition} do
+indent
+line = {body}
+dedent
+line = end
+
+[Do]
+line = repeat
+indent
+line = {body}
+dedent
+line = until {condition}
+
+[For]
+line = for {variable} = {start}, {end}, {step} do
+indent
+line = {body}
+dedent
+line = end
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = -- {text}
+
+[Breakpoint]
+line = -- breakpoint
+
+[Function]
+line = function {name}({params})
+indent
+line = {body}
+returns line = return {returnName}
+dedent
+line = end
+
+[Param]
+line = {name}

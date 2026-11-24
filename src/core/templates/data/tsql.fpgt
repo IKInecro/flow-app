@@ -1,0 +1,130 @@
+[Language]
+name = Transact-SQL
+extension = sql
+call = {name}({args})
+index = {name}[{index}]
+variable = @{name}
+
+[Types]
+Integer = INT
+Real = FLOAT
+String = NVARCHAR(MAX)
+Boolean = BIT
+
+[Literals]
+line = "{value}"
+true = 1
+false = 0
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = *
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = =
+neq = <>
+and = AND
+or = OR
+not = NOT
+
+[Program]
+line = -- {name}
+line = {functions}
+line = {main}
+
+[Main]
+line = {body}
+
+[Declare]
+array line = DECLARE {names} TABLE (value {type});
+~array line = DECLARE {names} {type} = {zero};
+
+[Assign]
+line = SET {target} = {expression};
+
+[Input]
+line = SET {variable} = 0;
+
+[Output]
+line = PRINT {expression};
+
+[If]
+line = IF {condition}
+indent
+line = BEGIN
+indent
+line = {then}
+dedent
+line = END
+dedent
+else line = ELSE
+else indent
+else line = BEGIN
+else indent
+else line = {else}
+else dedent
+else line = END
+else dedent
+
+[While]
+line = WHILE {condition}
+indent
+line = BEGIN
+indent
+line = {body}
+dedent
+line = END
+dedent
+
+[Do]
+line = WHILE 1 = 1
+indent
+line = BEGIN
+indent
+line = {body}
+dedent
+line = IF NOT ({condition}) BREAK;
+line = END
+dedent
+
+[For]
+line = DECLARE @i INT = {start};
+line = WHILE @i <= {end}
+indent
+line = BEGIN
+indent
+line = {body}
+dedent
+line = SET @i = @i + {step};
+line = END
+dedent
+
+[Call]
+line = EXEC {function} {args};
+
+[Comment]
+line = -- {text}
+
+[Breakpoint]
+line = -- breakpoint
+
+[Function]
+line = CREATE FUNCTION {name}({params}) RETURNS {returnType} AS
+indent
+line = BEGIN
+indent
+line = {body}
+returns line = RETURN {returnName};
+dedent
+line = END;
+dedent
+
+[Param]
+line = {name} {type}

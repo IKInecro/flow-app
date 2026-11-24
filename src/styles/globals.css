@@ -1609,3 +1609,130 @@ a {
   color: var(--text-muted);
   font-size: 10px;
 }
+
+/* Source viewer */
+.editor__body--source {
+  grid-template-columns: 196px minmax(0, 1fr) minmax(340px, 440px);
+}
+
+.source {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  background: var(--surface);
+}
+
+.source__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.source__pick {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.source__pick select {
+  min-width: 0;
+  max-width: 190px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.source__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.source__actions .icon-button {
+  width: 28px;
+  height: 28px;
+}
+
+.source__actions .icon-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.source__toast {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.source__toast--ok {
+  background: color-mix(in srgb, var(--success) 12%, var(--surface));
+  color: var(--success);
+}
+
+.source__toast--error {
+  background: color-mix(in srgb, var(--danger) 12%, var(--surface));
+  color: var(--danger);
+}
+
+.source__empty {
+  margin: 0;
+  padding: 18px 14px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.source__code {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.source__code .cm-editor {
+  height: 100%;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.source__code .cm-scroller {
+  overflow: auto;
+}
+
+.source__code .cm-gutters {
+  border-right: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.source__code .cm-activeLine {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.source__code .cm-activeLineGutter {
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface-2));
+  color: var(--accent);
+}
+
+.source__code .cm-content {
+  caret-color: transparent;
+}

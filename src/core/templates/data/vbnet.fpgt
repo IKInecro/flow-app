@@ -1,0 +1,114 @@
+[Language]
+name = Visual Basic .NET
+extension = vb
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = Integer
+Real = Double
+String = String
+Boolean = Boolean
+
+[Literals]
+line = "{value}"
+true = True
+false = False
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = =
+neq = <>
+and = AndAlso
+or = OrElse
+not = Not
+
+[Program]
+line = Module Program
+indent
+line = {functions}
+line = {main}
+dedent
+line = End Module
+
+[Main]
+line = Sub Main()
+indent
+line = {body}
+dedent
+line = End Sub
+
+[Declare]
+array line = Dim {names}({size}) As {type}
+~array line = Dim {names} As {type} = {zero}
+
+[Assign]
+line = {target} = {expression}
+
+[Input]
+line = {variable} = Console.ReadLine()
+
+[Output]
+line = Console.WriteLine({expression})
+
+[If]
+line = If {condition} Then
+indent
+line = {then}
+dedent
+else line = Else
+else indent
+else line = {else}
+else dedent
+line = End If
+
+[While]
+line = While {condition}
+indent
+line = {body}
+dedent
+line = End While
+
+[Do]
+line = Do
+indent
+line = {body}
+dedent
+line = Loop While {condition}
+
+[For]
+line = For {variable} = {start} To {end} Step {step}
+indent
+line = {body}
+dedent
+line = Next
+
+[Call]
+line = {function}({args})
+
+[Comment]
+line = ' {text}
+
+[Breakpoint]
+line = ' breakpoint
+
+[Function]
+line = Function {name}({params}) As {returnType}
+indent
+line = {body}
+returns line = Return {returnName}
+dedent
+line = End Function
+
+[Param]
+line = {name} As {type}

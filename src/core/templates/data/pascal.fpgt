@@ -1,0 +1,111 @@
+[Language]
+name = Pascal
+extension = pas
+call = {name}({args})
+index = {name}[{index}]
+
+[Types]
+Integer = integer
+Real = real
+String = string
+Boolean = boolean
+
+[Literals]
+line = "{value}"
+true = true
+false = false
+
+[Operators]
+plus = +
+minus = -
+times = *
+divide = /
+modulo = %
+power = ^
+concat = +
+gt = >
+lt = <
+gte = >=
+lte = <=
+eq = =
+neq = <>
+and = and
+or = or
+not = not
+
+[Program]
+line = program {name};
+line = {functions}
+line = {main}
+
+[Main]
+line = begin
+indent
+line = {body}
+dedent
+line = end.
+
+[Declare]
+array line = {names}: array[0..{size}] of {type};
+~array line = {names}: {type};
+
+[Assign]
+line = {target} := {expression};
+
+[Input]
+line = readln({variable});
+
+[Output]
+line = writeln({expression});
+
+[If]
+line = if {condition} then begin
+indent
+line = {then}
+dedent
+else line = end else begin
+else indent
+else line = {else}
+else dedent
+line = end;
+
+[While]
+line = while {condition} do begin
+indent
+line = {body}
+dedent
+line = end;
+
+[Do]
+line = repeat
+indent
+line = {body}
+dedent
+line = until {condition};
+
+[For]
+line = for {variable} := {start} to {end} do begin
+indent
+line = {body}
+dedent
+line = end;
+
+[Call]
+line = {function}({args});
+
+[Comment]
+line = // {text}
+
+[Breakpoint]
+line = // breakpoint
+
+[Function]
+line = function {name}({params}): {returnType};
+indent
+line = {body}
+returns line = {name} := {returnName};
+dedent
+line = end;
+
+[Param]
+line = {name}: {type}
