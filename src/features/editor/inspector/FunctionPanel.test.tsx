@@ -33,7 +33,7 @@ test('renaming a function updates callsites', async () => {
   render(<FunctionPanel />)
 
   await userEvent.click(screen.getByRole('button', { name: /^foo$/i }))
-  const name = screen.getByLabelText(/nama function/i)
+  const name = screen.getByLabelText(/function name/i)
   await userEvent.clear(name)
   await userEvent.type(name, 'Bar{Enter}')
 
@@ -46,18 +46,18 @@ test('renaming a function updates callsites', async () => {
 test('Main cannot be deleted', () => {
   load()
   render(<FunctionPanel />)
-  expect(screen.getByRole('button', { name: /hapus function/i })).toBeDisabled()
+  expect(screen.getByRole('button', { name: /delete function/i })).toBeDisabled()
 })
 
 test('duplicate function names are blocked', async () => {
   load()
   render(<FunctionPanel />)
 
-  const newName = screen.getByLabelText(/function baru/i)
+  const newName = screen.getByLabelText(/new function/i)
   await userEvent.type(newName, 'Foo')
-  await userEvent.click(screen.getByRole('button', { name: /tambah function/i }))
+  await userEvent.click(screen.getByRole('button', { name: /add function/i }))
 
-  expect(screen.getByRole('alert')).toHaveTextContent(/sudah ada/i)
+  expect(screen.getByRole('alert')).toHaveTextContent(/already taken/i)
   const program = useProjectStore.getState().program
   expect(program?.functions.filter((fn) => fn.name.toLowerCase() === 'foo')).toHaveLength(1)
 })

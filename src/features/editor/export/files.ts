@@ -3,7 +3,7 @@ import type { Program } from '../../../core/model/types'
 
 export function downloadBlob(blob: Blob, filename: string): void {
   if (typeof URL.createObjectURL !== 'function') {
-    throw new Error('Browser tidak mendukung unduhan file.')
+    throw new Error('This browser cannot download files.')
   }
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')

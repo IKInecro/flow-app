@@ -7,7 +7,7 @@ export function CallStack() {
     <aside className="watch" aria-label="Call stack">
       <h2 className="inspector__title">Call stack</h2>
       {callStack.length === 0 ? (
-        <p className="inspector__hint">Belum ada frame aktif.</p>
+        <p className="inspector__hint">No active frames yet.</p>
       ) : (
         <ol className="callstack">
           {callStack

@@ -15,12 +15,12 @@ export function ShapeToolbar({ kind, stmt, onInsert, onEdit, onDelete }: Props) 
   const canNest = kind === 'if' || kind === 'while' || kind === 'do' || kind === 'for'
 
   return (
-    <div className="node-toolbar" role="toolbar" aria-label="Aksi node">
+    <div className="node-toolbar" role="toolbar" aria-label="Node actions">
       <button
         type="button"
         className="node-toolbar__button"
-        title="Sisipkan sebelum"
-        aria-label="Sisipkan sebelum"
+        title="Insert before"
+        aria-label="Insert before"
         onClick={() => onInsert('before')}
       >
         <ArrowUpToLine size={15} />
@@ -28,8 +28,8 @@ export function ShapeToolbar({ kind, stmt, onInsert, onEdit, onDelete }: Props) 
       <button
         type="button"
         className="node-toolbar__button"
-        title="Sisipkan sesudah"
-        aria-label="Sisipkan sesudah"
+        title="Insert after"
+        aria-label="Insert after"
         onClick={() => onInsert('after')}
       >
         <ArrowDownToLine size={15} />
@@ -38,8 +38,8 @@ export function ShapeToolbar({ kind, stmt, onInsert, onEdit, onDelete }: Props) 
         <button
           type="button"
           className="node-toolbar__button"
-          title="Sisipkan ke dalam"
-          aria-label="Sisipkan ke dalam"
+          title="Insert inside"
+          aria-label="Insert inside"
           onClick={() => onInsert(canBranch ? 'into-then' : 'into-body')}
         >
           <CornerDownRight size={15} />
@@ -60,8 +60,8 @@ export function ShapeToolbar({ kind, stmt, onInsert, onEdit, onDelete }: Props) 
         <button
           type="button"
           className="node-toolbar__button node-toolbar__button--danger"
-          title="Hapus node"
-          aria-label="Hapus node"
+          title="Delete node"
+          aria-label="Delete node"
           onClick={onDelete}
         >
           <Trash2 size={15} />

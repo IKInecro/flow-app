@@ -39,7 +39,7 @@ export function Inspector() {
 
   return (
     <aside className="inspector" aria-label="Inspector">
-      <h2 className="inspector__title">Properti</h2>
+      <h2 className="inspector__title">Properties</h2>
       <datalist id="mf-symbols">
         {symbols.map((name) => (
           <option key={name} value={name} />
@@ -57,7 +57,7 @@ export function Inspector() {
           </div>
         </>
       ) : (
-        <p className="inspector__hint">Pilih node di kanvas untuk melihat propertinya.</p>
+        <p className="inspector__hint">Select a node on the canvas to see its properties.</p>
       )}
 
       <Problems />

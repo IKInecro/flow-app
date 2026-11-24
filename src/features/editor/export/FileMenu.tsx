@@ -28,7 +28,7 @@ export function FileMenu() {
   async function readFile(file: File | undefined): Promise<void> {
     if (!file) return
     if (!/\.fprg$/i.test(file.name)) {
-      setNotice({ kind: 'error', text: 'File harus berekstensi .fprg.' })
+      setNotice({ kind: 'error', text: 'The file must have a .fprg extension.' })
       return
     }
     try {
@@ -39,12 +39,14 @@ export function FileMenu() {
         return
       }
       commit(() => parsed.program)
-      const extra = parsed.warnings.length ? ` (${parsed.warnings.length} peringatan)` : ''
-      setNotice({ kind: 'success', text: `Proyek diimpor${extra}.` })
+      const extra = parsed.warnings.length
+        ? ` (${parsed.warnings.length} warning${parsed.warnings.length === 1 ? '' : 's'})`
+        : ''
+      setNotice({ kind: 'success', text: `Project imported${extra}.` })
     } catch (error) {
       setNotice({
         kind: 'error',
-        text: error instanceof Error ? error.message : 'Gagal membaca file.',
+        text: error instanceof Error ? error.message : 'Could not read the file.',
       })
     }
   }
@@ -57,17 +59,17 @@ export function FileMenu() {
   async function exportImage(kind: 'png' | 'svg'): Promise<void> {
     const element = document.querySelector<HTMLElement>('.canvas')
     if (!element) {
-      setNotice({ kind: 'error', text: 'Kanvas belum siap diekspor.' })
+      setNotice({ kind: 'error', text: 'The canvas is not ready to export.' })
       return
     }
     try {
       if (kind === 'svg') exportSvg(element, `${base}.svg`)
       else await exportPng(element, `${base}.png`)
-      setNotice({ kind: 'success', text: `Gambar ${kind.toUpperCase()} diunduh.` })
+      setNotice({ kind: 'success', text: `${kind.toUpperCase()} image downloaded.` })
     } catch (error) {
       setNotice({
         kind: 'error',
-        text: error instanceof Error ? error.message : 'Ekspor gambar gagal.',
+        text: error instanceof Error ? error.message : 'Could not export the image.',
       })
     }
   }
@@ -75,14 +77,14 @@ export function FileMenu() {
   return (
     <>
       <details className="file-menu" ref={details}>
-        <summary className="button button--ghost file-menu__trigger" aria-label="Menu file">
+        <summary className="button button--ghost file-menu__trigger" aria-label="File menu">
           <FileDown size={16} aria-hidden="true" />
           File
         </summary>
-        <div className="file-menu__list" role="menu" aria-label="Aksi file">
+        <div className="file-menu__list" role="menu" aria-label="File actions">
           <button type="button" role="menuitem" onClick={() => input.current?.click()}>
             <FileUp size={15} aria-hidden="true" />
-            Impor .fprg
+            Import .fprg
           </button>
           <button
             type="button"
@@ -94,7 +96,7 @@ export function FileMenu() {
             }}
           >
             <Download size={15} aria-hidden="true" />
-            Ekspor .fprg
+            Export .fprg
           </button>
           <button
             type="button"
@@ -106,7 +108,7 @@ export function FileMenu() {
             }}
           >
             <ImageDown size={15} aria-hidden="true" />
-            Ekspor PNG
+            Export PNG
           </button>
           <button
             type="button"
@@ -118,7 +120,7 @@ export function FileMenu() {
             }}
           >
             <ImageDown size={15} aria-hidden="true" />
-            Ekspor SVG
+            Export SVG
           </button>
         </div>
         <input
@@ -126,7 +128,7 @@ export function FileMenu() {
           type="file"
           accept=".fprg"
           hidden
-          aria-label="File proyek"
+          aria-label="Project file"
           onChange={onUpload}
         />
       </details>

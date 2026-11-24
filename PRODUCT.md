@@ -8,7 +8,7 @@ web
 
 ## Users
 
-Pelajar, mahasiswa, dan pengajar yang belajar algoritma lewat diagram alur. Mereka biasanya bekerja di laptop/desktop, sering di kelas atau saat mengerjakan tugas, dan butuh menyusun logika tanpa menulis sintaks dulu. Pengguna awal berbahasa Indonesia; sebagian memakai Inggris.
+Pelajar, mahasiswa, dan pengajar yang belajar algoritma lewat diagram alur. Mereka biasanya bekerja di laptop/desktop, sering di kelas atau saat mengerjakan tugas, dan butuh menyusun logika tanpa menulis sintaks dulu. The interface ships in English only.
 
 ## Product Purpose
 
@@ -23,7 +23,7 @@ Semua data tinggal di browser lewat IndexedDB, dan file `.fprg` bisa dibawa kelu
 - Desktop-first; di bawah 768px aplikasi menampilkan ajakan pindah ke desktop dan menonaktifkan editing.
 - Alur kerja: hub proyek → editor kanvas → jalankan/step → console, variabel, call stack → lihat kode.
 - Proyek disimpan otomatis; impor/ekspor `.fprg`; template kustom `.fpgt`.
-- Tema mengikuti sistem, dengan toggle terang/gelap. Bahasa Indonesia default, Inggris opsional.
+- Theme follows the system, with a light/dark toggle and a Settings page. The interface ships in English only.
 - Koneksi internet hanya dibutuhkan untuk memuat aplikasi.
 
 ## Capabilities and Constraints
@@ -38,7 +38,7 @@ Semua data tinggal di browser lewat IndexedDB, dan file `.fprg` bisa dibawa kelu
 ## Brand Commitments
 
 - Nama produk: MarcoFlow. Nada bicara: ramah, jelas, tidak menggurui.
-- Bahasa Indonesia sebagai default; istilah teknis umum boleh tetap Inggris.
+- English is the only interface language; common technical terms stay in English.
 - Brief pemilik: tampilan harus modern dan halus, memakai Google Fonts, animasi pada konektor dan saat drag, modal dan transisi panel yang mulus; tidak boleh terasa terlalu teknis.
 
 ## Evidence on Hand

@@ -15,22 +15,22 @@ export interface InsertMenuProps {
 }
 
 export const INSERTABLE: { kind: StmtKind; label: string; hint: string }[] = [
-  { kind: 'declare', label: 'Declare', hint: 'Deklarasi variabel' },
-  { kind: 'assign', label: 'Assign', hint: 'Isi variabel' },
-  { kind: 'input', label: 'Input', hint: 'Baca dari pengguna' },
-  { kind: 'output', label: 'Output', hint: 'Tampilkan nilai' },
-  { kind: 'if', label: 'If', hint: 'Percabangan' },
-  { kind: 'while', label: 'While', hint: 'Loop selama kondisi' },
-  { kind: 'do', label: 'Do', hint: 'Loop minimal sekali' },
-  { kind: 'for', label: 'For', hint: 'Loop dengan counter' },
-  { kind: 'call', label: 'Call', hint: 'Panggil function' },
-  { kind: 'comment', label: 'Comment', hint: 'Catatan' },
-  { kind: 'breakpoint', label: 'Breakpoint', hint: 'Berhenti saat debug' },
+  { kind: 'declare', label: 'Declare', hint: 'Declare a variable' },
+  { kind: 'assign', label: 'Assign', hint: 'Set a variable' },
+  { kind: 'input', label: 'Input', hint: 'Read from the user' },
+  { kind: 'output', label: 'Output', hint: 'Show a value' },
+  { kind: 'if', label: 'If', hint: 'Branching' },
+  { kind: 'while', label: 'While', hint: 'Loop while a condition holds' },
+  { kind: 'do', label: 'Do', hint: 'Loop at least once' },
+  { kind: 'for', label: 'For', hint: 'Loop with a counter' },
+  { kind: 'call', label: 'Call', hint: 'Call a function' },
+  { kind: 'comment', label: 'Comment', hint: 'Leave a note' },
+  { kind: 'breakpoint', label: 'Breakpoint', hint: 'Pause while debugging' },
 ]
 
 export function InsertMenu({ target, onInsert, onClose }: InsertMenuProps): ReactNode {
   return (
-    <div className="insert-menu" role="menu" aria-label={`Sisipkan node pada ${target.path || 'awal'}`}>
+    <div className="insert-menu" role="menu" aria-label={`Insert node at ${target.path || 'start'}`}>
       {INSERTABLE.map((item) => (
         <button
           key={item.kind}

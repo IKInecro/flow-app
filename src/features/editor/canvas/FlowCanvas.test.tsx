@@ -29,9 +29,9 @@ test('renders start, statement, and end nodes for the selected function', () => 
 
   render(<FlowCanvas />)
 
-  expect(screen.getByLabelText('Mulai')).toBeInTheDocument()
+  expect(screen.getByLabelText('Start')).toBeInTheDocument()
   expect(screen.getByText('Output "hi"')).toBeInTheDocument()
-  expect(screen.getByLabelText('Selesai')).toBeInTheDocument()
+  expect(screen.getByLabelText('End')).toBeInTheDocument()
 })
 
 test('marks nodes with validation errors', () => {
@@ -45,15 +45,15 @@ test('marks nodes with validation errors', () => {
 
   render(<FlowCanvas />)
 
-  expect(screen.getByLabelText('Error validasi')).toBeInTheDocument()
+  expect(screen.getByLabelText('Validation error')).toBeInTheDocument()
 })
 
-test('empty functions offer a Tambah Output shortcut', async () => {
+test('empty functions offer an Add Output shortcut', async () => {
   const record = createProjectRecord('Kosong')
   useProjectStore.getState().load(record)
 
   render(<FlowCanvas />)
-  await userEvent.click(screen.getByRole('button', { name: /tambah output/i }))
+  await userEvent.click(screen.getByRole('button', { name: /add output/i }))
 
   expect(useProjectStore.getState().program?.functions[0].body).toHaveLength(1)
 })

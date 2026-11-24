@@ -157,7 +157,7 @@ export function createRunController(
       } catch (error) {
         entry({
           kind: 'error',
-          text: error instanceof Error ? error.message : 'Runtime berhenti tak terduga.',
+          text: error instanceof Error ? error.message : 'The program stopped unexpectedly.',
         })
         patch({ status: 'error' })
         generator = null

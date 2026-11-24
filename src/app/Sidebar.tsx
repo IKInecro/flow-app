@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
-import { Command, FolderKanban, Languages, Library, Moon, Sun, Workflow } from 'lucide-react'
-import { t, setLanguage, useLanguage } from '../shared/i18n'
+import { Command, FolderKanban, Library, Moon, Settings, Sun, Workflow } from 'lucide-react'
+import { t } from '../shared/i18n'
 import { useTheme } from '../shared/theme/theme'
 import { useUiStore } from '../features/editor/store/uiStore'
 
@@ -30,7 +30,6 @@ function BrandMark() {
 }
 
 export function Sidebar() {
-  const language = useLanguage()
   const { pathname } = useLocation()
   const { resolved, setTheme } = useTheme()
   const setCommandOpen = useUiStore((state) => state.setCommandOpen)
@@ -50,6 +49,13 @@ export function Sidebar() {
       icon: Library,
       end: false,
       match: pathname.startsWith('/examples'),
+    },
+    {
+      to: '/settings',
+      label: t('nav.settings'),
+      icon: Settings,
+      end: false,
+      match: pathname.startsWith('/settings'),
     },
   ]
 
@@ -79,7 +85,6 @@ export function Sidebar() {
             <span className="rail__text">{item.label}</span>
           </NavLink>
         ))}
-
       </div>
 
       <div className="rail__foot">
@@ -103,17 +108,6 @@ export function Sidebar() {
         >
           {resolved === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
           <span className="rail__text">{t('nav.theme')}</span>
-        </button>
-        <button
-          type="button"
-          className="rail__utility"
-          aria-label={`${t('nav.language')}: ${language === 'id' ? 'Indonesia' : 'English'}`}
-          title={t('nav.language')}
-          onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
-        >
-          <Languages size={18} aria-hidden="true" />
-          <span className="rail__text">{language === 'id' ? 'Indonesia' : 'English'}</span>
-          <kbd className="rail__kbd">{language.toUpperCase()}</kbd>
         </button>
       </div>
     </nav>

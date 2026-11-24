@@ -27,27 +27,27 @@ function renderHub() {
 
 test('shows an empty state and creates a project', async () => {
   renderHub()
-  expect(await screen.findByText(/belum ada proyek/i)).toBeInTheDocument()
+  expect(await screen.findByText(/no projects yet/i)).toBeInTheDocument()
 
-  await userEvent.click(screen.getByRole('button', { name: /proyek baru/i }))
+  await userEvent.click(screen.getByRole('button', { name: /new project/i }))
   expect(await screen.findByText('editor-page', {}, { timeout: 12000 })).toBeInTheDocument()
   await waitFor(async () => expect(await listProjects()).toHaveLength(1))
 })
 
 test('lists existing projects', async () => {
-  const record = createProjectRecord('Algoritma Saya')
-  record.program = createProgram('Algoritma Saya')
+  const record = createProjectRecord('My Algorithm')
+  record.program = createProgram('My Algorithm')
   await putProject(record)
 
   renderHub()
-  expect(await screen.findByText('Algoritma Saya')).toBeInTheDocument()
+  expect(await screen.findByText('My Algorithm')).toBeInTheDocument()
 })
 
 test('invalid import shows an error and keeps the current list', async () => {
   renderHub()
-  await screen.findByText(/belum ada proyek/i)
+  await screen.findByText(/no projects yet/i)
   const input = screen.getByLabelText(/import .fprg/i)
   await userEvent.upload(input, new File(['<nope/>'], 'bad.fprg', { type: 'application/xml' }))
   const alert = await screen.findByRole('alert')
-  expect(alert.textContent).toMatch(/tidak valid|bukan file/i)
+  expect(alert.textContent).toMatch(/invalid|could not|not a/i)
 })

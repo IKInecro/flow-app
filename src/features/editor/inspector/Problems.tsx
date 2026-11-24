@@ -9,8 +9,8 @@ export function Problems() {
   if (diagnostics.length === 0) return null
 
   return (
-    <section className="problems" aria-label="Masalah">
-      <h3 className="problems__title">Masalah ({diagnostics.length})</h3>
+    <section className="problems" aria-label="Problems">
+      <h3 className="problems__title">Problems ({diagnostics.length})</h3>
       <ul className="problems__list">
         {diagnostics.map((item, index) => (
           <li

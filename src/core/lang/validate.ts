@@ -28,7 +28,7 @@ export function checkProgram(program: Program): Diagnostic[] {
         path: '',
         function: fn.name,
         severity: 'error',
-        message: `Function "${fn.name}" duplikat.`,
+        message: `Duplicate function "${fn.name}".`,
       })
     }
     functions.set(key, fn)
@@ -40,7 +40,7 @@ export function checkProgram(program: Program): Diagnostic[] {
       path: '',
       function: 'Main',
       severity: 'error',
-      message: 'Function Main tidak ditemukan.',
+      message: 'Main function not found.',
     })
     return diagnostics
   }
@@ -55,7 +55,7 @@ export function checkProgram(program: Program): Diagnostic[] {
           path: '',
           function: fn.name,
           severity: 'error',
-          message: `Parameter "${param.name}" duplikat.`,
+          message: `Duplicate parameter "${param.name}".`,
         })
       }
       symbols.set(key, { type: param.type, isArray: param.isArray })
@@ -70,7 +70,7 @@ export function checkProgram(program: Program): Diagnostic[] {
             path: '',
             function: fn.name,
             severity: 'error',
-            message: `Variabel "${name}" sudah dideklarasi.`,
+            message: `Variable "${name}" is already declared.`,
           })
         }
         if (stmt.type === 'None') {
@@ -78,7 +78,7 @@ export function checkProgram(program: Program): Diagnostic[] {
             path: '',
             function: fn.name,
             severity: 'error',
-            message: `Variabel "${name}" tidak boleh bertipe None.`,
+            message: `Variable "${name}" cannot have type None.`,
           })
           continue
         }
@@ -126,7 +126,7 @@ class ValidationContext {
 
   private parse(source: string, path: string): Expr | null {
     if (!source.trim()) {
-      this.error('Ekspresi kosong.', path)
+      this.error('Expression is empty.', path)
       return null
     }
     const parsed = parseExpression(source)
@@ -146,7 +146,7 @@ class ValidationContext {
 
   private scalar(tag: TypeTag | null, path: string, label: string): TypeTag | null {
     if (tag === 'Array') {
-      this.error(`${label} tidak boleh array tanpa index.`, path)
+      this.error(`${label} cannot be an array without an index.`, path)
       return null
     }
     return tag
@@ -155,7 +155,7 @@ class ValidationContext {
   private numeric(tag: TypeTag | null, path: string, label: string): boolean {
     if (tag === null) return false
     if (tag !== 'Integer' && tag !== 'Real') {
-      this.error(`${label} harus angka.`, path)
+      this.error(`${label} must be a number.`, path)
       return false
     }
     return true
@@ -164,7 +164,7 @@ class ValidationContext {
   private boolean(tag: TypeTag | null, path: string, label: string): boolean {
     if (tag === null) return false
     if (tag !== 'Boolean') {
-      this.error(`${label} harus Boolean.`, path)
+      this.error(`${label} must be Boolean.`, path)
       return false
     }
     return true
@@ -181,7 +181,7 @@ class ValidationContext {
       case 'identifier': {
         const found = this.symbol(expr.name)
         if (!found) {
-          this.error(`Variabel "${expr.name}" belum dideklarasi.`, path)
+          this.error(`Variable "${expr.name}" is not declared.`, path)
           return null
         }
         return found.isArray ? 'Array' : found.type
@@ -189,11 +189,11 @@ class ValidationContext {
       case 'index': {
         const found = this.symbol(expr.name)
         if (!found) {
-          this.error(`Variabel "${expr.name}" belum dideklarasi.`, path)
+          this.error(`Variable "${expr.name}" is not declared.`, path)
           return null
         }
         if (!found.isArray) {
-          this.error(`"${expr.name}" bukan array.`, path)
+          this.error(`"${expr.name}" is not an array.`, path)
           return null
         }
         const index = this.infer(expr.index, path)
@@ -230,7 +230,7 @@ class ValidationContext {
                 ? true
                 : left === right
             if (!comparable) {
-              this.error(`Tidak bisa membandingkan ${left} dengan ${right}.`, path)
+              this.error(`Cannot compare ${left} with ${right}.`, path)
             }
           }
           return 'Boolean'
@@ -251,31 +251,31 @@ class ValidationContext {
     if (isBuiltin(expr.name)) {
       const expected = BUILTIN_ARITY[expr.name.toLowerCase()]
       if (expected !== undefined && expr.args.length !== expected) {
-        this.error(`${expr.name} butuh ${expected} argumen, dapat ${expr.args.length}.`, path)
+        this.error(`${expr.name} expects ${expected} arguments, got ${expr.args.length}.`, path)
         return null
       }
       if (expr.name.toLowerCase() === 'size') {
         const arg = expr.args[0]
         if (!arg) return null
         const tag = this.infer(arg, path)
-        if (tag !== 'Array') this.error('Size butuh array.', path)
+        if (tag !== 'Array') this.error('Size requires an array.', path)
         return 'Integer'
       }
       for (const arg of expr.args) {
         const tag = this.infer(arg, path)
-        if (tag !== null) this.scalar(tag, path, `Argumen ${expr.name}`)
+        if (tag !== null) this.scalar(tag, path, `Argument ${expr.name}`)
       }
       return builtinReturnType(expr.name) ?? 'Real'
     }
 
     const fn = this.functions.get(expr.name.toLowerCase())
     if (!fn) {
-      this.error(`Function "${expr.name}" tidak ditemukan.`, path)
+      this.error(`Function "${expr.name}" not found.`, path)
       return null
     }
     if (expr.args.length !== fn.params.length) {
       this.error(
-        `${fn.name} butuh ${fn.params.length} argumen, dapat ${expr.args.length}.`,
+        `${fn.name} expects ${fn.params.length} arguments, got ${expr.args.length}.`,
         path,
       )
       return null
@@ -285,13 +285,13 @@ class ValidationContext {
       const param = fn.params[index]
       if (tag === null) return
       if (param.isArray && tag !== 'Array') {
-        this.error(`Argumen ${index + 1} ${fn.name} harus array.`, path)
+        this.error(`Argument ${index + 1} of ${fn.name} must be an array.`, path)
       } else if (!param.isArray && tag === 'Array') {
-        this.error(`Argumen ${index + 1} ${fn.name} tidak boleh array.`, path)
+        this.error(`Argument ${index + 1} of ${fn.name} cannot be an array.`, path)
       }
     })
     if (fn.returnType === 'None') {
-      this.error(`${fn.name} tidak mengembalikan nilai (None).`, path)
+      this.error(`${fn.name} does not return a value (None).`, path)
       return null
     }
     return fn.returnType as ScalarType
@@ -300,12 +300,12 @@ class ValidationContext {
   private target(target: LValue, path: string, label: string): SymbolInfo | null {
     const found = this.symbol(target.name)
     if (!found) {
-      this.error(`${label} "${target.name}" belum dideklarasi.`, path)
+      this.error(`${label} "${target.name}" is not declared.`, path)
       return null
     }
     if (target.index !== undefined) {
       if (!found.isArray) {
-        this.error(`"${target.name}" bukan array.`, path)
+        this.error(`"${target.name}" is not an array.`, path)
         return null
       }
       const index = this.parse(target.index, path)
@@ -313,7 +313,7 @@ class ValidationContext {
       return found
     }
     if (found.isArray) {
-      this.error(`Array "${target.name}" butuh index.`, path)
+      this.error(`Array "${target.name}" requires an index.`, path)
       return null
     }
     return found
@@ -323,29 +323,29 @@ class ValidationContext {
     switch (stmt.kind) {
       case 'declare': {
         if (stmt.type === 'None') {
-          this.error('Deklarasi tidak boleh bertipe None.', path)
+          this.error('Declarations cannot use type None.', path)
         }
         if (stmt.names.length === 0) {
-          this.error('Deklarasi butuh nama variabel.', path)
+          this.error('A declaration needs a variable name.', path)
         }
         if (stmt.isArray) {
           if (!stmt.size.trim()) {
-            this.error(`Array "${stmt.names.join(', ') || '?'}" butuh ukuran.`, path)
+            this.error(`Array "${stmt.names.join(', ') || '?'}" requires a size.`, path)
           } else {
             const size = this.parse(stmt.size, path)
-            if (size) this.numeric(this.infer(size, path), path, 'Ukuran array')
+            if (size) this.numeric(this.infer(size, path), path, 'Array size')
           }
         }
         return
       }
       case 'assign': {
-        this.target(stmt.target, path, 'Variabel')
+        this.target(stmt.target, path, 'Variable')
         const expression = this.parse(stmt.expression, path)
         if (expression) this.scalar(this.infer(expression, path), path, 'Assignment')
         return
       }
       case 'input':
-        this.target(stmt.variable, path, 'Variabel input')
+        this.target(stmt.variable, path, 'Input variable')
         return
       case 'output': {
         const expression = this.parse(stmt.expression, path)
@@ -356,17 +356,17 @@ class ValidationContext {
       case 'while':
       case 'do': {
         const condition = this.parse(stmt.condition, path)
-        if (condition) this.boolean(this.infer(condition, path), path, 'Kondisi')
+        if (condition) this.boolean(this.infer(condition, path), path, 'Condition')
         return
       }
       case 'for': {
         const variable = this.symbol(stmt.variable)
         if (!variable) {
-          this.error(`Variabel "${stmt.variable}" belum dideklarasi.`, path)
+          this.error(`Variable "${stmt.variable}" is not declared.`, path)
         } else {
-          if (variable.isArray) this.error('Variabel For tidak boleh array.', path)
+          if (variable.isArray) this.error('A For variable cannot be an array.', path)
           if (variable.type !== 'Integer') {
-            this.error('Variabel For harus Integer.', path)
+            this.error('A For variable must be Integer.', path)
           }
         }
         for (const [label, source] of [
@@ -382,12 +382,12 @@ class ValidationContext {
       case 'call': {
         const fn = this.functions.get(stmt.functionName.toLowerCase())
         if (!fn) {
-          this.error(`Function "${stmt.functionName}" tidak ditemukan.`, path)
+          this.error(`Function "${stmt.functionName}" not found.`, path)
           return
         }
         if (stmt.args.length !== fn.params.length) {
           this.error(
-            `${fn.name} butuh ${fn.params.length} argumen, dapat ${stmt.args.length}.`,
+            `${fn.name} expects ${fn.params.length} arguments, got ${stmt.args.length}.`,
             path,
           )
           return
@@ -399,9 +399,9 @@ class ValidationContext {
           const param = fn.params[index]
           if (tag === null) return
           if (param.isArray && tag !== 'Array') {
-            this.error(`Argumen ${index + 1} ${fn.name} harus array.`, path)
+            this.error(`Argument ${index + 1} of ${fn.name} must be an array.`, path)
           } else if (!param.isArray && tag === 'Array') {
-            this.error(`Argumen ${index + 1} ${fn.name} tidak boleh array.`, path)
+            this.error(`Argument ${index + 1} of ${fn.name} cannot be an array.`, path)
           }
         })
         return

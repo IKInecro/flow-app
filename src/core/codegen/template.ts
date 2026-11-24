@@ -54,10 +54,10 @@ export function parseTemplate(source: string): TemplateParseResult {
 
     if (trimmed.startsWith('[')) {
       if (!trimmed.endsWith(']')) {
-        return { ok: false, error: `Section tidak valid di baris ${index + 1}: ${trimmed}` }
+        return { ok: false, error: `Invalid section on line ${index + 1}: ${trimmed}` }
       }
       const name = trimmed.slice(1, -1).trim()
-      if (!name) return { ok: false, error: `Nama section kosong di baris ${index + 1}.` }
+      if (!name) return { ok: false, error: `Section name is empty on line ${index + 1}.` }
       current = { entries: [] }
       sections[name] = current
       continue
@@ -67,7 +67,7 @@ export function parseTemplate(source: string): TemplateParseResult {
     const bareKey = bareTokens[bareTokens.length - 1]
     if ((bareKey === 'indent' || bareKey === 'dedent') && !trimmed.includes('=')) {
       if (!current) {
-        return { ok: false, error: `Baris ${index + 1} berada di luar section.` }
+        return { ok: false, error: `Line ${index + 1} is outside any section.` }
       }
       const parsedBare = parseKey(trimmed)
       current.entries.push({
@@ -81,13 +81,13 @@ export function parseTemplate(source: string): TemplateParseResult {
 
     const separator = raw.indexOf('=')
     if (separator === -1) {
-      return { ok: false, error: `Baris ${index + 1} bukan key = value.` }
+      return { ok: false, error: `Line ${index + 1} is not key = value.` }
     }
     if (!current) {
-      return { ok: false, error: `Baris ${index + 1} berada di luar section.` }
+      return { ok: false, error: `Line ${index + 1} is outside any section.` }
     }
     const { key, flags } = parseKey(raw.slice(0, separator))
-    if (!key) return { ok: false, error: `Key kosong di baris ${index + 1}.` }
+    if (!key) return { ok: false, error: `Key is empty on line ${index + 1}.` }
     current.entries.push({
       key,
       value: raw.slice(separator + 1).trim(),
@@ -98,7 +98,7 @@ export function parseTemplate(source: string): TemplateParseResult {
 
   for (const section of requiredSections) {
     if (!sections[section]) {
-      return { ok: false, error: `Section "${section}" tidak ditemukan.` }
+      return { ok: false, error: `Section "${section}" was not found.` }
     }
   }
 

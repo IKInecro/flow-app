@@ -11,12 +11,12 @@ const PREFIX: Record<string, string> = {
 }
 
 const STATUS: Record<string, string> = {
-  idle: 'Siap',
-  running: 'Berjalan',
-  paused: 'Jeda',
-  'awaiting-input': 'Menunggu input',
-  done: 'Selesai',
-  error: 'Gagal',
+  idle: 'Ready',
+  running: 'Running',
+  paused: 'Paused',
+  'awaiting-input': 'Waiting for input',
+  done: 'Finished',
+  error: 'Failed',
 }
 
 function initialOpen(): boolean {
@@ -64,8 +64,8 @@ export function ConsoleDock() {
           <button
             type="button"
             className="console__toggle"
-            aria-label={consoleMode === 'plain' ? 'Mode chat' : 'Mode plain'}
-            title={consoleMode === 'plain' ? 'Kembali ke bubble' : 'Tampilkan sebagai teks'}
+            aria-label={consoleMode === 'plain' ? 'Chat mode' : 'Plain mode'}
+            title={consoleMode === 'plain' ? 'Switch to bubbles' : 'Show as plain text'}
             onClick={() => setConsoleMode(consoleMode === 'plain' ? 'chat' : 'plain')}
           >
             {consoleMode === 'plain' ? <ToggleRight size={15} /> : <ToggleLeft size={15} />}
@@ -75,8 +75,8 @@ export function ConsoleDock() {
             type="button"
             className="console__collapse"
             aria-expanded={open}
-            aria-label={open ? 'Sembunyikan console' : 'Tampilkan console'}
-            title={open ? 'Sembunyikan' : 'Tampilkan'}
+            aria-label={open ? 'Hide console' : 'Show console'}
+            title={open ? 'Hide' : 'Show'}
             onClick={() => setOpen((value) => !value)}
           >
             <ChevronDown size={16} />
@@ -87,7 +87,7 @@ export function ConsoleDock() {
       <div className="console__scroll" aria-hidden={!open}>
         <div className="console__body">
           {entries.length === 0 && status === 'idle' ? (
-            <p className="console__empty">Tekan Jalankan untuk melihat hasil program di sini.</p>
+            <p className="console__empty">Press Run to see your program output here.</p>
           ) : consoleMode === 'plain' ? (
             <pre className="console__plain" data-testid="console-plain">
               {entries.map((entry) => `${PREFIX[entry.kind] ?? ''}${entry.text}`).join('\n')}
@@ -126,7 +126,7 @@ export function ConsoleDock() {
                 }}
               />
               <button type="submit" className="button button--primary">
-                Kirim
+                Send
               </button>
             </form>
           ) : null}

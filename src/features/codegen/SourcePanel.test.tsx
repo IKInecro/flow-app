@@ -34,14 +34,14 @@ beforeEach(() => {
 test('renders generated code for the selected template', () => {
   render(<SourcePanel />)
 
-  expect(screen.getByLabelText('Bahasa')).toHaveValue('python')
+  expect(screen.getByLabelText('Language')).toHaveValue('python')
   expect(codeText()).toContain('print("Hello, world")')
 })
 
 test('switching the template regenerates the code and persists the choice', async () => {
   render(<SourcePanel />)
 
-  await userEvent.selectOptions(screen.getByLabelText('Bahasa'), 'cpp')
+  await userEvent.selectOptions(screen.getByLabelText('Language'), 'cpp')
 
   expect(codeText()).toContain('cout << "Hello, world" << endl;')
   expect(useProjectStore.getState().record?.templateId).toBe('cpp')
@@ -66,10 +66,10 @@ test('copies the generated code to the clipboard', async () => {
   })
   render(<SourcePanel />)
 
-  await userEvent.click(screen.getByLabelText('Salin kode'))
+  await userEvent.click(screen.getByLabelText('Copy code'))
 
   expect(writeText).toHaveBeenCalledWith(expect.stringContaining('print("Hello, world")'))
-  expect(await screen.findByRole('status')).toHaveTextContent(/disalin/i)
+  expect(await screen.findByRole('status')).toHaveTextContent(/copied/i)
 })
 
 test('imports a custom .fpgt template and rejects a duplicate', async () => {
@@ -79,13 +79,13 @@ test('imports a custom .fpgt template and rejects a duplicate', async () => {
   const file = new File([custom], 'my-python.fpgt', { type: 'text/plain' })
 
   render(<SourcePanel />)
-  const input = screen.getByLabelText('File template')
+  const input = screen.getByLabelText('Template file')
 
   await userEvent.upload(input, file)
-  expect(await screen.findByRole('status')).toHaveTextContent(/diimpor/i)
+  expect(await screen.findByRole('status')).toHaveTextContent(/imported/i)
   expect(useProjectStore.getState().record?.templateId).toBe('custom-my-python')
-  expect(screen.getByLabelText('Bahasa')).toHaveValue('custom-my-python')
+  expect(screen.getByLabelText('Language')).toHaveValue('custom-my-python')
 
   await userEvent.upload(input, file)
-  expect(await screen.findByRole('alert')).toHaveTextContent(/sudah/i)
+  expect(await screen.findByRole('alert')).toHaveTextContent(/already/i)
 })

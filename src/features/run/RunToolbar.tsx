@@ -1,21 +1,21 @@
-import { Pause, Play, SkipForward, Square } from 'lucide-react'
+import { Pause, Play, RotateCcw, SkipForward, Square } from 'lucide-react'
 import { useProjectStore } from '../editor/store/projectStore'
 import { useRuntimeStore } from './runtimeStore'
 
 const SPEEDS = [
-  { value: 0, label: 'Instan' },
-  { value: 100, label: 'Cepat' },
-  { value: 300, label: 'Normal' },
-  { value: 600, label: 'Lambat' },
+  { value: 0, label: 'Instant' },
+  { value: 150, label: 'Fast' },
+  { value: 400, label: 'Normal' },
+  { value: 800, label: 'Slow' },
 ]
 
 const STATUS: Record<string, string> = {
-  idle: 'Siap',
-  running: 'Berjalan',
-  paused: 'Jeda',
-  'awaiting-input': 'Menunggu input',
-  done: 'Selesai',
-  error: 'Gagal',
+  idle: 'Ready',
+  running: 'Running',
+  paused: 'Paused',
+  'awaiting-input': 'Waiting for input',
+  done: 'Finished',
+  error: 'Failed',
 }
 
 export function RunToolbar() {
@@ -30,10 +30,12 @@ export function RunToolbar() {
   const stopRun = useRuntimeStore((state) => state.stopRun)
 
   const idle = status === 'idle' || status === 'done' || status === 'error'
-  const busy = status === 'running' || status === 'awaiting-input'
+  const running = status === 'running'
+  const paused = status === 'paused'
+  const active = running || paused || status === 'awaiting-input'
 
   return (
-    <div className={`run-pill run-pill--${status}`} role="toolbar" aria-label="Kontrol run">
+    <div className={`run-pill run-pill--${status}`} role="toolbar" aria-label="Run controls">
       <span className="run-pill__status">
         <span className="run-pill__dot" aria-hidden="true" />
         {STATUS[status] ?? status}
@@ -46,19 +48,19 @@ export function RunToolbar() {
           disabled={!program}
           onClick={() => program && void startRun(program)}
         >
-          <Play size={15} aria-hidden="true" />
-          Jalankan
+          {status === 'idle' ? <Play size={15} aria-hidden="true" /> : <RotateCcw size={15} aria-hidden="true" />}
+          {status === 'idle' ? 'Run' : 'Run again'}
         </button>
       ) : null}
 
-      {status === 'running' ? (
+      {running ? (
         <button type="button" className="run-pill__button" onClick={pauseRun}>
           <Pause size={15} aria-hidden="true" />
-          Jeda
+          Pause
         </button>
       ) : null}
 
-      {status === 'paused' ? (
+      {paused ? (
         <>
           <button
             type="button"
@@ -66,7 +68,7 @@ export function RunToolbar() {
             onClick={() => void resumeRun()}
           >
             <Play size={15} aria-hidden="true" />
-            Lanjut
+            Resume
           </button>
           <button
             type="button"
@@ -75,7 +77,7 @@ export function RunToolbar() {
             onClick={() => program && void stepRun(program)}
           >
             <SkipForward size={15} aria-hidden="true" />
-            Langkah
+            Step
           </button>
         </>
       ) : null}
@@ -88,14 +90,25 @@ export function RunToolbar() {
           onClick={() => program && void stepRun(program)}
         >
           <SkipForward size={15} aria-hidden="true" />
-          Langkah
+          Step
+        </button>
+      ) : null}
+
+      {active ? (
+        <button
+          type="button"
+          className="run-pill__button run-pill__button--stop"
+          onClick={stopRun}
+        >
+          <Square size={13} aria-hidden="true" />
+          Stop
         </button>
       ) : null}
 
       <label className="run-pill__speed">
-        <span>Kecepatan</span>
+        <span>Speed</span>
         <select
-          aria-label="Kecepatan"
+          aria-label="Run speed"
           value={speed}
           onChange={(event) => setSpeed(Number(event.target.value))}
         >
@@ -106,13 +119,6 @@ export function RunToolbar() {
           ))}
         </select>
       </label>
-
-      {!idle || busy ? (
-        <button type="button" className="run-pill__button run-pill__button--stop" onClick={stopRun}>
-          <Square size={14} aria-hidden="true" />
-          Hentikan
-        </button>
-      ) : null}
     </div>
   )
 }

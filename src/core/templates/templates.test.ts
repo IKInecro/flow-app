@@ -99,7 +99,7 @@ test('importTemplate registers a custom template and rejects duplicates', () => 
   const duplicate = importTemplate(source)
   expect(duplicate.ok).toBe(false)
   if (duplicate.ok) return
-  expect(duplicate.error).toMatch(/sudah/i)
+  expect(duplicate.error).toMatch(/already/i)
 })
 
 test('importTemplate surfaces missing required sections', () => {

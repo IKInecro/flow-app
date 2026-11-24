@@ -125,13 +125,13 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
       return (
         <>
           <TextField
-            label="Ekspresi"
+            label="Expression"
             value={stmt.expression}
             list="mf-symbols"
             onCommit={(expression) => onCommit({ ...stmt, expression })}
           />
           <CheckboxField
-            label="Baris baru"
+            label="New line"
             checked={stmt.newline}
             onCommit={(newline) => onCommit({ ...stmt, newline })}
           />
@@ -143,12 +143,12 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
       return (
         <>
           <TextField
-            label="Variabel"
+            label="Variable"
             value={stmt.variable.name}
             onCommit={(name) => onCommit({ ...stmt, variable: update(stmt.variable, { name }) })}
           />
           <TextField
-            label="Index (opsional)"
+            label="Index (optional)"
             value={stmt.variable.index ?? ''}
             onCommit={(index) =>
               onCommit({
@@ -163,7 +163,7 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
       return (
         <>
           <TextField
-            label="Nama variabel"
+            label="Variable name"
             value={stmt.names.join(', ')}
             onCommit={(raw) =>
               onCommit({
@@ -176,7 +176,7 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
             }
           />
           <SelectField
-            label="Tipe"
+            label="Type"
             value={(stmt.type === 'None' ? 'Integer' : stmt.type) as ScalarType}
             options={SCALAR_TYPES}
             onCommit={(type) => onCommit({ ...stmt, type })}
@@ -188,9 +188,9 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
           />
           {stmt.isArray ? (
             <TextField
-              label="Ukuran"
+              label="Size"
               value={stmt.size}
-              placeholder="mis. 10"
+              placeholder="e.g. 10"
               onCommit={(size) => onCommit({ ...stmt, size })}
             />
           ) : null}
@@ -201,7 +201,7 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
     case 'do':
       return (
         <TextField
-          label="Kondisi"
+          label="Condition"
           value={stmt.condition}
           list="mf-symbols"
           onCommit={(condition) => onCommit({ ...stmt, condition })}
@@ -211,27 +211,27 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
       return (
         <>
           <TextField
-            label="Variabel"
+            label="Variable"
             value={stmt.variable}
             onCommit={(variable) => onCommit({ ...stmt, variable })}
           />
           <TextField
-            label="Mulai"
+            label="Start"
             value={stmt.start}
             onCommit={(start) => onCommit({ ...stmt, start })}
           />
-          <TextField label="Selesai" value={stmt.end} onCommit={(end) => onCommit({ ...stmt, end })} />
+          <TextField label="End" value={stmt.end} onCommit={(end) => onCommit({ ...stmt, end })} />
           <TextField
-            label="Langkah"
+            label="Step"
             value={stmt.step}
             onCommit={(step) => onCommit({ ...stmt, step })}
           />
           <SelectField
-            label="Arah"
+            label="Direction"
             value={stmt.direction}
             options={[
-              { value: 'inc', label: 'Naik' },
-              { value: 'dec', label: 'Turun' },
+              { value: 'inc', label: 'Ascending' },
+              { value: 'dec', label: 'Descending' },
             ]}
             onCommit={(direction) => onCommit({ ...stmt, direction })}
           />
@@ -242,7 +242,7 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
     case 'comment':
       return (
         <TextField
-          label="Catatan"
+          label="Comment"
           value={stmt.text}
           multiline
           onCommit={(text) => onCommit({ ...stmt, text })}
@@ -251,7 +251,7 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
     case 'breakpoint':
       return (
         <TextField
-          label="Kondisi (opsional)"
+          label="Condition (optional)"
           value={stmt.condition ?? ''}
           list="mf-symbols"
           onCommit={(raw) => onCommit({ ...stmt, condition: raw.trim() || undefined })}
@@ -261,13 +261,13 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
     case 'file':
       return (
         <div className="notice" role="note">
-          <strong>Fitur tahap 2</strong>
+          <strong>Phase 2 feature</strong>
           <p>
-            Node {stmt.kind === 'turtle' ? 'turtle grafis' : 'file I/O'} ini dipertahankan saat
-            import tapi belum bisa dijalankan atau diedit. Rencana phase 2.
+            This {stmt.kind === 'turtle' ? 'turtle graphics' : 'file I/O'} node is kept on import,
+            but it can't be run or edited yet. Planned for phase 2.
           </p>
           <dl className="notice__fields">
-            <dt>Operasi</dt>
+            <dt>Operation</dt>
             <dd>{stmt.op}</dd>
             {Object.entries(stmt.fields).map(([key, value]) => (
               <span key={key} className="notice__pair">
@@ -281,7 +281,7 @@ export function StmtForm({ stmt, onCommit }: StmtFormProps): ReactNode {
     case 'unsupported':
       return (
         <div className="notice" role="note">
-          <strong>Node tidak dikenal</strong>
+          <strong>Unknown node</strong>
           <pre>{stmt.rawXml}</pre>
         </div>
       )
@@ -299,11 +299,11 @@ function AssignForm({
   return (
     <>
       <TextField
-        label="Nama target"
+        label="Target name"
         value={stmt.target.name}
         onCommit={(name) => {
           if (!name.trim()) {
-            setError('Nama variabel wajib diisi.')
+            setError('A variable name is required.')
             return
           }
           setError(null)
@@ -311,7 +311,7 @@ function AssignForm({
         }}
       />
       <TextField
-        label="Index target (opsional)"
+        label="Target index (optional)"
         value={stmt.target.index ?? ''}
         onCommit={(index) =>
           onCommit({
@@ -321,7 +321,7 @@ function AssignForm({
         }
       />
       <TextField
-        label="Ekspresi"
+        label="Expression"
         value={stmt.expression}
         list="mf-symbols"
         onCommit={(expression) => onCommit({ ...stmt, expression })}
@@ -365,13 +365,13 @@ function CallForm({
       />
       {arity !== undefined && arity !== stmt.args.length ? (
         <p className="field__warning" role="status">
-          Butuh {arity} argumen, dapat {stmt.args.length}.
+          Expected {arity} arguments, got {stmt.args.length}.
         </p>
       ) : null}
       {Array.from({ length: fields }, (_, index) => (
         <TextField
           key={index}
-          label={`Argumen ${index + 1}`}
+          label={`Argument ${index + 1}`}
           value={stmt.args[index] ?? ''}
           list="mf-symbols"
           onCommit={(value) => setArg(index, value)}

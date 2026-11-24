@@ -22,7 +22,7 @@ const mirror = new Map<string, ProjectRecord>()
 let status: StorageStatus = 'ok'
 
 const WARNING =
-  'Penyimpanan browser tidak tersedia atau penuh. Proyek hanya tersimpan di memori — export backup sekarang.'
+  'Browser storage is unavailable or full. The project is only kept in memory — export a backup now.'
 
 export function getStorageStatus(): StorageStatus {
   return status

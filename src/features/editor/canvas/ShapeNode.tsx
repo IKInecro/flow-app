@@ -39,7 +39,7 @@ export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
         {label}
       </span>
       {data.hasError ? (
-        <span className="flow-node__badge" role="img" aria-label="Error validasi" title="Ada masalah validasi">
+        <span className="flow-node__badge" role="img" aria-label="Validation error" title="Validation problem">
           !
         </span>
       ) : null}

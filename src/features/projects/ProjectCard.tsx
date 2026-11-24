@@ -20,7 +20,7 @@ function nodeCount(record: ProjectRecord): number {
 }
 
 function updatedLabel(timestamp: number): string {
-  return new Intl.DateTimeFormat('id-ID', {
+  return new Intl.DateTimeFormat('en-GB', {
     day: 'numeric',
     month: 'short',
     hour: '2-digit',
@@ -34,10 +34,10 @@ function routeFor(record: ProjectRecord): string {
 }
 
 export function ProjectCard({ record, onRename, onDuplicate, onDelete }: Props) {
-  const name = record.program.meta.name || 'Tanpa judul'
+  const name = record.program.meta.name || 'Untitled'
   return (
     <article className="project-card">
-      <Link to={`/editor/${record.id}`} className="project-card__main" aria-label={`Buka ${name}`}>
+      <Link to={`/editor/${record.id}`} className="project-card__main" aria-label={`Open ${name}`}>
         <div className="project-card__preview" aria-hidden="true">
           <svg viewBox="0 0 240 120" className="project-card__route">
             <path className="project-card__path" d={routeFor(record)} />
@@ -52,15 +52,15 @@ export function ProjectCard({ record, onRename, onDuplicate, onDelete }: Props) 
         </div>
         <h3 className="project-card__name">{name}</h3>
         <p className="project-card__meta">
-          {updatedLabel(record.updatedAt)} · {nodeCount(record)} node
+          {updatedLabel(record.updatedAt)} · {nodeCount(record)} {nodeCount(record) === 1 ? 'node' : 'nodes'}
         </p>
       </Link>
       <div className="project-card__actions">
         <button
           type="button"
           className="icon-button"
-          aria-label={`Ganti nama ${name}`}
-          title="Ganti nama"
+          aria-label={`Rename ${name}`}
+          title="Rename"
           onClick={() => onRename(record)}
         >
           <Pencil size={16} />
@@ -68,8 +68,8 @@ export function ProjectCard({ record, onRename, onDuplicate, onDelete }: Props) 
         <button
           type="button"
           className="icon-button"
-          aria-label={`Duplikat ${name}`}
-          title="Duplikat"
+          aria-label={`Duplicate ${name}`}
+          title="Duplicate"
           onClick={() => onDuplicate(record)}
         >
           <Copy size={16} />
@@ -77,8 +77,8 @@ export function ProjectCard({ record, onRename, onDuplicate, onDelete }: Props) 
         <button
           type="button"
           className="icon-button icon-button--danger"
-          aria-label={`Hapus ${name}`}
-          title="Hapus"
+          aria-label={`Delete ${name}`}
+          title="Delete"
           onClick={() => onDelete(record)}
         >
           <Trash2 size={16} />

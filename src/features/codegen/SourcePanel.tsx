@@ -24,7 +24,7 @@ function readFile(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(String(reader.result ?? ''))
-    reader.onerror = () => reject(new Error('File tidak bisa dibaca.'))
+    reader.onerror = () => reject(new Error('The file could not be read.'))
     reader.readAsText(file)
   })
 }
@@ -69,7 +69,7 @@ export function SourcePanel() {
         EditorView.theme({
           '&': { height: '100%', fontSize: '12px' },
           '.cm-scroller': {
-            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+            fontFamily: "var(--font-mono, 'JetBrains Mono Variable'), ui-monospace, monospace",
             lineHeight: '1.55',
           },
         }),
@@ -106,15 +106,15 @@ export function SourcePanel() {
   async function copy(): Promise<void> {
     try {
       await navigator.clipboard.writeText(rendered.code)
-      setToast({ kind: 'ok', text: 'Kode disalin.' })
+      setToast({ kind: 'ok', text: 'Code copied.' })
     } catch {
-      setToast({ kind: 'error', text: 'Clipboard tidak tersedia di browser ini.' })
+      setToast({ kind: 'error', text: "The clipboard isn't available in this browser." })
     }
   }
 
   function download(): void {
     if (typeof URL.createObjectURL !== 'function') {
-      setToast({ kind: 'error', text: 'Browser tidak mendukung unduhan file.' })
+      setToast({ kind: 'error', text: "This browser doesn't support file downloads." })
       return
     }
     const blob = new Blob([rendered.code], { type: 'text/plain;charset=utf-8' })
@@ -131,7 +131,7 @@ export function SourcePanel() {
     try {
       const source = await readFile(file)
       if (!/\.fpgt$/i.test(file.name)) {
-        setToast({ kind: 'error', text: 'File harus berekstensi .fpgt.' })
+        setToast({ kind: 'error', text: 'The file must have a .fpgt extension.' })
         return
       }
       const result = importTemplate(source)
@@ -141,11 +141,11 @@ export function SourcePanel() {
       }
       setVersion((value) => value + 1)
       setTemplateId(result.template.id)
-      setToast({ kind: 'ok', text: `Template "${result.template.template.language}" diimpor.` })
+      setToast({ kind: 'ok', text: `Template "${result.template.template.language}" imported.` })
     } catch (error) {
       setToast({
         kind: 'error',
-        text: error instanceof Error ? error.message : 'Gagal membaca file.',
+        text: error instanceof Error ? error.message : 'Could not read the file.',
       })
     }
   }
@@ -154,9 +154,9 @@ export function SourcePanel() {
     <section className="source" aria-label="Source code">
       <div className="source__bar">
         <label className="source__pick">
-          <span>Bahasa</span>
+          <span>Language</span>
           <select
-            aria-label="Bahasa"
+            aria-label="Language"
             value={templateId}
             onChange={(event) => {
               setTemplateId(event.target.value)
@@ -175,8 +175,8 @@ export function SourcePanel() {
           <button
             type="button"
             className="icon-button"
-            aria-label="Salin kode"
-            title="Salin kode"
+            aria-label="Copy code"
+            title="Copy code"
             disabled={!rendered.code}
             onClick={() => void copy()}
           >
@@ -185,8 +185,8 @@ export function SourcePanel() {
           <button
             type="button"
             className="icon-button"
-            aria-label="Unduh kode"
-            title={`Unduh .${template?.extension || 'txt'}`}
+            aria-label="Download code"
+            title={`Download .${template?.extension || 'txt'}`}
             disabled={!rendered.code}
             onClick={download}
           >
@@ -195,8 +195,8 @@ export function SourcePanel() {
           <button
             type="button"
             className="icon-button"
-            aria-label="Impor template"
-            title="Impor template .fpgt"
+            aria-label="Import template"
+            title="Import .fpgt template"
             onClick={() => fileInput.current?.click()}
           >
             <Upload size={15} />
@@ -206,7 +206,7 @@ export function SourcePanel() {
             type="file"
             accept=".fpgt"
             hidden
-            aria-label="File template"
+            aria-label="Template file"
             onChange={(event) => {
               void upload(event.target.files?.[0])
               event.target.value = ''
@@ -227,10 +227,10 @@ export function SourcePanel() {
 
       {!template ? (
         <p className="source__empty" role="alert">
-          Template "{templateId}" tidak ditemukan. Pilih bahasa lain atau impor .fpgt.
+          Template "{templateId}" not found. Pick another language or import a .fpgt file.
         </p>
       ) : !program ? (
-        <p className="source__empty">Buka proyek dulu untuk melihat kode.</p>
+        <p className="source__empty">Open a project first to see the code.</p>
       ) : (
         <div className="source__code" ref={host} />
       )}

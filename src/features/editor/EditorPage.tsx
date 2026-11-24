@@ -21,10 +21,10 @@ import { useProjectStore } from './store/projectStore'
 import { useUiStore } from './store/uiStore'
 
 const SAVE_LABEL: Record<string, string> = {
-  idle: 'Belum disimpan',
-  saving: 'Menyimpan…',
-  saved: 'Tersimpan',
-  error: 'Gagal menyimpan',
+  idle: 'Unsaved',
+  saving: 'Saving…',
+  saved: 'Saved',
+  error: 'Save failed',
 }
 
 export function EditorPage() {
@@ -51,7 +51,7 @@ export function EditorPage() {
       setLoading(true)
       setError(null)
       if (!id || id === 'new') {
-        const saved = await putProject(createProjectRecord('Proyek Baru'))
+        const saved = await putProject(createProjectRecord('New Project'))
         if (cancelled) return
         navigate(`/editor/${saved.id}`, { replace: true })
         return
@@ -59,7 +59,7 @@ export function EditorPage() {
       const record = await getProject(id)
       if (cancelled) return
       if (!record) {
-        setError('Proyek tidak ditemukan. Mungkin sudah dihapus dari browser ini.')
+        setError('Project not found. It may have been deleted from this browser.')
         setLoading(false)
         return
       }
@@ -78,7 +78,7 @@ export function EditorPage() {
   if (loading) {
     return (
       <section className="editor">
-        <p className="editor__status">Membuka proyek…</p>
+        <p className="editor__status">Opening project…</p>
       </section>
     )
   }
@@ -90,7 +90,7 @@ export function EditorPage() {
           <p>{error}</p>
           <Link className="button" to="/">
             <ArrowLeft size={16} aria-hidden="true" />
-            Kembali ke proyek
+            Back to projects
           </Link>
         </div>
       </section>
@@ -100,11 +100,11 @@ export function EditorPage() {
   return (
     <section className="editor">
       <header className="editor__bar">
-        <Link className="icon-button" to="/" aria-label="Kembali ke proyek" title="Kembali">
+        <Link className="icon-button" to="/" aria-label="Back to projects" title="Back">
           <ArrowLeft size={18} />
         </Link>
         <div className="editor__title">
-          <strong>{program?.meta.name || 'Tanpa judul'}</strong>
+          <strong>{program?.meta.name || 'Untitled'}</strong>
           <span className={`editor__save editor__save--${saveState}`}>{SAVE_LABEL[saveState]}</span>
         </div>
         <div className="editor__actions">
@@ -132,7 +132,7 @@ export function EditorPage() {
           <button
             type="button"
             className="button button--ghost"
-            title="Kembali ke auto-layout"
+            title="Reset to auto layout"
             onClick={clearOffsets}
           >
             <LayoutGrid size={16} aria-hidden="true" />
@@ -151,14 +151,14 @@ export function EditorPage() {
         <ShapePalette />
         <FlowCanvas />
         <div className="editor__side">
-          <div className="editor__tabs" role="tablist" aria-label="Panel kanan">
+          <div className="editor__tabs" role="tablist" aria-label="Right panel">
             {(
               [
-                ['properties', 'Properti'],
-                ['functions', 'Fungsi'],
-                ['variables', 'Variabel'],
-                ['callstack', 'Stack'],
-                ['source', 'Kode'],
+                ['properties', 'Properties'],
+                ['functions', 'Functions'],
+                ['variables', 'Variables'],
+                ['callstack', 'Call stack'],
+                ['source', 'Code'],
               ] as const
             ).map(([tab, label]) => (
               <button

@@ -20,6 +20,7 @@ function loadProgram(): void {
   useUiStore.setState({ commandOpen: true, inspectorTab: 'properties' })
   useRuntimeStore.setState({
     status: 'idle',
+    speed: 0,
     activePath: null,
     entries: [],
     variables: [],
@@ -36,11 +37,11 @@ beforeEach(() => {
 
 test('filters actions by label or English keyword', () => {
   const actions: PaletteAction[] = [
-    { id: 'run', label: 'Jalankan program', keywords: ['run'], run: () => undefined },
-    { id: 'code', label: 'Buka panel kode', keywords: ['source'], run: () => undefined },
+    { id: 'run', label: 'Run program', keywords: ['run'], run: () => undefined },
+    { id: 'code', label: 'Open code panel', keywords: ['source'], run: () => undefined },
   ]
 
-  expect(filterActions('jalankan', actions).map((action) => action.id)).toEqual(['run'])
+  expect(filterActions('run program', actions).map((action) => action.id)).toEqual(['run'])
   expect(filterActions('run', actions).map((action) => action.id)).toEqual(['run'])
   expect(filterActions('zzz', actions)).toEqual([])
   expect(filterActions('', actions).map((action) => action.id)).toEqual(['run', 'code'])
@@ -53,9 +54,9 @@ test('runs a filtered command and closes the palette', async () => {
     </MemoryRouter>,
   )
 
-  expect(screen.getByRole('dialog', { name: 'Perintah' })).toBeInTheDocument()
-  await userEvent.type(screen.getByLabelText('Cari perintah'), 'jalankan')
-  await userEvent.click(screen.getByRole('option', { name: /jalankan program/i }))
+  expect(screen.getByRole('dialog', { name: 'Commands' })).toBeInTheDocument()
+  await userEvent.type(screen.getByLabelText('Search commands'), 'run program')
+  await userEvent.click(screen.getByRole('option', { name: /run program/i }))
 
   await waitFor(() => expect(useRuntimeStore.getState().status).toBe('done'))
   expect(useUiStore.getState().commandOpen).toBe(false)
@@ -69,8 +70,8 @@ test('opens editor panels from the palette', async () => {
     </MemoryRouter>,
   )
 
-  await userEvent.type(screen.getByLabelText('Cari perintah'), 'panel kode')
-  await userEvent.click(screen.getByRole('option', { name: /panel kode/i }))
+  await userEvent.type(screen.getByLabelText('Search commands'), 'code panel')
+  await userEvent.click(screen.getByRole('option', { name: /open code panel/i }))
 
   expect(useUiStore.getState().inspectorTab).toBe('source')
 })

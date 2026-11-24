@@ -77,12 +77,12 @@ export function builtinReturnType(name: string): ScalarType | undefined {
 function expectArity(name: string, args: Value[]): void {
   const expected = BUILTIN_ARITY[name.toLowerCase()]
   if (expected !== undefined && args.length !== expected) {
-    throw new RuntimeFault(`${name} butuh ${expected} argumen, dapat ${args.length}.`)
+    throw new RuntimeFault(`${name} expects ${expected} arguments, got ${args.length}.`)
   }
 }
 
 function finite(value: number, name: string): number {
-  if (!Number.isFinite(value)) throw new RuntimeFault(`${name} tidak terdefinisi untuk nilai itu.`)
+  if (!Number.isFinite(value)) throw new RuntimeFault(`${name} is undefined for that value.`)
   return value
 }
 
@@ -117,17 +117,17 @@ export function callBuiltin(name: string, args: Value[], ctx: EvalContext): Scal
     case 'ln':
     case 'log': {
       const input = num(0)
-      if (input <= 0) throw new RuntimeFault('Logaritma butuh nilai > 0.')
+      if (input <= 0) throw new RuntimeFault('Logarithm requires a value > 0.')
       return scalar('Real', Math.log(input))
     }
     case 'log10': {
       const input = num(0)
-      if (input <= 0) throw new RuntimeFault('Logaritma butuh nilai > 0.')
+      if (input <= 0) throw new RuntimeFault('Logarithm requires a value > 0.')
       return scalar('Real', Math.log10(input))
     }
     case 'sqrt': {
       const input = num(0)
-      if (input < 0) throw new RuntimeFault('Sqrt butuh nilai >= 0.')
+      if (input < 0) throw new RuntimeFault('Sqrt requires a value >= 0.')
       return scalar('Real', Math.sqrt(input))
     }
     case 'sgn':
@@ -137,17 +137,17 @@ export function callBuiltin(name: string, args: Value[], ctx: EvalContext): Scal
     case 'char': {
       const chars = Array.from(str(0))
       const index = int(1)
-      if (index < 0 || index >= chars.length) throw new RuntimeFault('Index Char di luar batas.')
+      if (index < 0 || index >= chars.length) throw new RuntimeFault('Char index is out of bounds.')
       return scalar('String', chars[index])
     }
     case 'tochar': {
       const code = int(0)
-      if (code < 0 || code > 0x10ffff) throw new RuntimeFault('Kode karakter di luar batas.')
+      if (code < 0 || code > 0x10ffff) throw new RuntimeFault('Character code is out of bounds.')
       return scalar('String', String.fromCodePoint(code))
     }
     case 'tocode': {
       const chars = Array.from(str(0))
-      if (chars.length === 0) throw new RuntimeFault('ToCode butuh string tidak kosong.')
+      if (chars.length === 0) throw new RuntimeFault('ToCode requires a non-empty string.')
       return scalar('Integer', chars[0].codePointAt(0) ?? 0)
     }
     case 'tofixed': {
@@ -157,13 +157,13 @@ export function callBuiltin(name: string, args: Value[], ctx: EvalContext): Scal
     case 'tointeger': {
       const arg = value(0)
       const parsed = Number(toStr(arg).trim())
-      if (!Number.isFinite(parsed)) throw new RuntimeFault(`"${toStr(arg)}" bukan angka.`)
+      if (!Number.isFinite(parsed)) throw new RuntimeFault(`"${toStr(arg)}" is not a number.`)
       return scalar('Integer', Math.trunc(parsed))
     }
     case 'toreal': {
       const arg = value(0)
       const parsed = Number(toStr(arg).trim())
-      if (!Number.isFinite(parsed)) throw new RuntimeFault(`"${toStr(arg)}" bukan angka.`)
+      if (!Number.isFinite(parsed)) throw new RuntimeFault(`"${toStr(arg)}" is not a number.`)
       return scalar('Real', parsed)
     }
     case 'tostring':
@@ -172,16 +172,16 @@ export function callBuiltin(name: string, args: Value[], ctx: EvalContext): Scal
       return scalar('Boolean', false)
     case 'random': {
       const max = int(0)
-      if (max <= 0) throw new RuntimeFault('Random butuh nilai > 0.')
+      if (max <= 0) throw new RuntimeFault('Random requires a value > 0.')
       const result = Math.floor(ctx.random(max))
       return scalar('Integer', Math.min(max - 1, Math.max(0, result)))
     }
     case 'size': {
       const arg = args[0]
-      if (!arg || arg.kind !== 'array') throw new RuntimeFault('Size butuh array.')
+      if (!arg || arg.kind !== 'array') throw new RuntimeFault('Size requires an array.')
       return scalar('Integer', arg.items.length)
     }
     default:
-      throw new RuntimeFault(`Fungsi bawaan tidak dikenal: ${name}.`)
+      throw new RuntimeFault(`Unknown built-in function: ${name}.`)
   }
 }

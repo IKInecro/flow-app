@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <flowgorithm fileversion="4.2">
 <attributes>
-<attribute name="name" value="Halo Dunia"/>
+<attribute name="name" value="Hello World"/>
 <attribute name="authors" value="MarcoFlow"/>
-<attribute name="about" value="Contoh paling sederhana: menampilkan teks."/>
+<attribute name="about" value="The simplest example: shows some text."/>
 </attributes>
 <function name="Main" type="None" variable="">
 <parameters/>
 <body>
-<output expression="&quot;Halo, dunia!&quot;" newline="True"/>
+<output expression="&quot;Hello, world!&quot;" newline="True"/>
 </body>
 </function>
 </flowgorithm>

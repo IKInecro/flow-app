@@ -101,7 +101,7 @@ class Parser {
 
     if (token.type === 'lparen') {
       const expr = this.parse(0)
-      this.expect('rparen', 'Kurung tutup ")" tidak ditemukan.')
+      this.expect('rparen', 'Missing closing ")".')
       return expr
     }
 
@@ -116,8 +116,8 @@ class Parser {
       return this.parsePostfix(token.value)
     }
 
-    if (token.type === 'eof') throw new ParseError('Ekspresi kosong.', token.position)
-    throw new ParseError(`Token tidak terduga: ${token.value || token.type}`, token.position)
+    if (token.type === 'eof') throw new ParseError('Expression is empty.', token.position)
+    throw new ParseError(`Unexpected token: ${token.value || token.type}`, token.position)
   }
 
   private parsePostfix(name: string): Expr {
@@ -134,7 +134,7 @@ class Parser {
           break
         }
       }
-      this.expect('rparen', 'Kurung tutup ")" tidak ditemukan.')
+      this.expect('rparen', 'Missing closing ")".')
       return { kind: 'call', name, args }
     }
 
@@ -142,9 +142,9 @@ class Parser {
     while (this.peek().type === 'lbracket') {
       this.next()
       const index = this.parse(0)
-      this.expect('rbracket', 'Kurung tutup "]" tidak ditemukan.')
+      this.expect('rbracket', 'Missing closing ].')
       if (expr.kind !== 'identifier' && expr.kind !== 'index') {
-        throw new ParseError('Index hanya berlaku untuk variabel.', this.peek().position)
+        throw new ParseError('Indexing is only allowed on variables.', this.peek().position)
       }
       expr = { kind: 'index', name: expr.name, index }
     }
@@ -153,7 +153,7 @@ class Parser {
 
   expectEnd(): void {
     const token = this.peek()
-    if (token.type !== 'eof') throw new ParseError('Ekspresi memiliki sisa token.', token.position)
+    if (token.type !== 'eof') throw new ParseError('Unexpected tokens after expression.', token.position)
   }
 }
 
@@ -167,6 +167,6 @@ export function parseExpression(source: string): ParseResult<Expr> {
     if (error instanceof LexError || error instanceof ParseError) {
       return { ok: false, error: { message: error.message, position: error.position } }
     }
-    return { ok: false, error: { message: 'Ekspresi tidak valid.', position: 0 } }
+    return { ok: false, error: { message: 'Invalid expression.', position: 0 } }
   }
 }

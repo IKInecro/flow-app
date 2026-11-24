@@ -5,21 +5,21 @@ export function VariableWatch() {
   const status = useRuntimeStore((state) => state.status)
 
   return (
-    <aside className="watch" aria-label="Variabel runtime">
-      <h2 className="inspector__title">Variabel</h2>
+    <aside className="watch" aria-label="Runtime variables">
+      <h2 className="inspector__title">Variables</h2>
       {variables.length === 0 ? (
         <p className="inspector__hint">
           {status === 'idle'
-            ? 'Jalankan program untuk melihat nilai variabel.'
-            : 'Belum ada variabel di scope ini.'}
+            ? 'Run the program to see variable values.'
+            : 'No variables in this scope yet.'}
         </p>
       ) : (
         <table className="watch__table">
           <thead>
             <tr>
-              <th scope="col">Nama</th>
-              <th scope="col">Tipe</th>
-              <th scope="col">Nilai</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Value</th>
             </tr>
           </thead>
           <tbody>

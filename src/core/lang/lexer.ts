@@ -91,7 +91,7 @@ export function tokenize(source: string): Token[] {
         value += current
         index += 1
       }
-      if (!closed) throw new LexError('String tidak ditutup.', start)
+      if (!closed) throw new LexError('String literal is not closed.', start)
       tokens.push({ type: 'string', value, position: start })
       continue
     }
@@ -125,7 +125,7 @@ export function tokenize(source: string): Token[] {
       continue
     }
 
-    throw new LexError(`Karakter tidak dikenal: ${char}`, index)
+    throw new LexError(`Unknown character: ${char}`, index)
   }
 
   tokens.push({ type: 'eof', value: '', position: source.length })

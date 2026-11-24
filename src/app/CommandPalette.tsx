@@ -64,33 +64,33 @@ export function CommandPalette() {
     const items: PaletteAction[] = [
       {
         id: 'run',
-        label: 'Jalankan program',
+        label: 'Run program',
         hint: 'F5',
-        keywords: ['run', 'jalankan', 'mulai'],
+        keywords: ['run', 'start', 'play'],
         run: () => {
           if (program) void startRun(program)
         },
       },
       {
         id: 'step',
-        label: 'Langkah berikutnya',
+        label: 'Next step',
         hint: 'F10',
-        keywords: ['step', 'langkah', 'debug'],
+        keywords: ['step', 'next', 'debug'],
         run: () => {
           if (program) void stepRun(program)
         },
       },
       {
         id: 'stop',
-        label: 'Hentikan program',
-        keywords: ['stop', 'berhenti', 'reset'],
+        label: 'Stop program',
+        keywords: ['stop', 'halt', 'reset'],
         run: stopRun,
       },
       {
         id: 'export-fprg',
-        label: 'Ekspor proyek .fprg',
+        label: 'Export project .fprg',
         hint: 'Ctrl+S',
-        keywords: ['export', 'simpan', 'save', 'download', 'fprg'],
+        keywords: ['export', 'save', 'download', 'fprg'],
         run: () => {
           if (program) downloadFprg(program)
         },
@@ -99,38 +99,38 @@ export function CommandPalette() {
         id: 'undo',
         label: 'Undo',
         hint: 'Ctrl+Z',
-        keywords: ['undo', 'batalkan'],
+        keywords: ['undo', 'revert'],
         run: undo,
       },
       {
         id: 'redo',
         label: 'Redo',
         hint: 'Ctrl+Y',
-        keywords: ['redo', 'ulangi'],
+        keywords: ['redo', 'repeat'],
         run: redo,
       },
       {
         id: 'panel-source',
-        label: 'Buka panel kode',
-        keywords: ['source', 'kode', 'code', 'generate'],
+        label: 'Open code panel',
+        keywords: ['source', 'code', 'generate'],
         run: () => setInspectorTab('source'),
       },
       {
         id: 'panel-variables',
-        label: 'Buka panel variabel',
-        keywords: ['variables', 'variabel', 'watch'],
+        label: 'Open variables panel',
+        keywords: ['variables', 'watch', 'values'],
         run: () => setInspectorTab('variables'),
       },
       {
         id: 'panel-functions',
-        label: 'Buka panel function',
-        keywords: ['function', 'fungsi'],
+        label: 'Open functions panel',
+        keywords: ['function', 'functions'],
         run: () => setInspectorTab('functions'),
       },
       {
         id: 'projects',
-        label: 'Kembali ke proyek',
-        keywords: ['projects', 'proyek', 'home', 'beranda'],
+        label: 'Back to projects',
+        keywords: ['projects', 'home', 'hub'],
         run: () => navigate('/'),
       },
     ]
@@ -162,13 +162,13 @@ export function CommandPalette() {
   }
 
   return (
-    <Dialog open={open} title="Perintah" onClose={() => setOpen(false)} className="palette">
+    <Dialog open={open} title="Commands" onClose={() => setOpen(false)} className="palette">
       <div className="palette__search">
         <input
-          aria-label="Cari perintah"
+          aria-label="Search commands"
           autoFocus
           value={query}
-          placeholder="Cari perintah…"
+          placeholder="Search commands…"
           onChange={(event) => setQuery(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === 'ArrowDown') {
@@ -187,9 +187,9 @@ export function CommandPalette() {
           }}
         />
       </div>
-      <ul className="palette__list" role="listbox" aria-label="Perintah" ref={listRef}>
+      <ul className="palette__list" role="listbox" aria-label="Commands" ref={listRef}>
         {results.length === 0 ? (
-          <li className="palette__empty">Tidak ada perintah yang cocok.</li>
+          <li className="palette__empty">No matching commands.</li>
         ) : (
           results.map((action, index) => (
             <li key={action.id}>

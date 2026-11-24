@@ -72,7 +72,7 @@ export function importTemplate(source: string): ParseResult<{ id: string; templa
   if (!parsed.ok) return parsed
   const id = `custom-${slug(parsed.template.language)}`
   if (sourceById.has(id) || customTemplates.has(id)) {
-    return { ok: false, error: `Template "${parsed.template.language}" sudah pernah diimpor.` }
+    return { ok: false, error: `Template "${parsed.template.language}" was already imported.` }
   }
   customTemplates.set(id, parsed.template)
   return { ok: true, template: { id, template: parsed.template } }

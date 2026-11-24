@@ -66,12 +66,12 @@ export function FunctionPanel() {
     if (!program || !selected) return
     const next = renameDraft.trim()
     if (!next) {
-      setError('Nama function wajib diisi.')
+      setError('A function name is required.')
       return
     }
     if (next === selected.name) return
     if (conflict(next, selected.name)) {
-      setError('Nama function sudah ada.')
+      setError('That function name is already taken.')
       return
     }
     const from = selected.name
@@ -93,11 +93,11 @@ export function FunctionPanel() {
   function add(): void {
     const next = newName.trim()
     if (!next) {
-      setError('Nama function wajib diisi.')
+      setError('A function name is required.')
       return
     }
     if (conflict(next)) {
-      setError('Nama function sudah ada.')
+      setError('That function name is already taken.')
       return
     }
     const fn: FunctionDef = {
@@ -146,11 +146,11 @@ export function FunctionPanel() {
     )
     const names = next.map((param) => param.name.trim().toLowerCase())
     if (names.some((name) => !name)) {
-      setError('Nama parameter wajib diisi.')
+      setError('A parameter name is required.')
       return
     }
     if (new Set(names).size !== names.length) {
-      setError('Nama parameter tidak boleh duplikat.')
+      setError('Parameter names must be unique.')
       return
     }
     setError(null)
@@ -160,7 +160,7 @@ export function FunctionPanel() {
   if (!program) {
     return (
       <aside className="functions" aria-label="Function">
-        <p className="inspector__hint">Belum ada program.</p>
+        <p className="inspector__hint">No program yet.</p>
       </aside>
     )
   }
@@ -190,7 +190,7 @@ export function FunctionPanel() {
       {selected ? (
         <div className="functions__editor">
           <div className="field">
-            <label htmlFor="mf-function-name">Nama function</label>
+            <label htmlFor="mf-function-name">Function name</label>
             <input
               id="mf-function-name"
               value={renameDraft}
@@ -204,12 +204,12 @@ export function FunctionPanel() {
           <button
             type="button"
             className="button button--ghost functions__delete"
-            aria-label="Hapus function"
+            aria-label="Delete function"
             disabled={selected.name.toLowerCase() === 'main'}
             onClick={remove}
           >
             <Trash2 size={15} aria-hidden="true" />
-            Hapus function
+            Delete function
           </button>
 
           <fieldset className="functions__params">
@@ -217,12 +217,12 @@ export function FunctionPanel() {
             {selected.params.map((param, index) => (
               <div className="functions__param" key={index}>
                 <ParamName
-                  label={`Parameter ${index + 1} nama`}
+                  label={`Parameter ${index + 1} name`}
                   value={param.name}
                   onCommit={(name) => updateParam(index, { name })}
                 />
                 <select
-                  aria-label={`Parameter ${index + 1} tipe`}
+                  aria-label={`Parameter ${index + 1} type`}
                   value={param.type}
                   onChange={(event) =>
                     updateParam(index, { type: event.target.value as ScalarType })
@@ -245,7 +245,7 @@ export function FunctionPanel() {
                 <button
                   type="button"
                   className="icon-button"
-                  aria-label={`Hapus parameter ${index + 1}`}
+                  aria-label={`Delete parameter ${index + 1}`}
                   onClick={() =>
                     saveFunction({
                       ...selected,
@@ -259,7 +259,7 @@ export function FunctionPanel() {
             ))}
             <button type="button" className="button button--ghost" onClick={addParam}>
               <Plus size={15} aria-hidden="true" />
-              Tambah parameter
+              Add parameter
             </button>
           </fieldset>
         </div>
@@ -267,7 +267,7 @@ export function FunctionPanel() {
 
       <div className="functions__add">
         <div className="field">
-          <label htmlFor="mf-new-function">Function baru</label>
+          <label htmlFor="mf-new-function">New function</label>
           <input
             id="mf-new-function"
             value={newName}
@@ -279,7 +279,7 @@ export function FunctionPanel() {
         </div>
         <button type="button" className="button button--primary" onClick={add}>
           <Plus size={15} aria-hidden="true" />
-          Tambah function
+          Add function
         </button>
       </div>
 

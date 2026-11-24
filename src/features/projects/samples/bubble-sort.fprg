@@ -3,7 +3,7 @@
 <attributes>
 <attribute name="name" value="Bubble Sort"/>
 <attribute name="authors" value="MarcoFlow"/>
-<attribute name="about" value="Mengurutkan array dengan bubble sort."/>
+<attribute name="about" value="Sorts an array with bubble sort."/>
 </attributes>
 <function name="Main" type="None" variable="">
 <parameters/>

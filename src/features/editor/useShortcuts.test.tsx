@@ -31,6 +31,7 @@ beforeEach(() => {
   })
   useRuntimeStore.setState({
     status: 'idle',
+    speed: 0,
     activePath: null,
     entries: [],
     variables: [],

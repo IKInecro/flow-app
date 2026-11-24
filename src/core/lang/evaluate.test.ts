@@ -39,7 +39,7 @@ test('concatenation converts values to text', () => {
 })
 
 test('plus rejects non-numbers', () => {
-  expect(() => run('"2" + 1')).toThrow(/butuh angka/)
+  expect(() => run('"2" + 1')).toThrow(/requires numbers/)
 })
 
 test('boolean keyword operators short-circuit', () => {
@@ -75,13 +75,13 @@ test('char intrinsics are zero-based and bounds checked', () => {
   expect(run('Char("abc", 1)')).toEqual(scalar('String', 'b'))
   expect(run('ToCode("A")')).toEqual(scalar('Integer', 65))
   expect(run('ToChar(66)')).toEqual(scalar('String', 'B'))
-  expect(() => run('Char("abc", 9)')).toThrow(/di luar/)
+  expect(() => run('Char("abc", 9)')).toThrow(/out of bounds/)
 })
 
 test('array indexing and Size', () => {
   expect(run('a[1]')).toEqual(scalar('Integer', 8))
   expect(run('Size(a)')).toEqual(scalar('Integer', 2))
-  expect(() => run('a[5]')).toThrow(/di luar/)
+  expect(() => run('a[5]')).toThrow(/out of bounds/)
 })
 
 test('user function calls go through the context', () => {
@@ -89,5 +89,5 @@ test('user function calls go through the context', () => {
 })
 
 test('division by zero faults', () => {
-  expect(() => run('1 / 0')).toThrow(/nol/)
+  expect(() => run('1 / 0')).toThrow(/zero/)
 })

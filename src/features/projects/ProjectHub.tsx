@@ -49,7 +49,7 @@ export function ProjectHub() {
   }, [])
 
   async function handleNew(): Promise<void> {
-    const saved = await putProject(createProjectRecord('Proyek Baru'))
+    const saved = await putProject(createProjectRecord('New Project'))
     await refresh()
     navigate(`/editor/${saved.id}`)
   }
@@ -58,7 +58,7 @@ export function ProjectHub() {
     const text = await file.text()
     const parsed = parseFprg(text)
     if (!parsed.ok) {
-      setMessage(`Import gagal: ${parsed.error}`)
+      setMessage(`Import failed: ${parsed.error}`)
       return
     }
     const name = parsed.program.meta.name || file.name.replace(/\.fprg$/i, '') || 'Import'
@@ -71,7 +71,7 @@ export function ProjectHub() {
   }
 
   async function handleRename(record: ProjectRecord): Promise<void> {
-    const next = window.prompt('Nama project', record.program.meta.name)
+    const next = window.prompt('Project name', record.program.meta.name)
     if (!next?.trim()) return
     record.program.meta.name = next.trim()
     await putProject(record)
@@ -84,7 +84,7 @@ export function ProjectHub() {
   }
 
   async function handleDelete(record: ProjectRecord): Promise<void> {
-    if (!window.confirm(`Hapus "${record.program.meta.name}"?`)) return
+    if (!window.confirm(`Delete "${record.program.meta.name}"?`)) return
     await deleteProject(record.id)
     await refresh()
   }
@@ -93,23 +93,23 @@ export function ProjectHub() {
     <section className="hub">
       <header className="hub__hero">
         <div className="hub__intro">
-          <h1>Proyek kamu</h1>
+          <h1>Your projects</h1>
           <p className="hub__subtitle">
-            Gambar alurnya, jalankan langkahnya, lalu baca kodenya. Semua tersimpan di browser ini.
+            Draw the flow, run it step by step, then read the code. Everything is stored in this browser.
           </p>
-          <div className="hub__chips" aria-label="Status penyimpanan">
+          <div className="hub__chips" aria-label="Storage status">
             <span className="hub__chip">
               <HardDrive size={13} aria-hidden="true" />
-              Lokal, tanpa akun
+              Local, no account
             </span>
             <span className="hub__chip hub__chip--quiet">
-              {loading ? 'Memuat…' : `${projects.length} proyek`}
+              {loading ? 'Loading…' : `${projects.length} ${projects.length === 1 ? 'project' : 'projects'}`}
             </span>
           </div>
           <div className="hub__actions">
             <button type="button" className="button button--primary" onClick={() => void handleNew()}>
               <Plus size={16} aria-hidden="true" />
-              Proyek baru
+              New project
             </button>
             <ImportButton onFile={(file) => void handleImport(file)} />
           </div>
@@ -130,7 +130,7 @@ export function ProjectHub() {
       ) : null}
 
       {loading ? (
-        <div className="hub__grid" aria-label="Memuat proyek">
+        <div className="hub__grid" aria-label="Loading projects">
           {[0, 1, 2].map((index) => (
             <div className="project-card project-card--skeleton" key={index} aria-hidden="true">
               <div className="project-card__preview" />
@@ -148,16 +148,16 @@ export function ProjectHub() {
               <circle cx="28" cy="10" r="3.4" />
             </svg>
           </span>
-          <p>Belum ada proyek. Buat baru atau buka contoh.</p>
+          <p>No projects yet. Create one or open an example.</p>
           <button type="button" className="button button--primary" onClick={() => void handleNew()}>
-            Mulai proyek pertama
+            Start your first project
           </button>
         </div>
       ) : (
         <div className="hub__section">
           <div className="section-head">
-            <h2>Terbaru</h2>
-            <span>{projects.length} proyek</span>
+            <h2>Recent</h2>
+            <span>{projects.length} {projects.length === 1 ? 'project' : 'projects'}</span>
           </div>
           <div className="hub__grid">
             {projects.map((record) => (

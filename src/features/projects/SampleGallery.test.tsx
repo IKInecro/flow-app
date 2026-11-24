@@ -29,11 +29,11 @@ function renderGallery() {
 test('shows the four authored samples', () => {
   renderGallery()
 
-  expect(screen.getByRole('heading', { name: /contoh program/i })).toBeInTheDocument()
-  for (const name of ['Halo Dunia', 'Faktorial', 'Bubble Sort', 'Fibonacci']) {
+  expect(screen.getByRole('heading', { name: /example programs/i })).toBeInTheDocument()
+  for (const name of ['Hello World', 'Factorial', 'Bubble Sort', 'Fibonacci']) {
     expect(screen.getByRole('heading', { name })).toBeInTheDocument()
   }
-  expect(screen.getAllByRole('button', { name: /buka contoh/i })).toHaveLength(4)
+  expect(screen.getAllByRole('button', { name: /open example/i })).toHaveLength(4)
 })
 
 test('every sample parses, validates, and runs to completion', async () => {
@@ -54,10 +54,10 @@ test('every sample parses, validates, and runs to completion', async () => {
 test('opening a sample stores a project and navigates to the editor', async () => {
   renderGallery()
 
-  await userEvent.click(screen.getByRole('button', { name: /buka contoh faktorial/i }))
+  await userEvent.click(screen.getByRole('button', { name: /open example factorial/i }))
   expect(await screen.findByText('editor-page')).toBeInTheDocument()
 
   const projects = await listProjects()
   expect(projects).toHaveLength(1)
-  expect(projects[0].program.functions.map((fn) => fn.name)).toContain('Faktorial')
+  expect(projects[0].program.functions.map((fn) => fn.name)).toContain('Factorial')
 })

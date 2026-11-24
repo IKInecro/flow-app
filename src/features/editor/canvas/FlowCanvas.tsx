@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Background,
   BackgroundVariant,
@@ -6,6 +6,7 @@ import {
   MarkerType,
   MiniMap,
   ReactFlow,
+  useNodesState,
   type Edge,
   type Node,
   type NodeMouseHandler,
@@ -62,8 +63,7 @@ export function FlowCanvas() {
 
   const nodes = useMemo<Node<ShapeNodeData>[]>(() => {
     if (!layout) return []
-    return layout.nodes.map((item) => {
-      const offset = viewState.nodeOffsets[item.path]
+    return layout.nodes.map((item) => {      const offset = viewState.nodeOffsets[item.path]
       const isMerge = item.kind === 'merge'
       return {
         id: item.id,
@@ -80,9 +80,9 @@ export function FlowCanvas() {
         data: {
           label:
             item.kind === 'start'
-              ? 'Mulai'
+              ? 'Start'
               : item.kind === 'end'
-                ? 'Selesai'
+                ? 'End'
                 : item.stmt
                   ? formatStmt(item.stmt)
                   : '',
@@ -97,6 +97,11 @@ export function FlowCanvas() {
       }
     })
   }, [layout, selectedFunction, viewState.nodeOffsets, errorPaths, activePath])
+
+  // React Flow is controlled here: keep its live copy so a node tracks the
+  // pointer during the drag, then persist the offset on drop.
+  const [liveNodes, setLiveNodes, handleNodesChange] = useNodesState<Node<ShapeNodeData>>(nodes)
+  useEffect(() => setLiveNodes(nodes), [nodes, setLiveNodes])
 
   const edges = useMemo<Edge[]>(() => {
     if (!layout) return []
@@ -177,7 +182,7 @@ export function FlowCanvas() {
   if (!program || !layout) {
     return (
       <div className="canvas canvas--empty">
-        <p>Pilih atau buat proyek dulu.</p>
+        <p>Pick or create a project first.</p>
       </div>
     )
   }
@@ -187,10 +192,11 @@ export function FlowCanvas() {
       <div className="canvas__hud" role="status">
         <span className={`canvas__hud-dot ${activePath ? 'is-live' : ''}`} aria-hidden="true" />
         <strong>{selectedFunction}</strong>
-        <span>{fn ? fn.body.length : 0} langkah</span>
+        <span>{fn ? fn.body.length : 0} {(fn ? fn.body.length : 0) === 1 ? 'step' : 'steps'}</span>
       </div>
       <ReactFlow
-        nodes={nodes}
+        nodes={liveNodes}
+        onNodesChange={handleNodesChange}
         edges={edges}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
@@ -208,7 +214,7 @@ export function FlowCanvas() {
         nodesConnectable={false}
         edgesFocusable={false}
         proOptions={{ hideAttribution: true }}
-        aria-label="Kanvas flowchart"
+        aria-label="Flowchart canvas"
       >
         <Background variant={BackgroundVariant.Dots} gap={24} size={1.3} color="var(--bg-grid)" />
         <Controls showInteractive={false} position="bottom-right" />
@@ -232,9 +238,9 @@ export function FlowCanvas() {
 
       {fn && fn.body.length === 0 ? (
         <div className="canvas__cta">
-          <p>Fungsi {selectedFunction} masih kosong.</p>
+          <p>Function {selectedFunction} is still empty.</p>
           <button type="button" className="button button--primary" onClick={addFirstOutput}>
-            Tambah Output
+            Add Output
           </button>
         </div>
       ) : null}

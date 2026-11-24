@@ -32,7 +32,7 @@ export function getRunController(): RunController {
 
 export const useRuntimeStore = create<RuntimeStore>((set, get) => ({
   ...INITIAL_RUNTIME_STATE,
-  speed: 0,
+  speed: 400,
 
   async startRun(program, options) {
     const active = getRunController()

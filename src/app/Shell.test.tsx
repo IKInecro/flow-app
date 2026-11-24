@@ -10,8 +10,8 @@ test('sidebar exposes navigation and toggles theme', async () => {
       <Shell />
     </MemoryRouter>,
   )
-  expect(screen.getByRole('navigation', { name: /utama/i })).toBeInTheDocument()
-  expect(screen.getByRole('link', { name: /proyek/i })).toBeInTheDocument()
-  await userEvent.click(screen.getByRole('button', { name: /tema/i }))
+  expect(screen.getByRole('navigation', { name: /main/i })).toBeInTheDocument()
+  expect(screen.getByRole('link', { name: /projects/i })).toBeInTheDocument()
+  await userEvent.click(screen.getByRole('button', { name: /theme/i }))
   expect(document.documentElement.dataset.theme).toMatch(/light|dark/)
 })

@@ -33,7 +33,7 @@ export function Drawer({ open, title, side = 'right', onClose, children }: Drawe
       >
         <header className="dialog__head">
           <h2>{title}</h2>
-          <IconButton label="Tutup" onClick={onClose}>
+          <IconButton label="Close" onClick={onClose}>
             <X size={16} />
           </IconButton>
         </header>

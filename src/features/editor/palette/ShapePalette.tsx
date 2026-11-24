@@ -30,10 +30,10 @@ export function ShapePalette() {
   }
 
   return (
-    <aside className="palette" aria-label="Palet bentuk">
-      <h2 className="palette__title">Sisipkan</h2>
+    <aside className="palette" aria-label="Shape palette">
+      <h2 className="palette__title">Insert</h2>
       <p className="palette__hint">
-        Klik untuk menambah{selectedPath ? ' setelah node terpilih' : ' di akhir blok'}.
+        Click to add{selectedPath ? ' after the selected node' : ' at the end of the block'}.
       </p>
       <div className="palette__grid">
         {INSERTABLE.map((item) => (

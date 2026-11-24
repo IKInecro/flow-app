@@ -50,9 +50,9 @@ function compare(op: string, left: ScalarValue, right: ScalarValue): boolean {
   if (left.type === 'Boolean' && right.type === 'Boolean') {
     if (op === '==') return left.value === right.value
     if (op === '!=') return left.value !== right.value
-    throw new RuntimeFault(`Operator ${op} tidak berlaku untuk Boolean.`)
+    throw new RuntimeFault(`Operator ${op} is not valid for Boolean.`)
   }
-  throw new RuntimeFault(`Tidak bisa membandingkan ${left.type} dengan ${right.type}.`)
+  throw new RuntimeFault(`Cannot compare ${left.type} with ${right.type}.`)
 }
 
 export function applyUnary(op: UnaryOp, value: ScalarValue): ScalarValue {
@@ -76,7 +76,7 @@ export function applyBinary(op: string, left: ScalarValue, right: ScalarValue): 
     return scalar('Boolean', compare(op, left, right))
   }
 
-  if (!bothNumeric(left, right)) throw new RuntimeFault(`Operator ${op} butuh angka.`)
+  if (!bothNumeric(left, right)) throw new RuntimeFault(`Operator ${op} requires numbers.`)
   const a = asNumber(left)
   const b = asNumber(right)
 
@@ -84,15 +84,15 @@ export function applyBinary(op: string, left: ScalarValue, right: ScalarValue): 
   if (op === '-') return scalar(numericType(left, right), a - b)
   if (op === '*') return scalar(numericType(left, right), a * b)
   if (op === '/') {
-    if (b === 0) throw new RuntimeFault('Pembagian dengan nol.')
+    if (b === 0) throw new RuntimeFault('Division by zero.')
     return scalar('Real', a / b)
   }
   if (op === '%') {
-    if (b === 0) throw new RuntimeFault('Modulo dengan nol.')
+    if (b === 0) throw new RuntimeFault('Modulo by zero.')
     return scalar(numericType(left, right), a % b)
   }
   if (op === '^') return scalar('Real', Math.pow(a, b))
-  throw new RuntimeFault(`Operator tidak dikenal: ${op}.`)
+  throw new RuntimeFault(`Unknown operator: ${op}.`)
 }
 
 export function evaluateValue(expr: Expr, ctx: EvalContext): Value {
@@ -105,16 +105,16 @@ export function evaluateValue(expr: Expr, ctx: EvalContext): Value {
       return scalar('Boolean', expr.value)
     case 'identifier': {
       const value = ctx.lookup(expr.name)
-      if (!value) throw new RuntimeFault(`Variabel "${expr.name}" belum dideklarasi.`)
+      if (!value) throw new RuntimeFault(`Variable "${expr.name}" is not declared.`)
       return value
     }
     case 'index': {
       const container = ctx.lookup(expr.name)
-      if (!container) throw new RuntimeFault(`Variabel "${expr.name}" belum dideklarasi.`)
-      if (container.kind !== 'array') throw new RuntimeFault(`"${expr.name}" bukan array.`)
+      if (!container) throw new RuntimeFault(`Variable "${expr.name}" is not declared.`)
+      if (container.kind !== 'array') throw new RuntimeFault(`"${expr.name}" is not an array.`)
       const index = Math.trunc(asNumber(evaluate(expr.index, ctx)))
       if (index < 0 || index >= container.items.length) {
-        throw new RuntimeFault(`Index ${index} di luar batas array "${expr.name}".`)
+        throw new RuntimeFault(`Index ${index} is out of bounds for array "${expr.name}".`)
       }
       return container.items[index]
     }

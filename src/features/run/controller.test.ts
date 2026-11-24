@@ -104,7 +104,7 @@ test('submitInput rejects bad input and then accepts the right type', async () =
   expect(controller.getState().status).toBe('awaiting-input')
   expect(
     controller.getState().entries.some(
-      (entry) => entry.kind === 'error' && /bukan integer/i.test(entry.text),
+      (entry) => entry.kind === 'error' && /not a valid Integer/i.test(entry.text),
     ),
   ).toBe(true)
 

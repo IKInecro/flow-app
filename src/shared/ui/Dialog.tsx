@@ -38,7 +38,7 @@ export function Dialog({ open, title, onClose, children, className = '' }: Dialo
       >
         <header className="dialog__head">
           <h2>{title}</h2>
-          <IconButton label="Tutup" onClick={onClose}>
+          <IconButton label="Close" onClick={onClose}>
             <X size={16} />
           </IconButton>
         </header>

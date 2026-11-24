@@ -212,28 +212,28 @@ function parseFunction(el: Element): FunctionDef {
 }
 
 export function parseFprg(xml: string): ParseResult {
-  if (!xml.trim()) return { ok: false, error: 'File kosong.' }
+  if (!xml.trim()) return { ok: false, error: 'The file is empty.' }
   let doc: Document
   try {
     doc = new DOMParser().parseFromString(xml, 'application/xml')
   } catch {
-    return { ok: false, error: 'XML tidak valid.' }
+    return { ok: false, error: 'Invalid XML.' }
   }
   const parserError = doc.getElementsByTagName('parsererror')[0]
   if (parserError) {
-    return { ok: false, error: `XML tidak valid: ${parserError.textContent?.trim() ?? 'unknown error'}` }
+    return { ok: false, error: `Invalid XML: ${parserError.textContent?.trim() ?? 'unknown error'}` }
   }
   const root = doc.documentElement
   if (!root || root.tagName !== 'flowgorithm') {
-    return { ok: false, error: 'Bukan file Flowgorithm (.fprg).' }
+    return { ok: false, error: 'Not a Flowgorithm (.fprg) file.' }
   }
 
   const functions = children(root, 'function').map(parseFunction)
   if (functions.length === 0) {
-    return { ok: false, error: 'File tidak memiliki function.' }
+    return { ok: false, error: 'The file has no function.' }
   }
   if (!functions.some((fn) => fn.name.toLowerCase() === 'main')) {
-    return { ok: false, error: 'Function Main tidak ditemukan.' }
+    return { ok: false, error: 'Main function not found.' }
   }
 
   const unknown = Array.from(root.children)

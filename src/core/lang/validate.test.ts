@@ -34,7 +34,7 @@ test('flags wrong argument count', () => {
     [fn('Add', [{ name: 'a', type: 'Integer', isArray: false }, { name: 'b', type: 'Integer', isArray: false }], 'Integer')],
   )
   const diagnostics = checkProgram(program)
-  expect(diagnostics.some((item) => /argumen/i.test(item.message))).toBe(true)
+  expect(diagnostics.some((item) => /arguments/i.test(item.message))).toBe(true)
 })
 
 test('allows implicit real to integer conversion without diagnostics', () => {
@@ -49,13 +49,13 @@ test('allows implicit real to integer conversion without diagnostics', () => {
 test('flags a None function used in an expression', () => {
   const program = make([{ kind: 'output', expression: 'DoThing()', newline: true }], [fn('DoThing', [])])
   const diagnostics = checkProgram(program)
-  expect(diagnostics.some((item) => /tidak mengembalikan|None/i.test(item.message))).toBe(true)
+  expect(diagnostics.some((item) => /does not return|None/i.test(item.message))).toBe(true)
 })
 
 test('flags arrays without a size', () => {
   const program = make([{ kind: 'declare', names: ['a'], type: 'Integer', isArray: true, size: '' }])
   const diagnostics = checkProgram(program)
-  expect(diagnostics.some((item) => /ukuran/i.test(item.message))).toBe(true)
+  expect(diagnostics.some((item) => /size/i.test(item.message))).toBe(true)
 })
 
 test('accepts a valid loop program', () => {

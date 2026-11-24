@@ -20,27 +20,27 @@ interface SampleMeta {
 const META: SampleMeta[] = [
   {
     id: 'hello',
-    name: 'Halo Dunia',
-    description: 'Satu node output untuk memulai.',
-    level: 'Pemula',
+    name: 'Hello World',
+    description: 'One output node to get you started.',
+    level: 'Beginner',
   },
   {
     id: 'factorial',
-    name: 'Faktorial',
-    description: 'Fungsi rekursif dengan parameter dan return.',
-    level: 'Menengah',
+    name: 'Factorial',
+    description: 'A recursive function with a parameter and a return value.',
+    level: 'Intermediate',
   },
   {
     id: 'bubble-sort',
     name: 'Bubble Sort',
-    description: 'Array, nested loop, dan pertukaran nilai.',
-    level: 'Menengah',
+    description: 'Arrays, nested loops, and swapping values.',
+    level: 'Intermediate',
   },
   {
     id: 'fibonacci',
     name: 'Fibonacci',
-    description: 'Dua pemanggilan rekursif dalam satu ekspresi.',
-    level: 'Lanjut',
+    description: 'Two recursive calls in one expression.',
+    level: 'Advanced',
   },
 ]
 
@@ -60,7 +60,7 @@ export function SampleGallery() {
   async function open(sample: Sample): Promise<void> {
     const parsed = parseFprg(sample.source)
     if (!parsed.ok) {
-      setMessage(`Contoh "${sample.name}" tidak bisa dibuka: ${parsed.error}`)
+      setMessage(`Could not open example "${sample.name}": ${parsed.error}`)
       return
     }
     const record = createProjectRecord(parsed.program.meta.name || sample.name)
@@ -70,13 +70,13 @@ export function SampleGallery() {
   }
 
   return (
-    <section className="samples" aria-label="Contoh program">
+    <section className="samples" aria-label="Example programs">
       <header className="samples__head">
         <h2>
           <BookOpen size={16} aria-hidden="true" />
-          Contoh program
+          Example programs
         </h2>
-        <p>Mulai dari flowchart yang sudah jalan, lalu ubah sesukamu.</p>
+        <p>Start from a flowchart that already runs, then make it your own.</p>
       </header>
 
       {message ? (
@@ -96,10 +96,10 @@ export function SampleGallery() {
             <button
               type="button"
               className="button button--ghost sample__open"
-              aria-label={`Buka contoh ${sample.name}`}
+              aria-label={`Open example ${sample.name}`}
               onClick={() => void open(sample)}
             >
-              Buka contoh
+              Open example
               <ArrowUpRight size={14} aria-hidden="true" />
             </button>
           </article>

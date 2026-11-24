@@ -4053,3 +4053,485 @@ a {
   position: relative;
   z-index: 20;
 }
+
+/* ------------------------------------------------------------------
+   Refinements: wider canvas, honest drag, settings, run controls
+   ------------------------------------------------------------------ */
+
+/* Compact rail earlier so a 1280px laptop keeps a usable canvas. */
+@media (max-width: 1360px) {
+  .rail {
+    width: 78px;
+    flex-basis: 78px;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 10px 14px;
+  }
+
+  .rail__brand {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .rail__brandtext,
+  .rail__text,
+  .rail__label,
+  .rail__kbd {
+    display: none;
+  }
+
+  .rail__items,
+  .rail__foot {
+    width: 100%;
+    align-items: center;
+  }
+
+  .rail__item,
+  .rail__utility {
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .rail__foot {
+    border-top: 1px solid var(--rail-border);
+  }
+}
+
+/* The dragged block stays exactly under the pointer; depth does the lifting. */
+.react-flow__node.dragging .flow-node {
+  transform: none;
+}
+
+.react-flow__node.dragging .flow-node__shape path {
+  filter: drop-shadow(0 16px 22px rgb(23 32 43 / 24%));
+}
+
+[data-theme='dark'] .react-flow__node.dragging .flow-node__shape path {
+  filter: drop-shadow(0 16px 24px rgb(0 0 0 / 65%));
+}
+
+.react-flow__node {
+  transition: none;
+}
+
+/* Run bar: the stop action must read as an exit, not a secondary action. */
+.run-pill__button--stop {
+  border-color: color-mix(in srgb, var(--danger) 38%, var(--border));
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  color: var(--danger);
+  font-weight: 650;
+}
+
+.run-pill__button--stop:hover {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 16%, var(--surface));
+  color: var(--danger);
+}
+
+.run-pill__button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.run-pill__speed select:hover {
+  border-color: var(--border-strong);
+}
+
+.run-pill__status {
+  min-width: 66px;
+}
+
+@media (max-width: 1100px) {
+  .run-pill {
+    left: 10px;
+    right: 10px;
+    transform: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-radius: 16px;
+  }
+}
+
+/* Pages */
+.page {
+  max-width: 1240px;
+  padding: 34px;
+}
+
+/* Settings */
+.settings__head {
+  margin-bottom: 26px;
+}
+
+.settings__eyebrow {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.settings__head h1 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  font-weight: 620;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.settings__lede {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.settings__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.settings__card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.settings__card--wide {
+  grid-column: 1 / -1;
+}
+
+.settings__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.settings__card-head h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.settings__meta {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.settings__head-icon {
+  color: var(--text-muted);
+}
+
+.settings__badge {
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.settings__badge.is-ok {
+  background: color-mix(in srgb, var(--success) 14%, var(--surface));
+  color: var(--success);
+}
+
+.settings__badge.is-warn {
+  background: color-mix(in srgb, var(--warning) 16%, var(--surface));
+  color: var(--warning);
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.theme-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-align: left;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms var(--ease-out);
+}
+
+.theme-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.theme-card.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.theme-card__preview {
+  display: flex;
+  height: 56px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #f1eee7;
+}
+
+.theme-card__preview[data-preview='dark'] {
+  background: #0d1218;
+}
+
+.theme-card__preview[data-preview='system'] {
+  background: linear-gradient(115deg, #f1eee7 0 50%, #0d1218 50% 100%);
+}
+
+.theme-card__rail {
+  width: 22%;
+  background: #17202b;
+}
+
+.theme-card__preview[data-preview='dark'] .theme-card__rail {
+  background: #090e13;
+}
+
+.theme-card__sheet {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  padding: 9px;
+}
+
+.theme-card__sheet span {
+  height: 7px;
+  border-radius: 3px;
+  background: #fffdf9;
+  box-shadow: 0 0 0 1px rgb(23 32 43 / 8%);
+}
+
+.theme-card__sheet span:last-child {
+  width: 62%;
+  background: #b53d28;
+}
+
+.theme-card__preview[data-preview='dark'] .theme-card__sheet span {
+  background: #1a232d;
+  box-shadow: none;
+}
+
+.theme-card__preview[data-preview='dark'] .theme-card__sheet span:last-child {
+  background: #ff7a5f;
+}
+
+.theme-card__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 620;
+}
+
+.theme-card__check {
+  margin-left: auto;
+  color: var(--accent);
+}
+
+.theme-card__hint {
+  color: var(--text-muted);
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
+.settings__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.settings__row svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--accent);
+}
+
+.settings__row strong {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 13.5px;
+  font-weight: 620;
+}
+
+.settings__row p,
+.settings__note,
+.settings__card > p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.settings__note {
+  margin-top: 12px;
+}
+
+.settings__note code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.settings__warning {
+  margin: 12px 0 0;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--warning) 40%, var(--border));
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--warning) 10%, var(--surface));
+  color: var(--warning);
+  font-size: 12px;
+}
+
+.shortcut-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 4px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shortcut-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.shortcut-list kbd {
+  flex: 0 0 auto;
+  min-width: 84px;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-align: center;
+}
+
+.settings__card > p + p {
+  margin-top: 10px;
+}
+
+/* Dark mode: keep the ink rail distinct from the work area. */
+[data-theme='dark'] .rail {
+  border-right: 1px solid var(--rail-border);
+}
+
+[data-theme='dark'] .shell {
+  background:
+    radial-gradient(900px 420px at 82% -8%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 62%),
+    var(--bg);
+}
+
+[data-theme='dark'] .hub__hero {
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--surface) 92%, var(--accent) 8%), var(--surface) 58%);
+}
+
+[data-theme='dark'] .flow-node__shape path {
+  filter: drop-shadow(0 4px 8px rgb(0 0 0 / 45%));
+}
+
+[data-theme='dark'] .flow-node__shape path {
+  fill: var(--surface-2);
+}
+
+[data-theme='dark'] .flow-node--term .flow-node__shape path {
+  fill: color-mix(in srgb, var(--success) 12%, var(--surface-2));
+}
+
+[data-theme='dark'] .flow-node--branch .flow-node__shape path {
+  fill: color-mix(in srgb, var(--warning) 12%, var(--surface-2));
+}
+
+[data-theme='dark'] .flow-node--note .flow-node__shape path {
+  fill: color-mix(in srgb, var(--warning) 16%, var(--surface-2));
+}
+
+@media (max-width: 900px) {
+  .settings {
+    padding: 24px 18px 48px;
+  }
+
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .theme-card__preview {
+    width: 74px;
+    height: 42px;
+    flex: 0 0 auto;
+  }
+
+  .theme-card__hint {
+    display: none;
+  }
+}
+
+/* Theme shift: colour settles in, geometry does not move. */
+body,
+.shell,
+.rail,
+.canvas,
+.editor__bar,
+.console,
+.inspector,
+.page,
+.settings__card,
+.flow-node__shape path {
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, fill 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .shell,
+  .rail,
+  .canvas,
+  .editor__bar,
+  .console,
+  .inspector,
+  .page,
+  .settings__card,
+  .flow-node__shape path {
+    transition: none;
+  }
+}
+
+/* Small status text still has to clear AA in daylight. */
+.settings__badge.is-ok {
+  color: color-mix(in srgb, var(--success) 72%, var(--text));
+}
+
+.settings__badge.is-warn {
+  color: color-mix(in srgb, var(--warning) 68%, var(--text));
+}

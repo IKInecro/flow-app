@@ -44,13 +44,13 @@ export function toStr(value: ScalarValue): string {
 }
 
 export function asScalar(value: Value): ScalarValue {
-  if (value.kind === 'array') throw new RuntimeFault('Array butuh index.')
+  if (value.kind === 'array') throw new RuntimeFault('Array requires an index.')
   return value
 }
 
 export function asNumber(value: ScalarValue): number {
   if (value.type !== 'Integer' && value.type !== 'Real') {
-    throw new RuntimeFault(`Nilai ${value.type} bukan angka.`)
+    throw new RuntimeFault(`Value ${value.type} is not a number.`)
   }
   return Number(value.value)
 }
@@ -61,12 +61,12 @@ export function asInteger(value: ScalarValue): number {
 }
 
 export function asBoolean(value: ScalarValue): boolean {
-  if (value.type !== 'Boolean') throw new RuntimeFault(`Nilai ${value.type} bukan Boolean.`)
+  if (value.type !== 'Boolean') throw new RuntimeFault(`Value ${value.type} is not Boolean.`)
   return Boolean(value.value)
 }
 
 export function asString(value: ScalarValue): string {
-  if (value.type !== 'String') throw new RuntimeFault(`Nilai ${value.type} bukan String.`)
+  if (value.type !== 'String') throw new RuntimeFault(`Value ${value.type} is not a String.`)
   return String(value.value)
 }
 
@@ -94,14 +94,14 @@ export function convertInput(text: string, type: ScalarType): ScalarValue {
   if (type === 'Integer') {
     const number = Number(trimmed)
     if (trimmed === '' || !Number.isFinite(number)) {
-      throw new RuntimeFault(`"${text}" bukan Integer yang valid.`)
+      throw new RuntimeFault(`"${text}" is not a valid Integer.`)
     }
     return scalar('Integer', Math.trunc(number))
   }
   if (type === 'Real') {
     const number = Number(trimmed)
     if (trimmed === '' || !Number.isFinite(number)) {
-      throw new RuntimeFault(`"${text}" bukan Real yang valid.`)
+      throw new RuntimeFault(`"${text}" is not a valid Real.`)
     }
     return scalar('Real', number)
   }
@@ -109,7 +109,7 @@ export function convertInput(text: string, type: ScalarType): ScalarValue {
     const lower = trimmed.toLowerCase()
     if (lower === 'true' || lower === 'ya' || lower === '1') return scalar('Boolean', true)
     if (lower === 'false' || lower === 'tidak' || lower === '0') return scalar('Boolean', false)
-    throw new RuntimeFault(`"${text}" bukan Boolean yang valid.`)
+    throw new RuntimeFault(`"${text}" is not a valid Boolean.`)
   }
   return scalar('String', text)
 }

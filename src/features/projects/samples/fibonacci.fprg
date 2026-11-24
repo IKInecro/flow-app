@@ -3,7 +3,7 @@
 <attributes>
 <attribute name="name" value="Fibonacci"/>
 <attribute name="authors" value="MarcoFlow"/>
-<attribute name="about" value="Deret Fibonacci dengan dua pemanggilan rekursif."/>
+<attribute name="about" value="The Fibonacci sequence with two recursive calls."/>
 </attributes>
 <function name="Main" type="None" variable="">
 <parameters/>
@@ -11,18 +11,18 @@
 <output expression="&quot;Fib(10) = &quot; &amp; Fib(10)" newline="True"/>
 </body>
 </function>
-<function name="Fib" type="Integer" variable="hasil">
+<function name="Fib" type="Integer" variable="result">
 <parameters>
 <parameter name="n" type="Integer" array="False"/>
 </parameters>
 <body>
-<declare name="hasil" type="Integer" array="False" size=""/>
+<declare name="result" type="Integer" array="False" size=""/>
 <if expression="n &lt;= 1">
 <then>
-<assign variable="hasil" expression="n"/>
+<assign variable="result" expression="n"/>
 </then>
 <else>
-<assign variable="hasil" expression="Fib(n - 1) + Fib(n - 2)"/>
+<assign variable="result" expression="Fib(n - 1) + Fib(n - 2)"/>
 </else>
 </if>
 </body>

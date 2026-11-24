@@ -94,7 +94,7 @@ async function* run(
   if (!main) {
     yield {
       type: 'error',
-      error: { message: 'Function Main tidak ditemukan.', path: '', function: 'Main', callStack: [] },
+      error: { message: 'Main function not found.', path: '', function: 'Main', callStack: [] },
     }
     yield { type: 'done' }
     return
@@ -113,7 +113,7 @@ async function* run(
     return {
       lookup: (name) => frame.locals.get(name.toLowerCase()),
       callFunction: () => {
-        throw new RuntimeFault('Pemanggilan fungsi tidak sinkron.', currentPath)
+        throw new RuntimeFault('Function call is not synchronous.', currentPath)
       },
       random,
     }
@@ -139,7 +139,7 @@ async function* run(
   function runtimeError(error: unknown): RuntimeError {
     const frame = frames.at(-1)
     return {
-      message: error instanceof Error ? error.message : 'Terjadi kesalahan saat menjalankan program.',
+      message: error instanceof Error ? error.message : 'Something went wrong while running the program.',
       path: error instanceof RuntimeFault && error.path ? error.path : currentPath,
       function: frame?.fn.name ?? 'Main',
       callStack: frames.map((item) => item.fn.name),
@@ -148,12 +148,12 @@ async function* run(
 
   function targetType(frame: Frame, target: LValue): ScalarType {
     const value = frame.locals.get(target.name.toLowerCase())
-    if (!value) throw new RuntimeFault(`Variabel "${target.name}" belum dideklarasi.`, currentPath)
+    if (!value) throw new RuntimeFault(`Variable "${target.name}" is not declared.`, currentPath)
     if (target.index !== undefined) {
-      if (value.kind !== 'array') throw new RuntimeFault(`"${target.name}" bukan array.`, currentPath)
+      if (value.kind !== 'array') throw new RuntimeFault(`"${target.name}" is not an array.`, currentPath)
       return value.elementType
     }
-    if (value.kind === 'array') throw new RuntimeFault(`Array "${target.name}" butuh index.`, currentPath)
+    if (value.kind === 'array') throw new RuntimeFault(`Array "${target.name}" requires an index.`, currentPath)
     return value.type
   }
 
@@ -164,15 +164,15 @@ async function* run(
   ): AsyncGenerator<RuntimeEvent, void, string> {
     const key = target.name.toLowerCase()
     const container = frame.locals.get(key)
-    if (!container) throw new RuntimeFault(`Variabel "${target.name}" belum dideklarasi.`, currentPath)
+    if (!container) throw new RuntimeFault(`Variable "${target.name}" is not declared.`, currentPath)
 
     if (target.index !== undefined) {
       if (container.kind !== 'array') {
-        throw new RuntimeFault(`"${target.name}" bukan array.`, currentPath)
+        throw new RuntimeFault(`"${target.name}" is not an array.`, currentPath)
       }
       const index = asInteger(asScalar(yield* evalValueAsync(parse(target.index), frame)))
       if (index < 0 || index >= container.items.length) {
-        throw new RuntimeFault(`Index ${index} di luar batas array "${target.name}".`, currentPath)
+        throw new RuntimeFault(`Index ${index} is out of bounds for array "${target.name}".`, currentPath)
       }
       const element = coerce(asScalar(value), container.elementType)
       container.items[index] = element
@@ -180,7 +180,7 @@ async function* run(
     }
 
     if (container.kind === 'array') {
-      throw new RuntimeFault(`Array "${target.name}" butuh index.`, currentPath)
+      throw new RuntimeFault(`Array "${target.name}" requires an index.`, currentPath)
     }
     frame.locals.set(key, coerce(asScalar(value), container.type))
   }
@@ -194,18 +194,18 @@ async function* run(
     switch (expr.kind) {
       case 'identifier': {
         const value = frame.locals.get(expr.name.toLowerCase())
-        if (!value) throw new RuntimeFault(`Variabel "${expr.name}" belum dideklarasi.`, currentPath)
+        if (!value) throw new RuntimeFault(`Variable "${expr.name}" is not declared.`, currentPath)
         return value
       }
       case 'index': {
         const container = frame.locals.get(expr.name.toLowerCase())
-        if (!container) throw new RuntimeFault(`Variabel "${expr.name}" belum dideklarasi.`, currentPath)
-        if (container.kind !== 'array') throw new RuntimeFault(`"${expr.name}" bukan array.`, currentPath)
+        if (!container) throw new RuntimeFault(`Variable "${expr.name}" is not declared.`, currentPath)
+        if (container.kind !== 'array') throw new RuntimeFault(`"${expr.name}" is not an array.`, currentPath)
         const index = Math.trunc(
           Number(asScalar(yield* evalValueAsync(expr.index, frame)).value),
         )
         if (index < 0 || index >= container.items.length) {
-          throw new RuntimeFault(`Index ${index} di luar batas array "${expr.name}".`, currentPath)
+          throw new RuntimeFault(`Index ${index} is out of bounds for array "${expr.name}".`, currentPath)
         }
         return container.items[index]
       }
@@ -230,7 +230,7 @@ async function* run(
         for (const arg of expr.args) args.push(yield* evalValueAsync(arg, frame))
         if (isBuiltin(expr.name)) return callBuiltin(expr.name, args, contextFor(frame))
         const fn = getFunction(program, expr.name)
-        if (!fn) throw new RuntimeFault(`Function "${expr.name}" tidak ditemukan.`, currentPath)
+        if (!fn) throw new RuntimeFault(`Function "${expr.name}" not found.`, currentPath)
         const result = yield* callFunction(fn, args, currentPath)
         return result ?? zero('Integer')
       }
@@ -252,14 +252,14 @@ async function* run(
     callPath: string,
   ): AsyncGenerator<RuntimeEvent, ScalarValue | undefined, string> {
     if (frames.length >= maxDepth) {
-      throw new RuntimeFault(`Batas rekursi tercapai (${maxDepth}).`, callPath)
+      throw new RuntimeFault(`Recursion depth limit reached (${maxDepth}).`, callPath)
     }
     const frame = makeFrame(fn)
     fn.params.forEach((param, index) => {
       const arg = args[index]
       if (param.isArray) {
         if (!arg || arg.kind !== 'array') {
-          throw new RuntimeFault(`Argumen ${index + 1} ${fn.name} harus array.`, callPath)
+          throw new RuntimeFault(`Argument ${index + 1} of ${fn.name} must be an array.`, callPath)
         }
         frame.locals.set(param.name.toLowerCase(), {
           kind: 'array',
@@ -319,7 +319,7 @@ async function* run(
         for (const name of stmt.names) {
           if (stmt.isArray) {
             const size = asInteger(asScalar(yield* evalScalarAsync(stmt.size, frame)))
-            if (size < 0) throw new RuntimeFault('Ukuran array tidak boleh negatif.', path)
+            if (size < 0) throw new RuntimeFault('Array size cannot be negative.', path)
             const elementType = stmt.type === 'None' ? 'Integer' : (stmt.type as ScalarType)
             frame.locals.set(name.toLowerCase(), {
               kind: 'array',
@@ -352,7 +352,7 @@ async function* run(
           } catch (error) {
             yield {
               type: 'inputError',
-              message: error instanceof Error ? error.message : 'Input tidak valid.',
+              message: error instanceof Error ? error.message : 'Invalid input.',
               path,
             }
           }
@@ -386,12 +386,12 @@ async function* run(
       case 'for': {
         const container = frame.locals.get(stmt.variable.toLowerCase())
         if (!container || container.kind !== 'scalar') {
-          throw new RuntimeFault(`Variabel For "${stmt.variable}" tidak valid.`, path)
+          throw new RuntimeFault(`For variable "${stmt.variable}" is not valid.`, path)
         }
         const start = asInteger(asScalar(yield* evalScalarAsync(stmt.start, frame)))
         const end = asInteger(asScalar(yield* evalScalarAsync(stmt.end, frame)))
         const step = Math.abs(asInteger(asScalar(yield* evalScalarAsync(stmt.step, frame))))
-        if (step === 0) throw new RuntimeFault('Step For tidak boleh 0.', path)
+        if (step === 0) throw new RuntimeFault('For step cannot be 0.', path)
         const direction = stmt.direction === 'dec' ? -1 : 1
         for (let value = start; direction > 0 ? value <= end : value >= end; value += step * direction) {
           frame.locals.set(stmt.variable.toLowerCase(), scalar('Integer', value))
@@ -401,7 +401,7 @@ async function* run(
       }
       case 'call': {
         const fn = getFunction(program, stmt.functionName)
-        if (!fn) throw new RuntimeFault(`Function "${stmt.functionName}" tidak ditemukan.`, path)
+        if (!fn) throw new RuntimeFault(`Function "${stmt.functionName}" not found.`, path)
         const args: Value[] = []
         for (const source of stmt.args) args.push(yield* evalValueAsync(parse(source), frame))
         yield* callFunction(fn, args, path)
