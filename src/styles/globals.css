@@ -1,0 +1,266 @@
+@import './tokens.css';
+@import 'tailwindcss';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell {
+  display: flex;
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 500px at 80% -10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
+    var(--bg);
+}
+
+.rail {
+  width: 72px;
+  flex: 0 0 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 8px;
+  border-right: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(12px);
+  z-index: 5;
+}
+
+.rail__brand {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  font-weight: 800;
+  font-size: 19px;
+  color: var(--accent-contrast);
+  background: linear-gradient(140deg, var(--accent), #22d3ee);
+  box-shadow: var(--shadow-sm);
+}
+
+.rail__items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.rail__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 9px 4px 7px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.rail__item:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.rail__item.is-active,
+.rail__item[aria-current='page'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.rail__text {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.panel {
+  width: 280px;
+  flex: 0 0 280px;
+  padding: 20px 18px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  animation: slide-in 160ms ease both;
+}
+
+.panel__title {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.panel__hint {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.shell__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 54px;
+  flex: 0 0 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.topbar__project {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.topbar__name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__saved {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.topbar__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.icon-button:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.shell__content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.placeholder {
+  padding: 32px;
+}
+
+.placeholder h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.desktop-gate {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+}
+
+.desktop-gate__card {
+  max-width: 420px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.desktop-gate__card h1 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.desktop-gate__card p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .rail {
+    width: 60px;
+    flex-basis: 60px;
+  }
+  .rail__text {
+    display: none;
+  }
+  .panel {
+    width: 220px;
+    flex-basis: 220px;
+  }
+}
