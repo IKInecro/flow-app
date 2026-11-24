@@ -32,3 +32,17 @@ test('renders start, statement, and end nodes for the selected function', () => 
   expect(screen.getByText('Output "hi"')).toBeInTheDocument()
   expect(screen.getByLabelText('Selesai')).toBeInTheDocument()
 })
+
+test('marks nodes with validation errors', () => {
+  const record = createProjectRecord('Bad')
+  record.program = appendStmt(record.program, 'Main', {
+    kind: 'assign',
+    target: { name: 'ghost' },
+    expression: '1',
+  })
+  useProjectStore.getState().load(record)
+
+  render(<FlowCanvas />)
+
+  expect(screen.getByLabelText('Error validasi')).toBeInTheDocument()
+})

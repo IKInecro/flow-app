@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, LayoutGrid, Redo2, Undo2 } from 'lucide-react'
-import { formatStmt, findStmt } from '../../core/model/program'
 import {
   createProjectRecord,
   getProject,
@@ -9,6 +8,8 @@ import {
   putProject,
 } from '../../shared/storage/projects'
 import { FlowCanvas } from './canvas/FlowCanvas'
+import { FunctionPanel } from './inspector/FunctionPanel'
+import { Inspector } from './inspector/Inspector'
 import { ShapePalette } from './palette/ShapePalette'
 import { useProjectStore } from './store/projectStore'
 import { useUiStore } from './store/uiStore'
@@ -31,8 +32,8 @@ export function EditorPage() {
   const canUndo = useProjectStore((state) => state.canUndo)
   const canRedo = useProjectStore((state) => state.canRedo)
   const clearOffsets = useProjectStore((state) => state.clearOffsets)
-  const selectedFunction = useUiStore((state) => state.selectedFunction)
-  const selectedPath = useUiStore((state) => state.selectedPath)
+  const inspectorTab = useUiStore((state) => state.inspectorTab)
+  const setInspectorTab = useUiStore((state) => state.setInspectorTab)
   const setSelectedFunction = useUiStore((state) => state.setSelectedFunction)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -65,8 +66,6 @@ export function EditorPage() {
     }
   }, [id, load, navigate, setSelectedFunction])
 
-  const selected =
-    program && selectedPath ? (findStmt(program, selectedFunction, selectedPath)?.stmt ?? null) : null
   const warning = getStorageWarning()
 
   if (loading) {
@@ -143,20 +142,29 @@ export function EditorPage() {
       <div className="editor__body">
         <ShapePalette />
         <FlowCanvas />
-        <aside className="inspector" aria-label="Inspector">
-          <h2 className="inspector__title">Properti</h2>
-          {selected ? (
-            <div className="inspector__content">
-              <p className="inspector__kind">{selected.kind}</p>
-              <pre className="inspector__preview">{formatStmt(selected)}</pre>
-              <p className="inspector__hint">Form edit lengkap ada di tahap inspector.</p>
-            </div>
-          ) : (
-            <p className="inspector__hint">
-              Pilih node di kanvas untuk melihat propertinya.
-            </p>
-          )}
-        </aside>
+        <div className="editor__side">
+          <div className="editor__tabs" role="tablist" aria-label="Panel kanan">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={inspectorTab !== 'functions'}
+              className={inspectorTab !== 'functions' ? 'is-active' : ''}
+              onClick={() => setInspectorTab('properties')}
+            >
+              Properti
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={inspectorTab === 'functions'}
+              className={inspectorTab === 'functions' ? 'is-active' : ''}
+              onClick={() => setInspectorTab('functions')}
+            >
+              Function
+            </button>
+          </div>
+          {inspectorTab === 'functions' ? <FunctionPanel /> : <Inspector />}
+        </div>
       </div>
     </section>
   )

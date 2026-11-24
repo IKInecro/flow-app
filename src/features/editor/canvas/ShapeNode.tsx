@@ -8,6 +8,7 @@ export interface ShapeNodeData extends Record<string, unknown> {
   functionName: string
   width: number
   height: number
+  hasError?: boolean
 }
 
 export type ShapeNodeType = Node<ShapeNodeData, 'shape'>
@@ -37,6 +38,11 @@ export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
       <span className={`flow-node__label ${shape === 'note' ? 'flow-node__label--note' : ''}`}>
         {label}
       </span>
+      {data.hasError ? (
+        <span className="flow-node__badge" role="img" aria-label="Error validasi" title="Ada masalah validasi">
+          !
+        </span>
+      ) : null}
       {!isTerminator ? <Handle type="target" position={Position.Top} className="flow-handle" /> : null}
       {data.kind !== 'end' ? (
         <Handle type="source" position={Position.Bottom} className="flow-handle" />

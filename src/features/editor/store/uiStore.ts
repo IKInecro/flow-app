@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { getTheme, setTheme, type Theme } from '../../../shared/theme/theme'
 
 export type SidebarPanel = 'palette' | 'functions' | 'variables' | 'source' | 'settings' | null
-export type InspectorTab = 'properties' | 'variables' | 'callstack' | 'source'
+export type InspectorTab = 'properties' | 'functions' | 'variables' | 'callstack' | 'source'
 export type ConsoleMode = 'chat' | 'plain'
 
 interface UiState {

@@ -15,6 +15,7 @@ import { formatStmt, getFunction, createStmt, insertStmt, removeStmt } from '../
 import type { InsertPosition } from '../../../core/model/program'
 import type { StmtKind } from '../../../core/model/types'
 import { layoutFunction } from '../../../core/layout/layout'
+import { checkProgram } from '../../../core/lang/validate'
 import { useProjectStore } from '../store/projectStore'
 import { useUiStore } from '../store/uiStore'
 import { InsertMenu, type InsertTarget } from './InsertMenu'
@@ -32,6 +33,15 @@ export function FlowCanvas() {
   const selectedPath = useUiStore((state) => state.selectedPath)
   const select = useUiStore((state) => state.select)
   const [insertTarget, setInsertTarget] = useState<InsertTarget | null>(null)
+
+  const errorPaths = useMemo(() => {
+    if (!program) return new Set<string>()
+    return new Set(
+      checkProgram(program)
+        .filter((item) => item.severity === 'error' && item.function === selectedFunction)
+        .map((item) => item.path),
+    )
+  }, [program, selectedFunction])
 
   const fn = program ? getFunction(program, selectedFunction) : undefined
   const layout = useMemo(() => (fn ? layoutFunction(fn) : null), [fn])
@@ -67,10 +77,11 @@ export function FlowCanvas() {
           functionName: selectedFunction,
           width: item.width,
           height: item.height,
+          hasError: Boolean(item.stmt) && errorPaths.has(item.path),
         },
       }
     })
-  }, [layout, selectedFunction, viewState.nodeOffsets])
+  }, [layout, selectedFunction, viewState.nodeOffsets, errorPaths])
 
   const edges = useMemo<Edge[]>(() => {
     if (!layout) return []
