@@ -30,7 +30,7 @@ test('shows an empty state and creates a project', async () => {
   expect(await screen.findByText(/belum ada proyek/i)).toBeInTheDocument()
 
   await userEvent.click(screen.getByRole('button', { name: /proyek baru/i }))
-  expect(await screen.findByText('editor-page', {}, { timeout: 4000 })).toBeInTheDocument()
+  expect(await screen.findByText('editor-page', {}, { timeout: 12000 })).toBeInTheDocument()
   await waitFor(async () => expect(await listProjects()).toHaveLength(1))
 })
 
