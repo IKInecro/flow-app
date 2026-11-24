@@ -55,7 +55,7 @@ function compare(op: string, left: ScalarValue, right: ScalarValue): boolean {
   throw new RuntimeFault(`Tidak bisa membandingkan ${left.type} dengan ${right.type}.`)
 }
 
-function applyUnary(op: UnaryOp, value: ScalarValue): ScalarValue {
+export function applyUnary(op: UnaryOp, value: ScalarValue): ScalarValue {
   if (op === 'not' || op === '!' || op === '¬') {
     return scalar('Boolean', !asBoolean(value))
   }
@@ -63,7 +63,7 @@ function applyUnary(op: UnaryOp, value: ScalarValue): ScalarValue {
   return scalar(value.type === 'Integer' ? 'Integer' : 'Real', -number)
 }
 
-function applyBinary(op: string, left: ScalarValue, right: ScalarValue): ScalarValue {
+export function applyBinary(op: string, left: ScalarValue, right: ScalarValue): ScalarValue {
   if (op === '&') return scalar('String', toStr(left) + toStr(right))
 
   if (op === 'and' || op === 'or') {

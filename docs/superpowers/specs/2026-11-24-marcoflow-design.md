@@ -236,6 +236,7 @@ type RuntimeEvent =
   | { type: 'output'; text: string; newline: boolean; path: string }
   | { type: 'inputRequest'; variable: string; expectedType: FlowType }
   | { type: 'inputAccept'; value: string }
+  | { type: 'inputError'; message: string; path: string }
   | { type: 'breakpoint'; path: string }
   | { type: 'callEnter'; function: string; args: Value[]; path: string }
   | { type: 'callExit'; function: string; returnValue?: Value }
