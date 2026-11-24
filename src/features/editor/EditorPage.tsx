@@ -10,6 +10,10 @@ import {
 import { FlowCanvas } from './canvas/FlowCanvas'
 import { FunctionPanel } from './inspector/FunctionPanel'
 import { Inspector } from './inspector/Inspector'
+import { CallStack } from '../run/CallStack'
+import { ConsoleDock } from '../run/ConsoleDock'
+import { RunToolbar } from '../run/RunToolbar'
+import { VariableWatch } from '../run/VariableWatch'
 import { ShapePalette } from './palette/ShapePalette'
 import { useProjectStore } from './store/projectStore'
 import { useUiStore } from './store/uiStore'
@@ -144,28 +148,39 @@ export function EditorPage() {
         <FlowCanvas />
         <div className="editor__side">
           <div className="editor__tabs" role="tablist" aria-label="Panel kanan">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={inspectorTab !== 'functions'}
-              className={inspectorTab !== 'functions' ? 'is-active' : ''}
-              onClick={() => setInspectorTab('properties')}
-            >
-              Properti
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={inspectorTab === 'functions'}
-              className={inspectorTab === 'functions' ? 'is-active' : ''}
-              onClick={() => setInspectorTab('functions')}
-            >
-              Function
-            </button>
+            {(
+              [
+                ['properties', 'Properti'],
+                ['functions', 'Function'],
+                ['variables', 'Variabel'],
+                ['callstack', 'Stack'],
+              ] as const
+            ).map(([tab, label]) => (
+              <button
+                key={tab}
+                type="button"
+                role="tab"
+                aria-selected={inspectorTab === tab}
+                className={inspectorTab === tab ? 'is-active' : ''}
+                onClick={() => setInspectorTab(tab)}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-          {inspectorTab === 'functions' ? <FunctionPanel /> : <Inspector />}
+          {inspectorTab === 'functions' ? (
+            <FunctionPanel />
+          ) : inspectorTab === 'variables' ? (
+            <VariableWatch />
+          ) : inspectorTab === 'callstack' ? (
+            <CallStack />
+          ) : (
+            <Inspector />
+          )}
         </div>
+        <RunToolbar />
       </div>
+      <ConsoleDock />
     </section>
   )
 }
