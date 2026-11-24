@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { DesktopGate } from './DesktopGate'
 import { Sidebar } from './Sidebar'
-import { TopBar } from './TopBar'
 import { CommandPalette } from './CommandPalette'
 
 export function Shell() {
@@ -9,7 +8,6 @@ export function Shell() {
     <div className="shell">
       <Sidebar />
       <div className="shell__main">
-        <TopBar />
         <main className="shell__content">
           <DesktopGate>
             <Outlet />

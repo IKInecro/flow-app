@@ -4,6 +4,7 @@ import {
   BackgroundVariant,
   Controls,
   MarkerType,
+  MiniMap,
   ReactFlow,
   type Edge,
   type Node,
@@ -25,11 +26,15 @@ import { layoutFunction } from '../../../core/layout/layout'
 import { checkProgram } from '../../../core/lang/validate'
 import { useProjectStore } from '../store/projectStore'
 import { useUiStore } from '../store/uiStore'
+import { useRuntimeStore } from '../../run/runtimeStore'
+import { RunToolbar } from '../../run/RunToolbar'
+import { FlowEdge } from './FlowEdge'
 import { InsertMenu, type InsertTarget } from './InsertMenu'
 import { ShapeToolbar } from './NodeToolbar'
 import { ShapeNode, type ShapeNodeData } from './ShapeNode'
 
 const nodeTypes = { shape: ShapeNode }
+const edgeTypes = { flow: FlowEdge }
 
 export function FlowCanvas() {
   const program = useProjectStore((state) => state.program)
@@ -39,7 +44,9 @@ export function FlowCanvas() {
   const selectedFunction = useUiStore((state) => state.selectedFunction)
   const selectedPath = useUiStore((state) => state.selectedPath)
   const select = useUiStore((state) => state.select)
+  const activePath = useRuntimeStore((state) => state.activePath)
   const [insertTarget, setInsertTarget] = useState<InsertTarget | null>(null)
+  const [dragging, setDragging] = useState(false)
 
   const errorPaths = useMemo(() => {
     if (!program) return new Set<string>()
@@ -85,26 +92,33 @@ export function FlowCanvas() {
           width: item.width,
           height: item.height,
           hasError: Boolean(item.stmt) && errorPaths.has(item.path),
+          active: Boolean(activePath) && item.path === activePath,
         },
       }
     })
-  }, [layout, selectedFunction, viewState.nodeOffsets, errorPaths])
+  }, [layout, selectedFunction, viewState.nodeOffsets, errorPaths, activePath])
 
   const edges = useMemo<Edge[]>(() => {
     if (!layout) return []
-    return layout.edges.map((item) => ({
-      id: item.id,
-      source: item.source,
-      target: item.target,
-      type: 'smoothstep',
-      label: item.label,
-      labelStyle: { fill: 'var(--text-muted)', fontSize: 11, fontWeight: 600 },
-      labelBgStyle: { fill: 'var(--surface)', fillOpacity: 0.9 },
-      labelBgPadding: [5, 3] as [number, number],
-      style: { stroke: 'var(--border-strong, var(--border))', strokeWidth: 1.6 },
-      markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16, color: 'var(--text-muted)' },
-    }))
-  }, [layout])
+    const nodePaths = new Map(layout.nodes.map((item) => [item.id, item.path]))
+    return layout.edges.map((item) => {
+      const live = Boolean(activePath) && nodePaths.get(item.source) === activePath
+      return {
+        id: item.id,
+        source: item.source,
+        target: item.target,
+        type: 'flow',
+        label: item.label,
+        data: { live },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: live ? 18 : 15,
+          height: live ? 18 : 15,
+          color: live ? 'var(--accent)' : 'var(--text-muted)',
+        },
+      }
+    })
+  }, [layout, activePath])
 
   const handleDragStop: OnNodeDrag = useCallback(
     (_event, node) => {
@@ -169,12 +183,22 @@ export function FlowCanvas() {
   }
 
   return (
-    <div className="canvas">
+    <div className={`canvas ${dragging ? 'is-dragging' : ''}`}>
+      <div className="canvas__hud" role="status">
+        <span className={`canvas__hud-dot ${activePath ? 'is-live' : ''}`} aria-hidden="true" />
+        <strong>{selectedFunction}</strong>
+        <span>{fn ? fn.body.length : 0} langkah</span>
+      </div>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
-        onNodeDragStop={handleDragStop}
+        edgeTypes={edgeTypes}
+        onNodeDragStart={() => setDragging(true)}
+        onNodeDragStop={(event, node, nodeBounds) => {
+          handleDragStop(event, node, nodeBounds)
+          setDragging(false)
+        }}
         onNodeClick={handleNodeClick}
         onPaneClick={() => select(null)}
         fitView
@@ -186,13 +210,29 @@ export function FlowCanvas() {
         proOptions={{ hideAttribution: true }}
         aria-label="Kanvas flowchart"
       >
-        <Background variant={BackgroundVariant.Dots} gap={22} size={1.4} color="var(--bg-grid)" />
+        <Background variant={BackgroundVariant.Dots} gap={24} size={1.3} color="var(--bg-grid)" />
         <Controls showInteractive={false} position="bottom-right" />
+        <MiniMap
+          pannable
+          zoomable
+          position="top-right"
+          style={{ width: 132, height: 84 }}
+          nodeStrokeWidth={2}
+          nodeColor={(node) => {
+            const kind = (node.data as ShapeNodeData | undefined)?.kind
+            if (kind === 'start' || kind === 'end') return 'var(--success)'
+            if (kind === 'if' || kind === 'while' || kind === 'do' || kind === 'for') return 'var(--warning)'
+            if (kind === 'comment') return 'var(--text-muted)'
+            return 'var(--accent)'
+          }}
+        />
       </ReactFlow>
+
+      <RunToolbar />
 
       {fn && fn.body.length === 0 ? (
         <div className="canvas__cta">
-          <p>Function {selectedFunction} masih kosong.</p>
+          <p>Fungsi {selectedFunction} masih kosong.</p>
           <button type="button" className="button button--primary" onClick={addFirstOutput}>
             Tambah Output
           </button>

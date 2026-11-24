@@ -9,6 +9,7 @@ export interface ShapeNodeData extends Record<string, unknown> {
   width: number
   height: number
   hasError?: boolean
+  active?: boolean
 }
 
 export type ShapeNodeType = Node<ShapeNodeData, 'shape'>
@@ -16,13 +17,12 @@ export type ShapeNodeType = Node<ShapeNodeData, 'shape'>
 export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
   const shape = shapeForKind(data.kind)
   const category = categoryForKind(data.kind)
-  const isTerminator = data.kind === 'start' || data.kind === 'end'
   const path = shapePath(shape, data.width, data.height)
   const label = data.label
 
   return (
     <div
-      className={`flow-node flow-node--${category} ${selected ? 'is-selected' : ''}`}
+      className={`flow-node flow-node--${category} ${selected ? 'is-selected' : ''} ${data.active ? 'is-active' : ''}`}
       style={{ width: data.width, height: data.height }}
       data-kind={data.kind}
       aria-label={label}
@@ -43,7 +43,7 @@ export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
           !
         </span>
       ) : null}
-      {!isTerminator ? <Handle type="target" position={Position.Top} className="flow-handle" /> : null}
+      {data.kind !== 'start' ? <Handle type="target" position={Position.Top} className="flow-handle" /> : null}
       {data.kind !== 'end' ? (
         <Handle type="source" position={Position.Bottom} className="flow-handle" />
       ) : null}

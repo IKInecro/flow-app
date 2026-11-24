@@ -53,7 +53,7 @@ test('runs a filtered command and closes the palette', async () => {
     </MemoryRouter>,
   )
 
-  expect(screen.getByRole('dialog', { name: 'Command palette' })).toBeInTheDocument()
+  expect(screen.getByRole('dialog', { name: 'Perintah' })).toBeInTheDocument()
   await userEvent.type(screen.getByLabelText('Cari perintah'), 'jalankan')
   await userEvent.click(screen.getByRole('option', { name: /jalankan program/i }))
 

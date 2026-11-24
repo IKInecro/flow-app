@@ -15,7 +15,6 @@ import { FileMenu } from './export/FileMenu'
 import { useShortcuts } from './useShortcuts'
 import { CallStack } from '../run/CallStack'
 import { ConsoleDock } from '../run/ConsoleDock'
-import { RunToolbar } from '../run/RunToolbar'
 import { VariableWatch } from '../run/VariableWatch'
 import { ShapePalette } from './palette/ShapePalette'
 import { useProjectStore } from './store/projectStore'
@@ -137,7 +136,7 @@ export function EditorPage() {
             onClick={clearOffsets}
           >
             <LayoutGrid size={16} aria-hidden="true" />
-            Auto-layout
+            <span>Auto-layout</span>
           </button>
         </div>
       </header>
@@ -156,7 +155,7 @@ export function EditorPage() {
             {(
               [
                 ['properties', 'Properti'],
-                ['functions', 'Function'],
+                ['functions', 'Fungsi'],
                 ['variables', 'Variabel'],
                 ['callstack', 'Stack'],
                 ['source', 'Kode'],
@@ -174,19 +173,20 @@ export function EditorPage() {
               </button>
             ))}
           </div>
-          {inspectorTab === 'functions' ? (
-            <FunctionPanel />
-          ) : inspectorTab === 'variables' ? (
-            <VariableWatch />
-          ) : inspectorTab === 'callstack' ? (
-            <CallStack />
-          ) : inspectorTab === 'source' ? (
-            <SourcePanel />
-          ) : (
-            <Inspector />
-          )}
+          <div className="editor__panel" key={inspectorTab}>
+            {inspectorTab === 'functions' ? (
+              <FunctionPanel />
+            ) : inspectorTab === 'variables' ? (
+              <VariableWatch />
+            ) : inspectorTab === 'callstack' ? (
+              <CallStack />
+            ) : inspectorTab === 'source' ? (
+              <SourcePanel />
+            ) : (
+              <Inspector />
+            )}
+          </div>
         </div>
-        <RunToolbar />
       </div>
       <ConsoleDock />
     </section>

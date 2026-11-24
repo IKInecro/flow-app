@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T18:55:00.000Z",
+  "title": "Design System: MarcoFlow",
+  "extensions": {
+    "colorMeta": {
+      "route-vermilion": {
+        "role": "primary",
+        "displayName": "Route Vermilion",
+        "canonical": "oklch(52.9% 0.159 32.3)",
+        "tonalRamp": ["#470000", "#720000", "#9e2510", "#c74d38", "#f1735c", "#ffa390", "#ffc0ac", "#ffe1d4"]
+      },
+      "ink-navy": {
+        "role": "neutral",
+        "displayName": "Ink Navy",
+        "canonical": "oklch(24.0% 0.025 253.8)",
+        "tonalRamp": ["#0e1721", "#2d3642", "#4f5966", "#707b89", "#94a0ae", "#b9c2cd", "#d6dfeb", "#edf2f9"]
+      },
+      "porcelain": {
+        "role": "neutral",
+        "displayName": "Porcelain Ground",
+        "canonical": "oklch(95.0% 0.010 87.5)",
+        "tonalRamp": ["#181611", "#373530", "#5a5852", "#7d7a74", "#a19e98", "#c3c1bc", "#e0ded9", "#f3f2ee"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "oklch(99.4% 0.006 84.6)",
+        "tonalRamp": ["#171613", "#373532", "#595854", "#7c7a77", "#a09e9a", "#c2c1be", "#dfdedb", "#f2f2f0"]
+      },
+      "warm-border": {
+        "role": "neutral",
+        "displayName": "Warm Hairline",
+        "canonical": "oklch(89.6% 0.016 82.8)",
+        "tonalRamp": ["#1a150e", "#39352c", "#5c574e", "#7f7a70", "#a39e93", "#c5c0b8", "#e2ddd5", "#f4f1ec"]
+      },
+      "muted-slate": {
+        "role": "neutral",
+        "displayName": "Muted Slate",
+        "canonical": "oklch(51.3% 0.023 253.0)",
+        "tonalRamp": ["#0f1720", "#2d3641", "#4f5965", "#717b88", "#95a0ad", "#b9c2cc", "#d6dfe9", "#edf2f9"]
+      },
+      "line-blue": {
+        "role": "secondary",
+        "displayName": "Cobalt Line",
+        "canonical": "oklch(49.1% 0.186 263.3)",
+        "tonalRamp": ["#050068", "#002092", "#1b4cbd", "#3d72e6", "#5f98ff", "#91bfff", "#adddff", "#d5f2ff"]
+      },
+      "line-teal": {
+        "role": "secondary",
+        "displayName": "Teal Line",
+        "canonical": "oklch(53.4% 0.098 175.4)",
+        "tonalRamp": ["#002214", "#004433", "#006955", "#258d77", "#52b29b", "#8dd1be", "#aaefdc", "#d4fcf0"]
+      },
+      "line-amber": {
+        "role": "secondary",
+        "displayName": "Amber Line",
+        "canonical": "oklch(62.6% 0.131 72.7)",
+        "tonalRamp": ["#350000", "#5b2300", "#834800", "#a86b00", "#cf9032", "#e8b778", "#ffd495", "#ffecc7"]
+      },
+      "rail-ink": {
+        "role": "neutral",
+        "displayName": "Rail Ink",
+        "canonical": "oklch(16.1% 0.013 248.5)",
+        "tonalRamp": ["#11171c", "#30363c", "#52595f", "#747b82", "#989fa7", "#bcc2c7", "#d9dfe4", "#eff2f6"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Bricolage Display",
+        "purpose": "Hub headline and section headings only; never buttons, labels, or diagram text."
+      },
+      "body": {
+        "displayName": "Onest UI",
+        "purpose": "All working interface copy, panels, forms, console prompts."
+      },
+      "title": {
+        "displayName": "Onest Title",
+        "purpose": "Card names, project title, panel headings."
+      },
+      "mono": {
+        "displayName": "JetBrains Code",
+        "purpose": "Generated code, console output, and numeric diagram data only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "rest",
+        "value": "0 1px 2px rgb(23 32 43 / 7%)",
+        "purpose": "Cards, buttons, and controls at rest."
+      },
+      {
+        "name": "lift",
+        "value": "0 2px 6px rgb(23 32 43 / 6%), 0 14px 32px -14px rgb(23 32 43 / 24%)",
+        "purpose": "Hovered cards and the floating run toolbar."
+      },
+      {
+        "name": "overlay",
+        "value": "0 30px 70px -24px rgb(23 32 43 / 38%), 0 8px 24px -12px rgb(23 32 43 / 18%)",
+        "purpose": "Dialogs, drawers, and floating toolbars above the work area."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Default entrance and state easing; 150-300ms."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.65, 0, 0.35, 1)",
+        "purpose": "Ambient loops such as skeleton shimmer."
+      },
+      {
+        "name": "route-pulse",
+        "value": "1.1s linear infinite",
+        "purpose": "Travelling dot and dash pulse along the active connector while running."
+      },
+      {
+        "name": "panel-in",
+        "value": "220ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "purpose": "Inspector tab content swap; opacity plus 6px rise."
+      },
+      {
+        "name": "dialog-in",
+        "value": "240ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "purpose": "Modal rise; 10px translate plus 0.98 scale."
+      }
+    ],
+    "breakpoints": [
+      { "name": "rail-compact", "value": "1180px" },
+      { "name": "editor-narrow", "value": "1080px" },
+      { "name": "rail-icons", "value": "900px" },
+      { "name": "editor-tight", "value": "820px" },
+      { "name": "desktop-gate", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Committed action such as creating a project or starting a run.",
+      "html": "<button class=\"ds-btn-primary\">Proyek baru</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 38px; padding: 0 15px; border: 1px solid transparent; border-radius: 9px; background: var(--accent, #b53d28); color: var(--accent-contrast, #fffaf6); font-family: var(--font-ui, sans-serif); font-size: 14px; font-weight: 600; box-shadow: 0 10px 22px -12px rgb(181 61 40 / 75%); transition: background 160ms cubic-bezier(0.16,1,0.3,1), box-shadow 160ms cubic-bezier(0.16,1,0.3,1), transform 120ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: #9e3522; box-shadow: 0 14px 28px -12px rgb(181 61 40 / 70%); } .ds-btn-primary:active { transform: translateY(1px) scale(0.995); box-shadow: 0 1px 2px rgb(23 32 43 / 7%); } .ds-btn-primary:focus-visible { outline: 2px solid var(--accent, #b53d28); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Neutral action beside a primary one: import, export, cancel.",
+      "html": "<button class=\"ds-btn\">Impor</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 38px; padding: 0 15px; border: 1px solid var(--border-strong, #cdc5b7); border-radius: 9px; background: var(--surface, #fffdf9); color: var(--text, #17202b); font-family: var(--font-ui, sans-serif); font-size: 14px; font-weight: 600; box-shadow: 0 1px 2px rgb(23 32 43 / 7%); transition: background 160ms cubic-bezier(0.16,1,0.3,1), box-shadow 160ms cubic-bezier(0.16,1,0.3,1), transform 120ms cubic-bezier(0.16,1,0.3,1); } .ds-btn:hover { background: var(--surface-2, #f7f3ec); box-shadow: 0 2px 6px rgb(23 32 43 / 6%), 0 14px 32px -14px rgb(23 32 43 / 24%); } .ds-btn:active { transform: translateY(1px) scale(0.995); } .ds-btn:focus-visible { outline: 2px solid var(--accent, #b53d28); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Expression and value inputs in the inspector; warm fill flips to paper on focus.",
+      "html": "<label class=\"ds-field\"><span>Ekspresi</span><input value=\"&quot;Halo, dunia!&quot;\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 5px; font-family: var(--font-ui, sans-serif); } .ds-field > span { color: var(--text, #17202b); font-size: 11px; font-weight: 600; } .ds-field input { height: 36px; padding: 0 10px; border: 1px solid var(--border, #e2dcd1); border-radius: 9px; background: var(--surface-2, #f7f3ec); color: var(--text, #17202b); font: inherit; font-size: 13px; outline: none; transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease; } .ds-field input:hover { border-color: var(--border-strong, #cdc5b7); } .ds-field input:focus-visible { background: var(--surface, #fffdf9); border-color: var(--accent, #b53d28); box-shadow: 0 0 0 3px rgb(181 61 40 / 16%); outline: none; }"
+    },
+    {
+      "name": "Navigation Rail Item",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Ink rail entry; current route gets a vermilion-tinted plaque and keeps its icon lit.",
+      "html": "<nav class=\"ds-rail\"><a class=\"ds-rail-item is-current\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"19\" height=\"19\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg><span>Proyek</span></a><a class=\"ds-rail-item\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"19\" height=\"19\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><path d=\"M10 6.5h4a3 3 0 0 1 3 3V14\"/></svg><span>Editor</span></a></nav>",
+      "css": ".ds-rail { display: flex; flex-direction: column; gap: 4px; width: 248px; padding: 14px; background: var(--rail, #17202b); font-family: var(--font-ui, sans-serif); border-radius: 12px; } .ds-rail-item { display: flex; align-items: center; gap: 11px; padding: 9px 10px; border-radius: 10px; color: var(--rail-muted, #a2adb9); font-size: 13px; font-weight: 550; text-decoration: none; transition: background 160ms cubic-bezier(0.16,1,0.3,1), color 160ms cubic-bezier(0.16,1,0.3,1); } .ds-rail-item:hover { background: var(--rail-raised, #202b38); color: var(--rail-text, #f6f2ea); } .ds-rail-item.is-current { background: rgb(181 61 40 / 17%); color: var(--rail-text, #f6f2ea); } .ds-rail-item.is-current svg { color: var(--accent, #b53d28); } .ds-rail-item:focus-visible { outline: 2px solid var(--accent, #b53d28); outline-offset: 2px; }"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Compact storage or state label under the hub headline.",
+      "html": "<span class=\"ds-chip\"><svg viewBox=\"0 0 24 24\" width=\"13\" height=\"13\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"7\" rx=\"2\"/><rect x=\"3\" y=\"13\" width=\"18\" height=\"7\" rx=\"2\"/><path d=\"M7 7.5h.01M7 16.5h.01\"/></svg>Lokal, tanpa akun</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid var(--border, #e2dcd1); border-radius: 99px; background: var(--surface, #fffdf9); color: var(--text-muted, #5e6874); font-family: var(--font-ui, sans-serif); font-size: 11px; font-weight: 600; } .ds-chip svg { color: var(--success, #0a7f6a); }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "project-card",
+      "description": "Project tile with a route-map preview; lifts on hover and reveals its open affordance.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-preview\"><svg viewBox=\"0 0 240 120\"><path d=\"M28 96V64a8 8 0 0 1 8-8h56a8 8 0 0 0 8-8V28h112\"/><circle cx=\"28\" cy=\"96\" r=\"5\"/><circle cx=\"100\" cy=\"48\" r=\"4.5\"/><circle cx=\"188\" cy=\"28\" r=\"4.5\"/></svg></div><h3>Halo Dunia</h3><p>24 Nov, 18.20 &middot; 3 node</p></article>",
+      "css": ".ds-card { width: 252px; padding: 12px 12px 14px; border: 1px solid var(--border, #e2dcd1); border-radius: 18px; background: var(--surface, #fffdf9); box-shadow: 0 1px 2px rgb(23 32 43 / 7%); font-family: var(--font-ui, sans-serif); transition: transform 220ms cubic-bezier(0.16,1,0.3,1), box-shadow 220ms cubic-bezier(0.16,1,0.3,1), border-color 200ms ease; } .ds-card:hover { transform: translateY(-3px); border-color: rgb(181 61 40 / 38%); box-shadow: 0 30px 70px -24px rgb(23 32 43 / 38%), 0 8px 24px -12px rgb(23 32 43 / 18%); } .ds-card-preview { height: 132px; margin-bottom: 12px; border-radius: 12px; background: radial-gradient(140px 100px at 80% 10%, rgb(181 61 40 / 9%), transparent 70%), var(--surface-2, #f7f3ec); overflow: hidden; } .ds-card-preview svg { width: 100%; height: 100%; } .ds-card-preview path { fill: none; stroke: var(--border-strong, #cdc5b7); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 220ms ease; } .ds-card:hover .ds-card-preview path { stroke: rgb(181 61 40 / 55%); } .ds-card-preview circle { fill: var(--surface, #fffdf9); stroke: var(--border-strong, #cdc5b7); stroke-width: 2; } .ds-card-preview circle:first-of-type { fill: var(--success, #0a7f6a); stroke: var(--success, #0a7f6a); } .ds-card-preview circle:nth-of-type(3) { fill: var(--accent, #b53d28); stroke: var(--accent, #b53d28); } .ds-card h3 { margin: 0 0 3px; padding: 0 2px; color: var(--text, #17202b); font-size: 14.5px; font-weight: 620; letter-spacing: -0.01em; } .ds-card p { margin: 0; padding: 0 2px; color: var(--text-muted, #5e6874); font-size: 11.5px; }"
+    },
+    {
+      "name": "Inspector Tab",
+      "kind": "custom",
+      "refersTo": "tab",
+      "description": "Segmented tab in the inspector header; active state is a raised paper plaque, not an underline.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab is-active\" role=\"tab\" aria-selected=\"true\">Properti</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Variabel</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Kode</button></div>",
+      "css": ".ds-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding: 6px; border-bottom: 1px solid var(--border, #e2dcd1); background: var(--surface-2, #f7f3ec); font-family: var(--font-ui, sans-serif); } .ds-tab { padding: 6px 2px; border: 0; border-radius: 8px; background: transparent; color: var(--text-muted, #5e6874); font: inherit; font-size: 10.5px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background 140ms ease, color 140ms ease; } .ds-tab:hover { background: var(--surface, #fffdf9); color: var(--text, #17202b); } .ds-tab.is-active { background: var(--surface, #fffdf9); color: var(--accent, #b53d28); box-shadow: 0 1px 2px rgb(23 32 43 / 7%); } .ds-tab:focus-visible { outline: 2px solid var(--accent, #b53d28); outline-offset: 2px; }"
+    },
+    {
+      "name": "Live Route Connector",
+      "kind": "custom",
+      "refersTo": "flow-edge",
+      "description": "Signature component. Neutral smooth-step route at rest; when its source station is active it turns vermilion, gains a dash pulse, and a dot travels the path.",
+      "html": "<svg class=\"ds-edge\" viewBox=\"0 0 220 150\" width=\"220\" height=\"150\"><path class=\"ds-edge-path\" d=\"M110 20v50a12 12 0 0 0 12 12h-24\"/><path class=\"ds-edge-pulse\" pathLength=\"1\" d=\"M110 20v50a12 12 0 0 0 12 12h-24\"/><circle class=\"ds-edge-dot\" r=\"3.4\"><animateMotion dur=\"1.1s\" repeatCount=\"indefinite\" path=\"M110 20v50a12 12 0 0 0 12 12h-24\"/></circle></svg>",
+      "css": ".ds-edge { overflow: visible; } .ds-edge-path { fill: none; stroke: var(--border-strong, #cdc5b7); stroke-width: 1.7; stroke-linecap: round; transition: stroke 160ms ease, stroke-width 160ms ease; } .ds-edge:hover .ds-edge-path { stroke: var(--accent, #b53d28); stroke-width: 2.4; stroke-dasharray: 6 5; animation: ds-edge-dash 0.55s linear infinite; } .ds-edge-pulse { fill: none; stroke: var(--accent, #b53d28); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 0.16 0.84; opacity: 0.9; animation: ds-edge-flow 1.1s linear infinite; } .ds-edge-dot { fill: var(--accent, #b53d28); stroke: var(--surface, #fffdf9); stroke-width: 2; } @keyframes ds-edge-flow { to { stroke-dashoffset: -1; } } @keyframes ds-edge-dash { to { stroke-dashoffset: -11; } } @media (prefers-reduced-motion: reduce) { .ds-edge-dot { display: none; } .ds-edge-pulse { animation: none; } .ds-edge:hover .ds-edge-path { stroke-dasharray: none; animation: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Daylight Wayfinding",
+    "overview": "MarcoFlow looks like a campus route map read in the morning: warm paper, deep ink, and a single vermilion line telling you where you are going. The interface is a working tool first, so navigation, panels, tabs, and forms stay familiar. The world enters through colour, type, density, and one live gesture: when a program runs, the active station and its connector pulse like a route being travelled.",
+    "keyCharacteristics": [
+      "Warm porcelain ground with a deep ink sidebar.",
+      "One vermilion accent reserved for action, selection, and the live route.",
+      "Line colours (cobalt, teal, amber) carry diagram meaning, never decoration.",
+      "Compact product density with generous grouping.",
+      "Motion explains state: route pulse, panel slide, drag lift, modal rise."
+    ],
+    "rules": [
+      {
+        "name": "The One Live Line Rule",
+        "body": "Only the active path and its outgoing connector wear vermilion. Everything else stays neutral so the run state is unmistakable.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Mono-UI Rule",
+        "body": "Monospace appears only inside code, console output, and numeric data; labels and buttons never wear it as a costume.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lift-On-Intent Rule",
+        "body": "Surfaces rest flat-ish and lift only when the visitor points at them or an overlay opens.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep vermilion for the active action or the active route only.",
+      "Do use warm paper and ink navy as the base contrast before adding a line colour.",
+      "Do keep node silhouettes and control positions standard for a flowchart tool.",
+      "Do animate state changes in 150-300ms with cubic-bezier(0.16, 1, 0.3, 1).",
+      "Do respect prefers-reduced-motion: keep colour/opacity feedback, remove travel."
+    ],
+    "donts": [
+      "Don't use monospace for UI labels, buttons, or marketing copy.",
+      "Don't use glass/blur as decoration; blur only separates a modal from the page.",
+      "Don't add a second accent for decoration or gradients inside text.",
+      "Don't put a coloured left border on cards, alerts, or list items.",
+      "Don't animate layout-driving properties; use transforms, opacity, and grid/flex reveal."
+    ]
+  }
+}

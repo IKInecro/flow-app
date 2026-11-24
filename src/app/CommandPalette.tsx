@@ -162,7 +162,7 @@ export function CommandPalette() {
   }
 
   return (
-    <Dialog open={open} title="Command palette" onClose={() => setOpen(false)} className="palette">
+    <Dialog open={open} title="Perintah" onClose={() => setOpen(false)} className="palette">
       <div className="palette__search">
         <input
           aria-label="Cari perintah"

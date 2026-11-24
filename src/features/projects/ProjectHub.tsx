@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus } from 'lucide-react'
+import { HardDrive, Plus } from 'lucide-react'
 import { parseFprg } from '../../core/fprg/parse'
 import {
   createProjectRecord,
@@ -14,6 +14,22 @@ import {
 import { ImportButton } from './ImportButton'
 import { ProjectCard } from './ProjectCard'
 import { SampleGallery } from './SampleGallery'
+
+function RouteArt() {
+  return (
+    <svg viewBox="0 0 420 240" className="hub__route" aria-hidden="true">
+      <path className="hub__route-line hub__route-line--blue" d="M34 196h78V128h84" />
+      <path className="hub__route-line hub__route-line--amber" d="M34 92h72v36h84V64h86" />
+      <path className="hub__route-line hub__route-line--coral" d="M34 196h52v-54h76v-46h96v72h128" />
+      <circle className="hub__stop hub__stop--blue" cx="196" cy="128" r="6" />
+      <circle className="hub__stop hub__stop--amber" cx="276" cy="64" r="6" />
+      <circle className="hub__stop hub__stop--coral" cx="162" cy="142" r="7" />
+      <circle className="hub__stop hub__stop--coral" cx="258" cy="96" r="7" />
+      <circle className="hub__stop hub__stop--coral" cx="354" cy="168" r="7" />
+      <circle className="hub__stop hub__stop--end" cx="386" cy="168" r="4" />
+    </svg>
+  )
+}
 
 export function ProjectHub() {
   const navigate = useNavigate()
@@ -75,18 +91,30 @@ export function ProjectHub() {
 
   return (
     <section className="hub">
-      <header className="hub__head">
-        <div>
+      <header className="hub__hero">
+        <div className="hub__intro">
           <h1>Proyek kamu</h1>
-          <p className="hub__subtitle">Semua proyek tersimpan di browser ini.</p>
+          <p className="hub__subtitle">
+            Gambar alurnya, jalankan langkahnya, lalu baca kodenya. Semua tersimpan di browser ini.
+          </p>
+          <div className="hub__chips" aria-label="Status penyimpanan">
+            <span className="hub__chip">
+              <HardDrive size={13} aria-hidden="true" />
+              Lokal, tanpa akun
+            </span>
+            <span className="hub__chip hub__chip--quiet">
+              {loading ? 'Memuat…' : `${projects.length} proyek`}
+            </span>
+          </div>
+          <div className="hub__actions">
+            <button type="button" className="button button--primary" onClick={() => void handleNew()}>
+              <Plus size={16} aria-hidden="true" />
+              Proyek baru
+            </button>
+            <ImportButton onFile={(file) => void handleImport(file)} />
+          </div>
         </div>
-        <div className="hub__actions">
-          <ImportButton onFile={(file) => void handleImport(file)} />
-          <button type="button" className="button button--primary" onClick={() => void handleNew()}>
-            <Plus size={16} aria-hidden="true" />
-            Proyek baru
-          </button>
-        </div>
+        <RouteArt />
       </header>
 
       {warning ? (
@@ -102,25 +130,46 @@ export function ProjectHub() {
       ) : null}
 
       {loading ? (
-        <p className="hub__loading">Memuat proyek…</p>
+        <div className="hub__grid" aria-label="Memuat proyek">
+          {[0, 1, 2].map((index) => (
+            <div className="project-card project-card--skeleton" key={index} aria-hidden="true">
+              <div className="project-card__preview" />
+              <div className="skeleton-line" />
+              <div className="skeleton-line skeleton-line--short" />
+            </div>
+          ))}
+        </div>
       ) : projects.length === 0 ? (
         <div className="hub__empty">
+          <span className="hub__empty-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48">
+              <path d="M10 38V24a8 8 0 0 1 8-8h4a6 6 0 0 0 6-6V6" />
+              <circle cx="10" cy="38" r="3.4" />
+              <circle cx="28" cy="10" r="3.4" />
+            </svg>
+          </span>
           <p>Belum ada proyek. Buat baru atau buka contoh.</p>
           <button type="button" className="button button--primary" onClick={() => void handleNew()}>
             Mulai proyek pertama
           </button>
         </div>
       ) : (
-        <div className="hub__grid">
-          {projects.map((record) => (
-            <ProjectCard
-              key={record.id}
-              record={record}
-              onRename={(item) => void handleRename(item)}
-              onDuplicate={(item) => void handleDuplicate(item)}
-              onDelete={(item) => void handleDelete(item)}
-            />
-          ))}
+        <div className="hub__section">
+          <div className="section-head">
+            <h2>Terbaru</h2>
+            <span>{projects.length} proyek</span>
+          </div>
+          <div className="hub__grid">
+            {projects.map((record) => (
+              <ProjectCard
+                key={record.id}
+                record={record}
+                onRename={(item) => void handleRename(item)}
+                onDuplicate={(item) => void handleDuplicate(item)}
+                onDelete={(item) => void handleDelete(item)}
+              />
+            ))}
+          </div>
         </div>
       )}
 

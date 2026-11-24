@@ -1,80 +1,121 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import {
-  Code2,
-  FolderKanban,
-  Library,
-  Settings,
-  Variable,
-  Workflow,
-  type LucideIcon,
-} from 'lucide-react'
-import { t, useLanguage } from '../shared/i18n'
+import { NavLink, useLocation } from 'react-router-dom'
+import { Command, FolderKanban, Languages, Library, Moon, Sun, Workflow } from 'lucide-react'
+import { t, setLanguage, useLanguage } from '../shared/i18n'
+import { useTheme } from '../shared/theme/theme'
+import { useUiStore } from '../features/editor/store/uiStore'
 
-type PanelId = 'variables' | 'source' | 'settings'
-
-interface RailItem {
-  to?: string
-  panel?: PanelId
-  label: string
-  icon: LucideIcon
+function BrandMark() {
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" className="rail__mark">
+      <path
+        d="M7 25V15a5 5 0 0 1 5-5h4a4 4 0 0 0 4-4V4"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16 25h9"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        opacity="0.45"
+      />
+      <circle cx="7" cy="25" r="3" fill="currentColor" />
+      <circle cx="20" cy="10" r="2.6" fill="currentColor" />
+      <circle cx="25" cy="25" r="3" fill="currentColor" opacity="0.45" />
+    </svg>
+  )
 }
 
 export function Sidebar() {
-  useLanguage()
-  const [panel, setPanel] = useState<PanelId | null>(null)
+  const language = useLanguage()
+  const { pathname } = useLocation()
+  const { resolved, setTheme } = useTheme()
+  const setCommandOpen = useUiStore((state) => state.setCommandOpen)
 
-  const items: RailItem[] = [
-    { to: '/', label: t('nav.projects'), icon: FolderKanban },
-    { to: '/editor/new', label: t('nav.editor'), icon: Workflow },
-    { to: '/examples', label: t('nav.examples'), icon: Library },
-    { panel: 'variables', label: t('nav.variables'), icon: Variable },
-    { panel: 'source', label: t('nav.source'), icon: Code2 },
-    { panel: 'settings', label: t('nav.settings'), icon: Settings },
+  const items = [
+    { to: '/', label: t('nav.projects'), icon: FolderKanban, end: true, match: pathname === '/' },
+    {
+      to: '/editor/new',
+      label: t('nav.editor'),
+      icon: Workflow,
+      end: false,
+      match: pathname.startsWith('/editor'),
+    },
+    {
+      to: '/examples',
+      label: t('nav.examples'),
+      icon: Library,
+      end: false,
+      match: pathname.startsWith('/examples'),
+    },
   ]
 
   return (
-    <>
-      <nav className="rail" aria-label={t('nav.label')}>
-        <NavLink to="/" className="rail__brand" aria-label={t('app.name')}>
-          <span aria-hidden="true">M</span>
-        </NavLink>
-        <div className="rail__items">
-          {items.map((item) =>
-            item.to ? (
-              <NavLink
-                key={item.label}
-                to={item.to}
-                className="rail__item"
-                aria-label={item.label}
-                title={item.label}
-              >
-                <item.icon size={20} aria-hidden="true" />
-                <span className="rail__text">{item.label}</span>
-              </NavLink>
-            ) : (
-              <button
-                key={item.label}
-                type="button"
-                className={`rail__item ${panel === item.panel ? 'is-active' : ''}`}
-                aria-label={item.label}
-                aria-pressed={panel === item.panel}
-                title={item.label}
-                onClick={() => setPanel((current) => (current === item.panel ? null : item.panel!))}
-              >
-                <item.icon size={20} aria-hidden="true" />
-                <span className="rail__text">{item.label}</span>
-              </button>
-            ),
-          )}
-        </div>
-      </nav>
-      {panel ? (
-        <aside className="panel" aria-label={t('nav.panel')}>
-          <h2 className="panel__title">{t(`nav.${panel}`)}</h2>
-          <p className="panel__hint">Panel ini aktif di dalam editor.</p>
-        </aside>
-      ) : null}
-    </>
+    <nav className="rail" aria-label={t('nav.label')}>
+      <NavLink to="/" className="rail__brand" aria-label={t('app.name')}>
+        <BrandMark />
+        <span className="rail__brandtext">
+          <strong>{t('app.name')}</strong>
+          <small>{t('app.tagline')}</small>
+        </span>
+      </NavLink>
+
+      <div className="rail__items">
+        <p className="rail__label">{t('nav.workspace')}</p>
+        {items.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            className={`rail__item ${item.match ? 'is-active' : ''}`}
+            aria-current={item.match ? 'page' : undefined}
+            aria-label={item.label}
+            title={item.label}
+          >
+            <item.icon size={19} aria-hidden="true" />
+            <span className="rail__text">{item.label}</span>
+          </NavLink>
+        ))}
+
+      </div>
+
+      <div className="rail__foot">
+        <button
+          type="button"
+          className="rail__utility"
+          aria-label={t('top.command')}
+          title={t('top.command')}
+          onClick={() => setCommandOpen(true)}
+        >
+          <Command size={18} aria-hidden="true" />
+          <span className="rail__text">{t('nav.command')}</span>
+          <kbd className="rail__kbd">⌘K</kbd>
+        </button>
+        <button
+          type="button"
+          className="rail__utility"
+          aria-label={t('top.theme')}
+          title={t('top.theme')}
+          onClick={() => setTheme(resolved === 'dark' ? 'light' : 'dark')}
+        >
+          {resolved === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+          <span className="rail__text">{t('nav.theme')}</span>
+        </button>
+        <button
+          type="button"
+          className="rail__utility"
+          aria-label={`${t('nav.language')}: ${language === 'id' ? 'Indonesia' : 'English'}`}
+          title={t('nav.language')}
+          onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+        >
+          <Languages size={18} aria-hidden="true" />
+          <span className="rail__text">{language === 'id' ? 'Indonesia' : 'English'}</span>
+          <kbd className="rail__kbd">{language.toUpperCase()}</kbd>
+        </button>
+      </div>
+    </nav>
   )
 }

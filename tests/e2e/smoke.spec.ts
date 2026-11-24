@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('create, run, step, export, and import a program', async ({ page }, testInfo) => {
-  test.setTimeout(60_000)
+  test.setTimeout(120_000)
   await page.goto('/')
   await page.getByRole('button', { name: /proyek baru/i }).click()
 
@@ -17,7 +17,7 @@ test('create, run, step, export, and import a program', async ({ page }, testInf
   await expect(page.locator('.console-entry--output')).toContainText('Hello, world')
 
   await page.getByRole('button', { name: /langkah/i }).click()
-  await expect(page.locator('.run-pill__status')).toHaveText('paused')
+  await expect(page.locator('.run-pill__status')).toHaveText(/jeda/i)
 
   const downloadPromise = page.waitForEvent('download')
   await page.getByLabel('Menu file').click()

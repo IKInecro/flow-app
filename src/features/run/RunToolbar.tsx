@@ -9,6 +9,15 @@ const SPEEDS = [
   { value: 600, label: 'Lambat' },
 ]
 
+const STATUS: Record<string, string> = {
+  idle: 'Siap',
+  running: 'Berjalan',
+  paused: 'Jeda',
+  'awaiting-input': 'Menunggu input',
+  done: 'Selesai',
+  error: 'Gagal',
+}
+
 export function RunToolbar() {
   const program = useProjectStore((state) => state.program)
   const status = useRuntimeStore((state) => state.status)
@@ -25,7 +34,10 @@ export function RunToolbar() {
 
   return (
     <div className={`run-pill run-pill--${status}`} role="toolbar" aria-label="Kontrol run">
-      <span className="run-pill__status">{status}</span>
+      <span className="run-pill__status">
+        <span className="run-pill__dot" aria-hidden="true" />
+        {STATUS[status] ?? status}
+      </span>
 
       {idle ? (
         <button
@@ -81,7 +93,7 @@ export function RunToolbar() {
       ) : null}
 
       <label className="run-pill__speed">
-        <span>Speed</span>
+        <span>Kecepatan</span>
         <select
           aria-label="Kecepatan"
           value={speed}

@@ -31,7 +31,7 @@ export function ShapePalette() {
 
   return (
     <aside className="palette" aria-label="Palet bentuk">
-      <h2 className="palette__title">Bentuk</h2>
+      <h2 className="palette__title">Sisipkan</h2>
       <p className="palette__hint">
         Klik untuk menambah{selectedPath ? ' setelah node terpilih' : ' di akhir blok'}.
       </p>

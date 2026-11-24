@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { Terminal, ToggleLeft, ToggleRight } from 'lucide-react'
+import { ChevronDown, Terminal, ToggleLeft, ToggleRight } from 'lucide-react'
 import { useUiStore } from '../editor/store/uiStore'
 import { useRuntimeStore } from './runtimeStore'
 
@@ -8,6 +8,20 @@ const PREFIX: Record<string, string> = {
   input: '? ',
   error: '! ',
   system: '# ',
+}
+
+const STATUS: Record<string, string> = {
+  idle: 'Siap',
+  running: 'Berjalan',
+  paused: 'Jeda',
+  'awaiting-input': 'Menunggu input',
+  done: 'Selesai',
+  error: 'Gagal',
+}
+
+function initialOpen(): boolean {
+  if (typeof localStorage === 'undefined') return true
+  return localStorage.getItem('marcoflow.console') !== 'closed'
 }
 
 export function ConsoleDock() {
@@ -19,11 +33,16 @@ export function ConsoleDock() {
   const consoleMode = useUiStore((state) => state.consoleMode)
   const setConsoleMode = useUiStore((state) => state.setConsoleMode)
   const [draft, setDraft] = useState('')
+  const [open, setOpen] = useState(initialOpen)
   const bottom = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     bottom.current?.scrollIntoView?.({ block: 'end' })
   }, [entries.length, status])
+
+  useEffect(() => {
+    localStorage.setItem('marcoflow.console', open ? 'open' : 'closed')
+  }, [open])
 
   async function submit(event: FormEvent): Promise<void> {
     event.preventDefault()
@@ -34,71 +53,85 @@ export function ConsoleDock() {
   }
 
   return (
-    <section className="console" aria-label="Console" aria-live="polite">
+    <section className={`console ${open ? '' : 'console--closed'}`} aria-label="Console" aria-live="polite">
       <header className="console__head">
         <span className="console__title">
           <Terminal size={14} aria-hidden="true" />
           Console
         </span>
-        <span className={`console__status console__status--${status}`}>{status}</span>
-        <button
-          type="button"
-          className="console__toggle"
-          aria-label={consoleMode === 'plain' ? 'Mode chat' : 'Mode plain'}
-          title={consoleMode === 'plain' ? 'Kembali ke bubble' : 'Tampilkan sebagai teks'}
-          onClick={() => setConsoleMode(consoleMode === 'plain' ? 'chat' : 'plain')}
-        >
-          {consoleMode === 'plain' ? <ToggleRight size={15} /> : <ToggleLeft size={15} />}
-          {consoleMode === 'plain' ? 'Chat' : 'Plain'}
-        </button>
+        <span className={`console__status console__status--${status}`}>{STATUS[status] ?? status}</span>
+        <div className="console__actions">
+          <button
+            type="button"
+            className="console__toggle"
+            aria-label={consoleMode === 'plain' ? 'Mode chat' : 'Mode plain'}
+            title={consoleMode === 'plain' ? 'Kembali ke bubble' : 'Tampilkan sebagai teks'}
+            onClick={() => setConsoleMode(consoleMode === 'plain' ? 'chat' : 'plain')}
+          >
+            {consoleMode === 'plain' ? <ToggleRight size={15} /> : <ToggleLeft size={15} />}
+            {consoleMode === 'plain' ? 'Chat' : 'Plain'}
+          </button>
+          <button
+            type="button"
+            className="console__collapse"
+            aria-expanded={open}
+            aria-label={open ? 'Sembunyikan console' : 'Tampilkan console'}
+            title={open ? 'Sembunyikan' : 'Tampilkan'}
+            onClick={() => setOpen((value) => !value)}
+          >
+            <ChevronDown size={16} />
+          </button>
+        </div>
       </header>
 
-      <div className="console__body">
-        {entries.length === 0 && status === 'idle' ? (
-          <p className="console__empty">Tekan Run untuk menjalankan program.</p>
-        ) : consoleMode === 'plain' ? (
-          <pre className="console__plain" data-testid="console-plain">
-            {entries.map((entry) => `${PREFIX[entry.kind] ?? ''}${entry.text}`).join('\n')}
-          </pre>
-        ) : (
-          <div className="console__chat">
-            {entries.map((entry, index) => (
-              <div
-                key={`${entry.kind}:${index}`}
-                className={`console-entry console-entry--${entry.kind}`}
-              >
-                <span className="console-entry__text">{entry.text}</span>
-                {entry.path ? <span className="console-entry__path">{entry.path}</span> : null}
-              </div>
-            ))}
-          </div>
-        )}
+      <div className="console__scroll" aria-hidden={!open}>
+        <div className="console__body">
+          {entries.length === 0 && status === 'idle' ? (
+            <p className="console__empty">Tekan Jalankan untuk melihat hasil program di sini.</p>
+          ) : consoleMode === 'plain' ? (
+            <pre className="console__plain" data-testid="console-plain">
+              {entries.map((entry) => `${PREFIX[entry.kind] ?? ''}${entry.text}`).join('\n')}
+            </pre>
+          ) : (
+            <div className="console__chat">
+              {entries.map((entry, index) => (
+                <div
+                  key={`${entry.kind}:${index}`}
+                  className={`console-entry console-entry--${entry.kind}`}
+                >
+                  <span className="console-entry__text">{entry.text}</span>
+                  {entry.path ? <span className="console-entry__path">{entry.path}</span> : null}
+                </div>
+              ))}
+            </div>
+          )}
 
-        {status === 'awaiting-input' ? (
-          <form className="console__prompt" onSubmit={(event) => void submit(event)}>
-            <label htmlFor="mf-console-input">
-              {pendingInput
-                ? `${pendingInput.variable} (${pendingInput.expectedType})`
-                : 'Input'}
-            </label>
-            <input
-              id="mf-console-input"
-              autoFocus
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Escape') {
-                  event.preventDefault()
-                  stopRun()
-                }
-              }}
-            />
-            <button type="submit" className="button button--primary">
-              Kirim
-            </button>
-          </form>
-        ) : null}
-        <div ref={bottom} />
+          {status === 'awaiting-input' ? (
+            <form className="console__prompt" onSubmit={(event) => void submit(event)}>
+              <label htmlFor="mf-console-input">
+                {pendingInput
+                  ? `${pendingInput.variable} (${pendingInput.expectedType})`
+                  : 'Input'}
+              </label>
+              <input
+                id="mf-console-input"
+                autoFocus
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') {
+                    event.preventDefault()
+                    stopRun()
+                  }
+                }}
+              />
+              <button type="submit" className="button button--primary">
+                Kirim
+              </button>
+            </form>
+          ) : null}
+          <div ref={bottom} />
+        </div>
       </div>
     </section>
   )
