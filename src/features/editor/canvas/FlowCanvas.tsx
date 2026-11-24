@@ -11,7 +11,14 @@ import {
   type OnNodeDrag,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { formatStmt, getFunction, createStmt, insertStmt, removeStmt } from '../../../core/model/program'
+import {
+  appendStmt,
+  createStmt,
+  formatStmt,
+  getFunction,
+  insertStmt,
+  removeStmt,
+} from '../../../core/model/program'
 import type { InsertPosition } from '../../../core/model/program'
 import type { StmtKind } from '../../../core/model/types'
 import { layoutFunction } from '../../../core/layout/layout'
@@ -136,6 +143,16 @@ export function FlowCanvas() {
     )
   }
 
+  function addFirstOutput(): void {
+    commit((current) =>
+      appendStmt(current, selectedFunction, {
+        kind: 'output',
+        expression: '"Halo, dunia!"',
+        newline: true,
+      }),
+    )
+  }
+
   function deleteSelected(): void {
     if (!selectedNode) return
     const path = selectedNode.path
@@ -172,6 +189,15 @@ export function FlowCanvas() {
         <Background variant={BackgroundVariant.Dots} gap={22} size={1.4} color="var(--bg-grid)" />
         <Controls showInteractive={false} position="bottom-right" />
       </ReactFlow>
+
+      {fn && fn.body.length === 0 ? (
+        <div className="canvas__cta">
+          <p>Function {selectedFunction} masih kosong.</p>
+          <button type="button" className="button button--primary" onClick={addFirstOutput}>
+            Tambah Output
+          </button>
+        </div>
+      ) : null}
 
       {selectedNode ? (
         <div className="canvas__selection">

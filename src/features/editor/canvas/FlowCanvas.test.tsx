@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { beforeEach, expect, test, vi } from 'vitest'
 import { appendStmt } from '../../../core/model/program'
 import { createProjectRecord } from '../../../shared/storage/projects'
@@ -45,4 +46,14 @@ test('marks nodes with validation errors', () => {
   render(<FlowCanvas />)
 
   expect(screen.getByLabelText('Error validasi')).toBeInTheDocument()
+})
+
+test('empty functions offer a Tambah Output shortcut', async () => {
+  const record = createProjectRecord('Kosong')
+  useProjectStore.getState().load(record)
+
+  render(<FlowCanvas />)
+  await userEvent.click(screen.getByRole('button', { name: /tambah output/i }))
+
+  expect(useProjectStore.getState().program?.functions[0].body).toHaveLength(1)
 })

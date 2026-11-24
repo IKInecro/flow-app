@@ -13,6 +13,7 @@ import {
 } from '../../shared/storage/projects'
 import { ImportButton } from './ImportButton'
 import { ProjectCard } from './ProjectCard'
+import { SampleGallery } from './SampleGallery'
 
 export function ProjectHub() {
   const navigate = useNavigate()
@@ -122,6 +123,8 @@ export function ProjectHub() {
           ))}
         </div>
       )}
+
+      <SampleGallery />
     </section>
   )
 }

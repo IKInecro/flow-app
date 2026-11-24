@@ -29,6 +29,8 @@ test('renders output and input bubbles with their colors', () => {
 
   render(<ConsoleDock />)
 
+  expect(screen.getByLabelText('Console')).toHaveAttribute('aria-live', 'polite')
+
   const output = screen.getByText('halo').closest('.console-entry')
   const input = screen.getByText('42').closest('.console-entry')
   expect(output).toHaveClass('console-entry--output')

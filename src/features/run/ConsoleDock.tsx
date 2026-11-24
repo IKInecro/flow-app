@@ -34,7 +34,7 @@ export function ConsoleDock() {
   }
 
   return (
-    <section className="console" aria-label="Console">
+    <section className="console" aria-label="Console" aria-live="polite">
       <header className="console__head">
         <span className="console__title">
           <Terminal size={14} aria-hidden="true" />

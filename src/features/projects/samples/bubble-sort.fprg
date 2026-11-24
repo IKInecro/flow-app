@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+<attributes>
+<attribute name="name" value="Bubble Sort"/>
+<attribute name="authors" value="MarcoFlow"/>
+<attribute name="about" value="Mengurutkan array dengan bubble sort."/>
+</attributes>
+<function name="Main" type="None" variable="">
+<parameters/>
+<body>
+<declare name="data" type="Integer" array="True" size="5"/>
+<declare name="i" type="Integer" array="False" size=""/>
+<declare name="j" type="Integer" array="False" size=""/>
+<declare name="temp" type="Integer" array="False" size=""/>
+<assign variable="data[0]" expression="5"/>
+<assign variable="data[1]" expression="1"/>
+<assign variable="data[2]" expression="4"/>
+<assign variable="data[3]" expression="2"/>
+<assign variable="data[4]" expression="8"/>
+<for variable="i" start="0" end="3" direction="inc" step="1">
+<body>
+<for variable="j" start="0" end="3 - i" direction="inc" step="1">
+<body>
+<if expression="data[j] &gt; data[j + 1]">
+<then>
+<assign variable="temp" expression="data[j]"/>
+<assign variable="data[j]" expression="data[j + 1]"/>
+<assign variable="data[j + 1]" expression="temp"/>
+</then>
+<else>
+</else>
+</if>
+</body>
+</for>
+</body>
+</for>
+<for variable="i" start="0" end="4" direction="inc" step="1">
+<body>
+<output expression="data[i]" newline="True"/>
+</body>
+</for>
+</body>
+</function>
+</flowgorithm>

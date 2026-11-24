@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+<attributes>
+<attribute name="name" value="Fibonacci"/>
+<attribute name="authors" value="MarcoFlow"/>
+<attribute name="about" value="Deret Fibonacci dengan dua pemanggilan rekursif."/>
+</attributes>
+<function name="Main" type="None" variable="">
+<parameters/>
+<body>
+<output expression="&quot;Fib(10) = &quot; &amp; Fib(10)" newline="True"/>
+</body>
+</function>
+<function name="Fib" type="Integer" variable="hasil">
+<parameters>
+<parameter name="n" type="Integer" array="False"/>
+</parameters>
+<body>
+<declare name="hasil" type="Integer" array="False" size=""/>
+<if expression="n &lt;= 1">
+<then>
+<assign variable="hasil" expression="n"/>
+</then>
+<else>
+<assign variable="hasil" expression="Fib(n - 1) + Fib(n - 2)"/>
+</else>
+</if>
+</body>
+</function>
+</flowgorithm>
