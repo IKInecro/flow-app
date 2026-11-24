@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+<attributes>
+<attribute name="name" value="Arrays"/>
+<attribute name="authors" value="MarcoFlow"/>
+<attribute name="about" value="Array and for-loop sample"/>
+</attributes>
+<function name="Main" type="None" variable="">
+<parameters/>
+<body>
+<declare name="a" type="Integer" array="True" size="3"/>
+<declare name="i" type="Integer" array="False" size=""/>
+<for variable="i" start="0" end="2" direction="inc" step="1">
+<body>
+<assign variable="a[i]" expression="i * 2"/>
+<output expression="a[i]" newline="True"/>
+</body>
+</for>
+</body>
+</function>
+</flowgorithm>

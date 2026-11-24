@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+<attributes>
+<attribute name="name" value="Hello"/>
+<attribute name="authors" value="MarcoFlow"/>
+<attribute name="about" value="Minimal hello world sample"/>
+</attributes>
+<function name="Main" type="None" variable="">
+<parameters/>
+<body>
+<output expression="&quot;Hello, world&quot;" newline="True"/>
+</body>
+</function>
+</flowgorithm>
