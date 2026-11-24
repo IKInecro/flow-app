@@ -79,7 +79,7 @@ export function FileMenu() {
           <FileDown size={16} aria-hidden="true" />
           File
         </summary>
-        <div className="file-menu__list" role="menu" aria-label="Menu file">
+        <div className="file-menu__list" role="menu" aria-label="Aksi file">
           <button type="button" role="menuitem" onClick={() => input.current?.click()}>
             <FileUp size={15} aria-hidden="true" />
             Impor .fprg

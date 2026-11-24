@@ -35,14 +35,14 @@ export function RunToolbar() {
           onClick={() => program && void startRun(program)}
         >
           <Play size={15} aria-hidden="true" />
-          Run
+          Jalankan
         </button>
       ) : null}
 
       {status === 'running' ? (
         <button type="button" className="run-pill__button" onClick={pauseRun}>
           <Pause size={15} aria-hidden="true" />
-          Pause
+          Jeda
         </button>
       ) : null}
 
@@ -54,7 +54,7 @@ export function RunToolbar() {
             onClick={() => void resumeRun()}
           >
             <Play size={15} aria-hidden="true" />
-            Resume
+            Lanjut
           </button>
           <button
             type="button"
@@ -63,7 +63,7 @@ export function RunToolbar() {
             onClick={() => program && void stepRun(program)}
           >
             <SkipForward size={15} aria-hidden="true" />
-            Step
+            Langkah
           </button>
         </>
       ) : null}
@@ -76,7 +76,7 @@ export function RunToolbar() {
           onClick={() => program && void stepRun(program)}
         >
           <SkipForward size={15} aria-hidden="true" />
-          Step
+          Langkah
         </button>
       ) : null}
 
@@ -98,7 +98,7 @@ export function RunToolbar() {
       {!idle || busy ? (
         <button type="button" className="run-pill__button run-pill__button--stop" onClick={stopRun}>
           <Square size={14} aria-hidden="true" />
-          Stop
+          Hentikan
         </button>
       ) : null}
     </div>
