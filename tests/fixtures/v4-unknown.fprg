@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+<attributes>
+<attribute name="name" value="Unknown"/>
+</attributes>
+<function name="Main" type="None" variable="">
+<parameters/>
+<body>
+<output expression="&quot;hi&quot;" newline="True"/>
+<customNode foo="bar"/>
+</body>
+</function>
+<extra note="keep"/>
+</flowgorithm>

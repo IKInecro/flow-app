@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="2.11">
+<attributes>
+<attribute name="name" value="Factorial"/>
+<attribute name="authors" value="Ada"/>
+<attribute name="about" value="Demo file"/>
+</attributes>
+<function name="Main" type="None" variable="">
+<parameters/>
+<body>
+<declare name="n" type="Integer" array="False" size=""/>
+<assign variable="n" expression="5"/>
+<output expression="&quot;Factorial &quot; &amp; n" newline="True"/>
+<if expression="n &gt; 0">
+<then>
+<output expression="n" newline="True"/>
+</then>
+<else/>
+</if>
+</body>
+</function>
+</flowgorithm>
