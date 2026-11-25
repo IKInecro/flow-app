@@ -176,6 +176,13 @@ Controls 9px, tiles and menus 10–13px, panels 12–14px, cards 18–20px, hero
 - Rail surface follows theme (white in light, #060d19 in dark).
 - 38px items, blue-soft active pill, muted slate at rest, 11px tracked section header with a fold chevron.
 
+### Connectors
+- Sequential steps connect bottom to top on one axis; no dog-legs.
+- Conditions leave from the diamond's side vertices. Each branch handle follows the side where its child actually sits, and the merge is centred under the condition.
+- A loop's `No` exit leaves the left vertex, drops in a lane outside the body, and joins the merge below it. The return line climbs a separate lane on the right and enters the header's right vertex.
+- Loop bodies and merges are centred on their header, so nesting adds depth instead of drifting right a column per level.
+- Lanes stagger when loops nest, and a lane follows its header when the header is dragged.
+
 ### Signature Component — Live Route Connector
 Edges are 1.7px neutral routes. The active edge turns route blue with a moving dash and travelling dot. Hover dashes any edge. Reduced motion keeps colour and drops travel.
 

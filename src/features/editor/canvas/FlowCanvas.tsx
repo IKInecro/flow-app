@@ -108,21 +108,29 @@ export function FlowCanvas() {
   const edges = useMemo<Edge[]>(() => {
     if (!layout) return []
     const nodePaths = new Map(layout.nodes.map((item) => [item.id, item.path]))
+    const mergeIds = new Set(
+      layout.nodes.filter((item) => item.kind === 'merge').map((item) => item.id),
+    )
     return layout.edges.map((item) => {
       const live = Boolean(activePath) && nodePaths.get(item.source) === activePath
+      const intoMerge = mergeIds.has(item.target)
       return {
         id: item.id,
         source: item.source,
         target: item.target,
+        sourceHandle: item.sourceHandle,
+        targetHandle: item.targetHandle,
         type: 'flow',
         label: item.label,
-        data: { live },
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: live ? 18 : 15,
-          height: live ? 18 : 15,
-          color: live ? 'var(--accent)' : 'var(--text-muted)',
-        },
+        data: { live, route: item.route },
+        markerEnd: intoMerge
+          ? undefined
+          : {
+              type: MarkerType.ArrowClosed,
+              width: live ? 18 : 15,
+              height: live ? 18 : 15,
+              color: live ? 'var(--accent)' : 'var(--text-muted)',
+            },
       }
     })
   }, [layout, activePath])

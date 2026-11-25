@@ -6639,3 +6639,11 @@ body.is-resizing-window * {
     font-size: 11px;
   }
 }
+
+/* Merge nodes are layout waypoints: keep them 2px so their handles sit on
+   the exact junction the branches meet. Padding would widen the invisible box. */
+.flow-node[data-kind='merge'] {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}

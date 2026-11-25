@@ -138,3 +138,32 @@ test('node sizes cover every statement kind', () => {
     expect(NODE_SIZE[kind]?.height).toBeGreaterThan(0)
   }
 })
+
+test('a loop body and its exit merge stay on the header axis', () => {
+  const { nodes } = layoutFunction(sample())
+  const byId = new Map(nodes.map((node) => [node.id, node]))
+  const header = byId.get('0/then/0')
+  const body = byId.get('0/then/0/body/0')
+  const merge = byId.get('merge:0/then/0')
+  expect(header && body && merge).toBeTruthy()
+  if (!header || !body || !merge) return
+
+  const axis = header.x + header.width / 2
+  expect(body.x + body.width / 2).toBeCloseTo(axis, 0)
+  expect(merge.x + merge.width / 2).toBeCloseTo(axis, 0)
+})
+
+test('loop connectors run in lanes outside the body', () => {
+  const { nodes, edges } = layoutFunction(sample())
+  const body = nodes.filter((node) => node.id.startsWith('0/then/0/body/'))
+  const left = Math.min(...body.map((node) => node.x))
+  const right = Math.max(...body.map((node) => node.x + node.width))
+
+  const exit = edges.find((edge) => edge.source === '0/then/0' && edge.label === 'No')
+  const back = edges.find((edge) => edge.target === '0/then/0')
+
+  expect(exit?.route?.kind).toBe('loop-exit')
+  expect(exit?.route?.laneX).toBeLessThan(left)
+  expect(back?.route?.kind).toBe('loop-back')
+  expect(back?.route?.laneX).toBeGreaterThan(right)
+})

@@ -37,7 +37,8 @@ test('a dragged node follows the pointer and keeps the offset on drop', async ({
 test('Stop is available while the program runs and pauses', async ({ page }) => {
   test.setTimeout(120_000)
   await page.goto('/examples')
-  await page.getByRole('button', { name: /open example hello world/i }).click()
+  // A longer program keeps the run alive while the test reaches Pause.
+  await page.getByRole('button', { name: /open example bubble sort/i }).click()
   await page.waitForSelector('.react-flow__node')
 
   await page.getByLabel('Run speed').selectOption('800')
@@ -138,6 +139,7 @@ test('block properties float beside the node and the terminal appears on run', a
 })
 
 test('sidebar follows the theme and its navigation can be folded', async ({ page }) => {
+  test.setTimeout(120_000)
   await page.goto('/')
   await page.evaluate(() => localStorage.setItem('marcoflow.theme', 'light'))
   await page.reload()

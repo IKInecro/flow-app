@@ -28,6 +28,9 @@ export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
   const Icon = meta.icon
   const cardOpen = useUiStore((state) => state.nodeCardOpen)
   const setNodeCardOpen = useUiStore((state) => state.setNodeCardOpen)
+  const isBranch = data.kind === 'if'
+  const isLoop = data.kind === 'while' || data.kind === 'do' || data.kind === 'for'
+  const hasBottomOut = data.kind !== 'end' && !isBranch
   const nodeRef = useRef<HTMLDivElement | null>(null)
   const [anchor, setAnchor] = useState<{ left: number; top: number } | null>(null)
   const showCard = Boolean(selected && cardOpen)
@@ -94,9 +97,43 @@ export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
           !
         </span>
       ) : null}
-      {data.kind !== 'start' ? <Handle type="target" position={Position.Top} className="flow-handle" /> : null}
-      {data.kind !== 'end' ? (
-        <Handle type="source" position={Position.Bottom} className="flow-handle" />
+      {data.kind !== 'start' ? (
+        <Handle id="in" type="target" position={Position.Top} className="flow-handle" />
+      ) : null}
+      {hasBottomOut ? (
+        <Handle id="out" type="source" position={Position.Bottom} className="flow-handle" />
+      ) : null}
+      {isBranch ? (
+        <>
+          <Handle
+            id="left-out"
+            type="source"
+            position={Position.Left}
+            className="flow-handle flow-handle--side"
+          />
+          <Handle
+            id="right-out"
+            type="source"
+            position={Position.Right}
+            className="flow-handle flow-handle--side"
+          />
+        </>
+      ) : null}
+      {isLoop ? (
+        <>
+          <Handle
+            id="exit-out"
+            type="source"
+            position={Position.Left}
+            className="flow-handle flow-handle--side"
+          />
+          <Handle
+            id="loop-in"
+            type="target"
+            position={Position.Right}
+            className="flow-handle flow-handle--side"
+          />
+        </>
       ) : null}
       {showCard && anchor
         ? createPortal(
