@@ -2257,7 +2257,7 @@ a {
   border-radius: 10px;
   color: var(--rail-text);
   background: color-mix(in srgb, var(--accent) 92%, black 4%);
-  box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--accent) 65%, transparent);
+  box-shadow: 0 8px 18px -10px rgb(0 0 0 / 55%);
 }
 
 .rail__brandtext {
@@ -3992,7 +3992,7 @@ a {
 }
 
 .sample {
-  flex: 0 0 clamp(224px, 24vw, 276px);
+  flex: 0 0 clamp(224px, 23vw, 264px);
   scroll-snap-align: start;
 }
 
@@ -4534,4 +4534,540 @@ body,
 
 .settings__badge.is-warn {
   color: color-mix(in srgb, var(--warning) 68%, var(--text));
+}
+
+/* ------------------------------------------------------------------
+   Workspace layout: collapsible rail, resizable and hideable panels,
+   and blocks that read as complete stations rather than empty boxes
+   ------------------------------------------------------------------ */
+
+/* Sidebar can be folded to the icon rail, independent of the viewport. */
+.rail--collapsed {
+  width: 78px;
+  flex-basis: 78px;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 10px 14px;
+}
+
+.rail--collapsed .rail__brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.rail--collapsed .rail__brandtext,
+.rail--collapsed .rail__text,
+.rail--collapsed .rail__label,
+.rail--collapsed .rail__kbd {
+  display: none;
+}
+
+.rail--collapsed .rail__items,
+.rail--collapsed .rail__foot {
+  width: 100%;
+  align-items: center;
+}
+
+.rail--collapsed .rail__item,
+.rail--collapsed .rail__utility {
+  justify-content: center;
+  padding: 10px;
+}
+
+.rail--collapsed .rail__foot {
+  border-top: 1px solid var(--rail-border);
+}
+
+.rail__collapse[aria-pressed='true'] {
+  color: var(--accent);
+}
+
+@media (max-width: 1360px) {
+  .rail__collapse {
+    display: none;
+  }
+}
+
+/* The editor body is a flex row so panels can close and resize cleanly. */
+.editor__body {
+  display: flex;
+  grid-template-columns: none;
+}
+
+.editor__body .palette {
+  width: var(--palette-w, 196px);
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor__body .canvas {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.editor__body .editor__side {
+  width: var(--side-w, 264px);
+  flex: 0 0 auto;
+}
+
+.editor__body--source .editor__side {
+  width: max(var(--side-w, 264px), 320px);
+}
+
+.palette__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.palette__head .palette__title {
+  margin: 0;
+}
+
+.palette__close,
+.editor__tabs-close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.palette__close:hover,
+.editor__tabs-close:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+/* Drag handles between panels. */
+.panel-resizer {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 6px;
+  background: transparent;
+  touch-action: none;
+}
+
+.panel-resizer--vertical {
+  cursor: col-resize;
+}
+
+.panel-resizer--horizontal {
+  flex-basis: 6px;
+  cursor: row-resize;
+}
+
+.panel-resizer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  transition: background 140ms ease;
+}
+
+.panel-resizer:hover::before,
+.panel-resizer:focus-visible::before {
+  background: color-mix(in srgb, var(--accent) 38%, transparent);
+}
+
+.panel-resizer__grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 30px;
+  border-radius: 99px;
+  background: var(--border-strong);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 140ms ease;
+}
+
+.panel-resizer--horizontal .panel-resizer__grip {
+  width: 34px;
+  height: 2px;
+}
+
+.panel-resizer:hover .panel-resizer__grip,
+.panel-resizer:focus-visible .panel-resizer__grip {
+  opacity: 0.75;
+}
+
+.panel-resizer:focus-visible {
+  outline: none;
+}
+
+.is-resizing-x,
+.is-resizing-x * {
+  cursor: col-resize !important;
+  user-select: none;
+}
+
+.is-resizing-y,
+.is-resizing-y * {
+  cursor: row-resize !important;
+  user-select: none;
+}
+
+/* Floating tabs bring a hidden panel back. */
+.editor__reveal {
+  position: absolute;
+  top: 50%;
+  z-index: 7;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-50%);
+}
+
+.editor__reveal:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.editor__reveal--left {
+  left: 0;
+  border-left: 0;
+  border-radius: 0 9px 9px 0;
+}
+
+.editor__reveal--right {
+  right: 0;
+  border-right: 0;
+  border-radius: 9px 0 0 9px;
+}
+
+.editor__tabs {
+  min-width: 0;
+}
+
+.editor__tabs button:not(.editor__tabs-close) {
+  min-width: 0;
+  padding: 0 3px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+}
+
+.editor__tabs-close {
+  align-self: stretch;
+  width: 26px;
+  height: auto;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+}
+
+/* Console height follows the stored preference. */
+.console {
+  flex: 0 0 var(--console-h, 186px);
+}
+
+.console--closed {
+  flex-basis: 40px;
+}
+
+@media (max-width: 900px) {
+  .editor__body .palette {
+    width: 170px;
+  }
+}
+
+/* Layout menu */
+.layout-menu__list {
+  min-width: 210px;
+}
+
+.layout-menu__heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 6px 6px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.layout-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text);
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.layout-menu__item:hover {
+  background: var(--surface-3);
+}
+
+.layout-menu__item svg {
+  color: var(--text-muted);
+}
+
+.layout-menu__check {
+  margin-left: auto;
+  color: var(--accent) !important;
+}
+
+/* Blocks: icon, role label, tinted surface, and a lit top edge. */
+.flow-node {
+  padding: 6px 14px;
+}
+
+.flow-node__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.flow-node__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 23px;
+  height: 23px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--info) 12%, var(--surface));
+  color: color-mix(in srgb, var(--info) 78%, var(--text));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--info) 18%, transparent);
+}
+
+.flow-node__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  text-align: left;
+}
+
+.flow-node__label {
+  max-width: 100%;
+  text-align: left;
+}
+
+.flow-node__meta {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.075em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.flow-node--term .flow-node__content {
+  justify-content: center;
+}
+
+.flow-node--term .flow-node__text {
+  text-align: center;
+}
+
+.flow-node--term .flow-node__label {
+  text-align: center;
+}
+
+.flow-node--term .flow-node__meta,
+.flow-node--break .flow-node__meta {
+  display: none;
+}
+
+.flow-node--term .flow-node__icon {
+  width: 19px;
+  height: 19px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--success) 15%, var(--surface));
+  color: var(--success);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--success) 24%, transparent);
+}
+
+.flow-node--kind-end .flow-node__shape path {
+  fill: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  stroke: color-mix(in srgb, var(--accent) 48%, var(--border));
+}
+
+.flow-node--kind-end .flow-node__icon {
+  background: color-mix(in srgb, var(--accent) 13%, var(--surface));
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.flow-node--action .flow-node__shape path {
+  fill: color-mix(in srgb, var(--info) 6%, var(--surface));
+  stroke: color-mix(in srgb, var(--info) 30%, var(--border));
+}
+
+.flow-node--branch .flow-node__content {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flow-node--branch .flow-node__icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--warning) 15%, var(--surface));
+  color: color-mix(in srgb, var(--warning) 72%, var(--text));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warning) 22%, transparent);
+}
+
+.flow-node--branch .flow-node__text {
+  align-items: center;
+  text-align: center;
+}
+
+.flow-node--branch .flow-node__label {
+  text-align: center;
+}
+
+.flow-node--branch .flow-node__meta {
+  color: color-mix(in srgb, var(--warning) 62%, var(--text-muted));
+}
+
+.flow-node--note .flow-node__content {
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.flow-node--note .flow-node__icon {
+  width: 19px;
+  height: 19px;
+  margin-top: 1px;
+  background: color-mix(in srgb, var(--warning) 16%, var(--surface));
+  color: color-mix(in srgb, var(--warning) 72%, var(--text));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warning) 20%, transparent);
+}
+
+.flow-node--note .flow-node__meta {
+  color: color-mix(in srgb, var(--warning) 55%, var(--text-muted));
+}
+
+.flow-node--break .flow-node__content {
+  gap: 6px;
+}
+
+.flow-node--break .flow-node__icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--danger) 14%, var(--surface));
+  color: var(--danger);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--danger) 24%, transparent);
+}
+
+/* A fine highlight along the top edge adds depth without a gradient hack. */
+.flow-node .flow-node__shape .flow-node__gloss {
+  fill: none;
+  stroke: color-mix(in srgb, #fff 46%, transparent);
+  stroke-width: 1;
+  filter: none;
+  opacity: 0.55;
+  transform: translateY(0.6px);
+  pointer-events: none;
+}
+
+[data-theme='dark'] .flow-node__gloss {
+  stroke: color-mix(in srgb, #fff 16%, transparent);
+}
+
+.flow-node:hover .flow-node__shape path:not(.flow-node__gloss) {
+  filter: drop-shadow(0 2px 0 rgb(255 255 255 / 28%)) drop-shadow(0 12px 18px rgb(23 32 43 / 14%));
+}
+
+[data-theme='dark'] .flow-node:hover .flow-node__shape path:not(.flow-node__gloss) {
+  filter: drop-shadow(0 10px 18px rgb(0 0 0 / 55%));
+}
+
+.flow-node.is-selected .flow-node__shape path:not(.flow-node__gloss) {
+  filter: drop-shadow(0 2px 0 rgb(255 255 255 / 30%))
+    drop-shadow(0 10px 20px color-mix(in srgb, var(--accent) 26%, transparent));
+}
+
+[data-theme='dark'] .flow-node--action .flow-node__shape path:not(.flow-node__gloss) {
+  fill: color-mix(in srgb, var(--info) 10%, var(--surface-2));
+  stroke: color-mix(in srgb, var(--info) 38%, var(--border));
+}
+
+[data-theme='dark'] .flow-node--term .flow-node__shape path:not(.flow-node__gloss) {
+  fill: color-mix(in srgb, var(--success) 12%, var(--surface-2));
+}
+
+[data-theme='dark'] .flow-node--branch .flow-node__shape path:not(.flow-node__gloss) {
+  fill: color-mix(in srgb, var(--warning) 12%, var(--surface-2));
+}
+
+[data-theme='dark'] .flow-node--note .flow-node__shape path:not(.flow-node__gloss) {
+  fill: color-mix(in srgb, var(--warning) 16%, var(--surface-2));
+}
+
+[data-theme='dark'] .flow-node--kind-end .flow-node__shape path:not(.flow-node__gloss) {
+  fill: color-mix(in srgb, var(--accent) 11%, var(--surface-2));
+  stroke: color-mix(in srgb, var(--accent) 52%, var(--border));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-resizer::before,
+  .panel-resizer__grip,
+  .flow-node__shape path {
+    transition: none;
+  }
+}
+
+/* Small laptops: keep the canvas usable even with both panels open. */
+@media (max-width: 1080px) {
+  .editor__body .palette {
+    width: min(var(--palette-w, 196px), 170px);
+  }
+
+  .editor__body .editor__side {
+    width: min(var(--side-w, 264px), 230px);
+  }
+}
+
+@media (max-width: 900px) {
+  .editor__body .palette {
+    width: 150px;
+  }
+
+  .editor__body .editor__side {
+    width: 210px;
+  }
+}
+
+.editor__tabs {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) 24px;
+}
+
+.editor__tabs button:not(.editor__tabs-close) {
+  font-size: 9.5px;
+  letter-spacing: -0.01em;
+  padding: 0 1px;
 }

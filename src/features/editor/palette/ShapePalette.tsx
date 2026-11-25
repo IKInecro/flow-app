@@ -1,10 +1,11 @@
+import { X } from 'lucide-react'
 import { createStmt, insertStmt } from '../../../core/model/program'
 import type { StmtKind } from '../../../core/model/types'
 import { useProjectStore } from '../store/projectStore'
 import { useUiStore } from '../store/uiStore'
 import { INSERTABLE } from '../canvas/InsertMenu'
 
-export function ShapePalette() {
+export function ShapePalette({ onClose }: { onClose?: () => void }) {
   const commit = useProjectStore((state) => state.commit)
   const selectedFunction = useUiStore((state) => state.selectedFunction)
   const selectedPath = useUiStore((state) => state.selectedPath)
@@ -31,7 +32,20 @@ export function ShapePalette() {
 
   return (
     <aside className="palette" aria-label="Shape palette">
-      <h2 className="palette__title">Insert</h2>
+      <div className="palette__head">
+        <h2 className="palette__title">Insert</h2>
+        {onClose ? (
+          <button
+            type="button"
+            className="palette__close"
+            aria-label="Hide shapes panel"
+            title="Hide shapes panel"
+            onClick={onClose}
+          >
+            <X size={14} aria-hidden="true" />
+          </button>
+        ) : null}
+      </div>
       <p className="palette__hint">
         Click to add{selectedPath ? ' after the selected node' : ' at the end of the block'}.
       </p>

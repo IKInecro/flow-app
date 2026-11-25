@@ -1,6 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, LayoutGrid, Redo2, Undo2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  LayoutGrid,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
+  Redo2,
+  Undo2,
+} from 'lucide-react'
 import {
   createProjectRecord,
   getProject,
@@ -17,6 +25,8 @@ import { CallStack } from '../run/CallStack'
 import { ConsoleDock } from '../run/ConsoleDock'
 import { VariableWatch } from '../run/VariableWatch'
 import { ShapePalette } from './palette/ShapePalette'
+import { LayoutMenu } from './layout/LayoutMenu'
+import { PanelResizer } from './layout/PanelResizer'
 import { useProjectStore } from './store/projectStore'
 import { useUiStore } from './store/uiStore'
 
@@ -42,6 +52,15 @@ export function EditorPage() {
   const inspectorTab = useUiStore((state) => state.inspectorTab)
   const setInspectorTab = useUiStore((state) => state.setInspectorTab)
   const setSelectedFunction = useUiStore((state) => state.setSelectedFunction)
+  const paletteOpen = useUiStore((state) => state.paletteOpen)
+  const sideOpen = useUiStore((state) => state.sideOpen)
+  const consoleOpen = useUiStore((state) => state.consoleOpen)
+  const paletteWidth = useUiStore((state) => state.paletteWidth)
+  const sideWidth = useUiStore((state) => state.sideWidth)
+  const consoleHeight = useUiStore((state) => state.consoleHeight)
+  const setLayout = useUiStore((state) => state.setLayout)
+  const togglePalette = useUiStore((state) => state.togglePalette)
+  const toggleSide = useUiStore((state) => state.toggleSide)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -98,7 +117,16 @@ export function EditorPage() {
   }
 
   return (
-    <section className="editor">
+    <section
+      className="editor"
+      style={
+        {
+          '--palette-w': `${paletteWidth}px`,
+          '--side-w': `${sideWidth}px`,
+          '--console-h': `${consoleHeight}px`,
+        } as CSSProperties
+      }
+    >
       <header className="editor__bar">
         <Link className="icon-button" to="/" aria-label="Back to projects" title="Back">
           <ArrowLeft size={18} />
@@ -109,6 +137,7 @@ export function EditorPage() {
         </div>
         <div className="editor__actions">
           <FileMenu />
+          <LayoutMenu />
           <button
             type="button"
             className="icon-button"
@@ -148,46 +177,111 @@ export function EditorPage() {
       ) : null}
 
       <div className={`editor__body ${inspectorTab === 'source' ? 'editor__body--source' : ''}`}>
-        <ShapePalette />
+        {paletteOpen ? (
+          <>
+            <ShapePalette onClose={togglePalette} />
+            <PanelResizer
+              orientation="vertical"
+              value={paletteWidth}
+              min={150}
+              max={340}
+              label="Resize shapes panel"
+              onResize={(width) => setLayout({ paletteWidth: width })}
+            />
+          </>
+        ) : (
+          <button
+            type="button"
+            className="editor__reveal editor__reveal--left"
+            aria-label="Show shapes panel"
+            title="Show shapes panel"
+            onClick={togglePalette}
+          >
+            <PanelLeftOpen size={16} aria-hidden="true" />
+          </button>
+        )}
         <FlowCanvas />
-        <div className="editor__side">
-          <div className="editor__tabs" role="tablist" aria-label="Right panel">
-            {(
-              [
-                ['properties', 'Properties'],
-                ['functions', 'Functions'],
-                ['variables', 'Variables'],
-                ['callstack', 'Call stack'],
-                ['source', 'Code'],
-              ] as const
-            ).map(([tab, label]) => (
-              <button
-                key={tab}
-                type="button"
-                role="tab"
-                aria-selected={inspectorTab === tab}
-                className={inspectorTab === tab ? 'is-active' : ''}
-                onClick={() => setInspectorTab(tab)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          <div className="editor__panel" key={inspectorTab}>
-            {inspectorTab === 'functions' ? (
-              <FunctionPanel />
-            ) : inspectorTab === 'variables' ? (
-              <VariableWatch />
-            ) : inspectorTab === 'callstack' ? (
-              <CallStack />
-            ) : inspectorTab === 'source' ? (
-              <SourcePanel />
-            ) : (
-              <Inspector />
-            )}
-          </div>
-        </div>
+        {sideOpen ? (
+          <>
+            <PanelResizer
+              orientation="vertical"
+              value={sideWidth}
+              min={220}
+              max={440}
+              invert
+              label="Resize right panel"
+              onResize={(width) => setLayout({ sideWidth: width })}
+            />
+            <div className="editor__side">
+              <div className="editor__tabs" role="tablist" aria-label="Right panel">
+                {(
+                  [
+                    ['properties', 'Node'],
+                    ['functions', 'Functions'],
+                    ['variables', 'Variables'],
+                    ['callstack', 'Stack'],
+                    ['source', 'Code'],
+                  ] as const
+                ).map(([tab, label]) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    role="tab"
+                    aria-selected={inspectorTab === tab}
+                    className={inspectorTab === tab ? 'is-active' : ''}
+                    onClick={() => setInspectorTab(tab)}
+                  >
+                    {label}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className="editor__tabs-close"
+                  aria-label="Hide right panel"
+                  title="Hide right panel"
+                  onClick={toggleSide}
+                >
+                  <PanelRightClose size={14} aria-hidden="true" />
+                </button>
+              </div>
+              <div className="editor__panel" key={inspectorTab}>
+                {inspectorTab === 'functions' ? (
+                  <FunctionPanel />
+                ) : inspectorTab === 'variables' ? (
+                  <VariableWatch />
+                ) : inspectorTab === 'callstack' ? (
+                  <CallStack />
+                ) : inspectorTab === 'source' ? (
+                  <SourcePanel />
+                ) : (
+                  <Inspector />
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <button
+            type="button"
+            className="editor__reveal editor__reveal--right"
+            aria-label="Show right panel"
+            title="Show right panel"
+            onClick={toggleSide}
+          >
+            <PanelRightOpen size={16} aria-hidden="true" />
+          </button>
+        )}
       </div>
+      {consoleOpen ? (
+        <PanelResizer
+          orientation="horizontal"
+          value={consoleHeight}
+          min={120}
+          max={420}
+          invert
+          label="Resize console"
+          onResize={(height) => setLayout({ consoleHeight: height })}
+        />
+      ) : null}
       <ConsoleDock />
     </section>
   )

@@ -1,5 +1,15 @@
 import { NavLink, useLocation } from 'react-router-dom'
-import { Command, FolderKanban, Library, Moon, Settings, Sun, Workflow } from 'lucide-react'
+import {
+  Command,
+  FolderKanban,
+  Library,
+  Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Settings,
+  Sun,
+  Workflow,
+} from 'lucide-react'
 import { t } from '../shared/i18n'
 import { useTheme } from '../shared/theme/theme'
 import { useUiStore } from '../features/editor/store/uiStore'
@@ -33,6 +43,8 @@ export function Sidebar() {
   const { pathname } = useLocation()
   const { resolved, setTheme } = useTheme()
   const setCommandOpen = useUiStore((state) => state.setCommandOpen)
+  const railCollapsed = useUiStore((state) => state.railCollapsed)
+  const toggleRail = useUiStore((state) => state.toggleRail)
 
   const items = [
     { to: '/', label: t('nav.projects'), icon: FolderKanban, end: true, match: pathname === '/' },
@@ -60,7 +72,7 @@ export function Sidebar() {
   ]
 
   return (
-    <nav className="rail" aria-label={t('nav.label')}>
+    <nav className={`rail ${railCollapsed ? 'rail--collapsed' : ''}`} aria-label={t('nav.label')}>
       <NavLink to="/" className="rail__brand" aria-label={t('app.name')}>
         <BrandMark />
         <span className="rail__brandtext">
@@ -88,6 +100,21 @@ export function Sidebar() {
       </div>
 
       <div className="rail__foot">
+        <button
+          type="button"
+          className="rail__utility rail__collapse"
+          aria-label={railCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={railCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-pressed={railCollapsed}
+          onClick={toggleRail}
+        >
+          {railCollapsed ? (
+            <PanelLeftOpen size={18} aria-hidden="true" />
+          ) : (
+            <PanelLeftClose size={18} aria-hidden="true" />
+          )}
+          <span className="rail__text">{railCollapsed ? 'Expand' : 'Collapse'}</span>
+        </button>
         <button
           type="button"
           className="rail__utility"

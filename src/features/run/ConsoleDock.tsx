@@ -19,11 +19,6 @@ const STATUS: Record<string, string> = {
   error: 'Failed',
 }
 
-function initialOpen(): boolean {
-  if (typeof localStorage === 'undefined') return true
-  return localStorage.getItem('marcoflow.console') !== 'closed'
-}
-
 export function ConsoleDock() {
   const entries = useRuntimeStore((state) => state.entries)
   const status = useRuntimeStore((state) => state.status)
@@ -32,17 +27,14 @@ export function ConsoleDock() {
   const stopRun = useRuntimeStore((state) => state.stopRun)
   const consoleMode = useUiStore((state) => state.consoleMode)
   const setConsoleMode = useUiStore((state) => state.setConsoleMode)
+  const open = useUiStore((state) => state.consoleOpen)
+  const toggleConsole = useUiStore((state) => state.toggleConsole)
   const [draft, setDraft] = useState('')
-  const [open, setOpen] = useState(initialOpen)
   const bottom = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     bottom.current?.scrollIntoView?.({ block: 'end' })
   }, [entries.length, status])
-
-  useEffect(() => {
-    localStorage.setItem('marcoflow.console', open ? 'open' : 'closed')
-  }, [open])
 
   async function submit(event: FormEvent): Promise<void> {
     event.preventDefault()
@@ -77,7 +69,7 @@ export function ConsoleDock() {
             aria-expanded={open}
             aria-label={open ? 'Hide console' : 'Show console'}
             title={open ? 'Hide' : 'Show'}
-            onClick={() => setOpen((value) => !value)}
+            onClick={toggleConsole}
           >
             <ChevronDown size={16} />
           </button>
