@@ -1,37 +1,39 @@
 ---
 name: MarcoFlow
-description: Daylight wayfinding for flowcharts that become code
+description: Modern blue wayfinding for flowcharts that become code
 colors:
-  route-vermilion: "#b53d28"
-  route-vermilion-soft: "#fbe6e0"
-  ink-navy: "#17202b"
-  porcelain: "#f1eee7"
-  paper: "#fffdf9"
-  paper-2: "#f7f3ec"
-  paper-3: "#ece6db"
-  border-warm: "#e2dcd1"
-  text-muted: "#5e6874"
-  line-blue: "#2456c8"
-  line-teal: "#0a7f6a"
-  line-amber: "#b7790c"
-  rail-ink: "#090e13"
+  route-blue: "#2f5fd0"
+  route-blue-soft: "#e9f0ff"
+  route-blue-dark: "#7ea2ff"
+  ink-navy: "#0d1b2f"
+  porcelain: "#f2f6fd"
+  paper: "#ffffff"
+  paper-2: "#f7faff"
+  paper-3: "#edf3fd"
+  border-cool: "#e0e8f6"
+  text-muted: "#566882"
+  line-teal: "#0e7c6b"
+  line-amber: "#96620b"
+  line-coral: "#bf3a31"
+  nav-light: "#ffffff"
+  nav-dark: "#060d19"
 typography:
   display:
-    fontFamily: "Bricolage Grotesque Variable, Onest Variable, sans-serif"
+    fontFamily: "Fredoka Variable, Nunito Variable, sans-serif"
     fontSize: "3.2rem"
-    fontWeight: 620
+    fontWeight: 600
     lineHeight: 1
-    letterSpacing: "-0.04em"
+    letterSpacing: "-0.02em"
   body:
-    fontFamily: "Onest Variable, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Nunito Variable, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
-    fontWeight: 400
+    fontWeight: 500
     lineHeight: 1.5
     letterSpacing: "0em"
   title:
-    fontFamily: "Onest Variable, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Nunito Variable, ui-sans-serif, system-ui, sans-serif"
     fontSize: "14px"
-    fontWeight: 620
+    fontWeight: 700
     lineHeight: 1.3
   mono:
     fontFamily: "JetBrains Mono Variable, ui-monospace, monospace"
@@ -43,35 +45,22 @@ rounded:
   md: "13px"
   lg: "20px"
   xl: "28px"
-spacing:
-  xs: "4px"
-  sm: "8px"
-  md: "12px"
-  lg: "16px"
-  xl: "24px"
-  2xl: "34px"
 components:
   button-primary:
-    backgroundColor: "{colors.route-vermilion}"
+    backgroundColor: "{colors.route-blue}"
     textColor: "{colors.paper}"
     rounded: "{rounded.sm}"
-    padding: "0 15px"
     height: "38px"
   button:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink-navy}"
     rounded: "{rounded.sm}"
-    padding: "0 15px"
     height: "38px"
-  chip:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.text-muted}"
-    rounded: "99px"
-    padding: "5px 9px"
-  project-card:
-    backgroundColor: "{colors.paper}"
+  palette-item:
+    backgroundColor: "{colors.paper-2}"
     textColor: "{colors.ink-navy}"
-    rounded: "18px"
+    rounded: "10px"
+    padding: "7px 8px"
   field:
     backgroundColor: "{colors.paper-2}"
     textColor: "{colors.ink-navy}"
@@ -83,124 +72,125 @@ components:
 
 ## Overview
 
-**Creative North Star: "Daylight Wayfinding"**
+**Creative North Star: "Modern Blue Wayfinding"**
 
-MarcoFlow looks like a campus route map read in the morning: warm paper, deep ink, and a single vermilion line telling you where you are going. The interface is a working tool first, so navigation, panels, tabs, and forms stay familiar. The world enters through colour, type, density, and one live gesture: when a program runs, the active station and its connector pulse like a route being travelled.
+MarcoFlow looks like a clean transit map for a software campus: cool porcelain ground, navy ink, soft white panels, and one confident blue route. It stays a working tool first — dense panels, standard flowchart silhouettes, obvious controls — and lets colour, rounded type, and floating tools carry the character.
 
 **Key Characteristics:**
-- Warm porcelain ground with a deep ink sidebar.
-- One vermilion accent reserved for action, selection, and the live route.
-- Line colours (cobalt, teal, amber) carry diagram meaning, never decoration.
-- Compact product density with generous grouping.
-- Motion explains state: route pulse, panel slide, drag lift, modal rise.
+- Cool blue-tinted ground with white work surfaces in light mode; deep navy ground with slate-blue panels in dark mode.
+- One route blue for action, selection, focus, and live connectors.
+- Teal, amber, and coral carry diagram meaning only.
+- Rounded Nunito/Fredoka typography keeps the product friendly without feeling technical.
+- Floating node properties and a floating terminal keep the canvas unobstructed.
+- Motion explains state in 150–300ms; nothing loops for decoration.
 
 ## Colors
 
-A restrained product palette with a committed ink/paper contrast and route colours doing semantic work.
+The palette is blue-led and low-glow. No neon, no chromatic halos, no gradients inside text.
 
 ### Primary
-- **Route Vermilion** (#b53d28): primary buttons, active node, live connector, selected tab, focus ring. On paper it clears 4.5:1 with white text.
+- **Route Blue** (#2f5fd0 light, #7ea2ff dark): primary buttons, active tab, focus ring, live connector.
+- **Route Blue Soft** (#e9f0ff light, #162846 dark): active pill and selection surfaces.
 
-### Secondary
-- **Cobalt Line** (#2456c8): input and call nodes, secondary route drawing.
-- **Teal Line** (#0a7f6a): success and terminal nodes.
-- **Amber Line** (#b7790c): branches and warnings.
+### Diagram inks
+- **Teal** (#0e7c6b / #3fc3a5): start station and success.
+- **Amber** (#96620b / #efb75b): branches and notes.
+- **Coral** (#bf3a31 / #ff7f7f): end station, breakpoints, destructive actions.
 
 ### Neutral
-- **Ink Navy** (#17202b): primary text and the sidebar ground in light theme.
-- **Porcelain** (#f1eee7): app ground.
-- **Paper** (#fffdf9): panels, cards, canvas.
-- **Warm Border** (#e2dcd1): hairlines and separation.
-- **Muted Slate** (#5e6874): supporting copy at 5.5:1 on paper.
-- **Rail Ink** (#090e13): dark-theme sidebar.
+- **Ink Navy** (#0d1b2f): primary text in light mode.
+- **Porcelain** (#f2f6fd): app ground; never plain grey or warm cream.
+- **Paper** (#ffffff): palette, inspector, cards, floating tools.
+- **Cool Border** (#e0e8f6 / #233550): hairlines and panel separation.
+- **Muted Slate** (#566882 / #94a5bf): supporting copy at AA.
 
 ### Named Rules
-**The One Live Line Rule.** Only the active path and its outgoing connector wear vermilion. Everything else stays neutral so the run state is unmistakable.
+**The One Route Rule.** Only the active path, primary action, and current selection wear route blue.
 
 ## Typography
 
-**Display Font:** Bricolage Grotesque Variable (with Onest fallback)
-**Body Font:** Onest Variable (with system sans fallback)
-**Label/Mono Font:** JetBrains Mono Variable
+**Display Font:** Fredoka Variable (self-hosted, `/fonts/fredoka-latin.woff2`)
+**Body Font:** Nunito Variable (self-hosted, `/fonts/nunito-latin.woff2`)
+**Code Font:** JetBrains Mono Variable
 
-**Character:** Bricolage gives the hub a hand-lettered wayfinding voice; Onest keeps dense panels quiet and legible; JetBrains Mono is used only for code and measurements.
+Fredoka gives panel titles and the wordmark a soft, geometric voice; Nunito keeps dense labels friendly and legible. Monospace is reserved for expressions, console output, and path labels. Functional UI text stays at 11px or above.
 
 ### Hierarchy
-- **Display** (620, clamp 2.25–3.2rem, 1): hub headline only.
-- **Headline** (600, 21px, 1.2): section headings on hub and examples.
-- **Title** (620, 14–15px, 1.3): card names, editor project name, panel headings.
-- **Body** (400–550, 12.5–15px, 1.5–1.6): descriptions, forms, console.
-- **Label** (600–700, 10–11px, 0.02–0.12em): chips, tabs, rail group labels, status.
+- **Display** (600, clamp 2.25–3.2rem, 1): hub hero only.
+- **Headline** (600, 17–21px): panel titles.
+- **Title** (700, 14–15px): card names, project name.
+- **Body** (500–650, 12.5–15px, 1.5): descriptions, forms.
+- **Label** (700–800, 11px, 0.02–0.13em): tabs, params, status.
 
-### Named Rules
-**The No-Mono-UI Rule.** Monospace appears only inside code, console output, and numeric data; labels and buttons never wear it as a costume.
+**The No-Mono-UI Rule.** Monospace belongs to code, terminal output, and numeric fields only.
 
 ## Layout
 
-The shell is a 248px ink rail beside a fluid work area; below 1180px the rail compacts to 78px, below 900px to 64px. The hub is a 1240px container: full-width hero, then project cards at 252px minimum, then a horizontally swipeable examples rail. The editor is a three-column grid — 220px insert palette, fluid canvas, 306px inspector — with the console docked below and collapsing to a 40px header. At 1080px the columns narrow; at 820px they become 150px / fluid / 210px. Source mode gives the code panel 360–460px.
+The shell is a 236px navigation rail (78px collapsed) beside a fluid work area. The rail's navigation group folds under its own header, and the rail itself follows light/dark theme.
 
-Spacing rhythm is 4/8/12/16/24/34 with more space above section headings than below. The canvas sits inset 10px inside a 18px rounded frame so the diagram reads as a sheet on a desk.
+The editor is a flex row: a 196px insert palette (170–340px), fluid canvas, and 280px inspector (250–460px). Every vertical border is a draggable 8px resizer with a visible grip; each panel can be hidden and reopened from its floating edge tab or the Layout menu. Widths persist in `marcoflow.layout`.
+
+The console is **not** a bottom dock. It is a 600×240px floating terminal that rises when a program runs, can be dragged by its header, resized from its corner, and closed until the next run. Block properties are a 262px card that floats beside the selected node and follows it while panning or dragging.
 
 ## Elevation & Depth
 
-Depth is soft and directional: a low ambient shadow at rest, a lifted shadow on hover, and a large offset shadow for overlays. No zero-offset halos. The editor bar is a solid layer with z-index 20 so its menus always escape the work area.
+Soft directional shadows only. Resting surfaces use a 1px hairline and near-flat shadow; hover lifts slightly; floating tools use the overlay shadow. No zero-offset chromatic glow.
 
 ### Shadow Vocabulary
-- **rest** (`0 1px 2px rgb(23 32 43 / 7%)`): cards, buttons, controls.
-- **lift** (`0 2px 6px rgb(23 32 43 / 6%), 0 14px 32px -14px rgb(23 32 43 / 24%)`): hover, run pill.
-- **overlay** (`0 30px 70px -24px rgb(23 32 43 / 38%), 0 8px 24px -12px rgb(23 32 43 / 18%)`): dialogs, drawers, floating toolbars.
-
-### Named Rules
-**The Lift-On-Intent Rule.** Surfaces rest flat-ish and lift only when the visitor points at them or an overlay opens.
+- **rest** (`0 1px 2px rgb(13 27 47 / 6%)`): cards, buttons.
+- **lift** (`0 2px 6px rgb(13 27 47 / 5%), 0 14px 32px -14px rgb(13 27 47 / 22%)`): hover, run pill.
+- **overlay** (`0 30px 70px -24px rgb(13 27 47 / 34%)`): dialogs, node card, terminal.
 
 ## Shapes
 
-Corners are gently rounded: 9px controls, 13px menus and inserts, 18px cards and canvas, 20px project cards and dialogs, 28px hero. Pills are reserved for status chips, speed, and the run toolbar. Diagram nodes keep their semantic silhouettes (terminator pill, process rectangle, branch diamond) with a 1.5px stroke and a soft drop shadow.
+Controls 9px, tiles and menus 10–13px, panels 12–14px, cards 18–20px, hero 28px. Pills are reserved for status chips and the run toolbar. Nodes keep their semantic silhouettes with a 1.6px stroke, tinted fill, icon chip, role label, and a fine top highlight.
 
 ## Components
 
-### Buttons
-- **Shape:** 9px radius, 38px height, 15px horizontal padding.
-- **Primary:** vermilion fill, warm white text, offset lift shadow.
-- **Hover / Focus:** darken and lift; 2px vermilion focus outline with 2px offset.
-- **Ghost / Icon:** transparent at rest, paper-3 hover, icon buttons 34px square.
+### Blocks
+- **Structure:** tinted station silhouette + 23px icon chip + label + uppercase role meta.
+- **Start / End:** teal terminator / coral terminator; compact, centred, no meta clutter.
+- **Actions:** blue-tinted parallelogram or rectangle.
+- **Branches:** amber diamond, icon above label.
+- **Notes / Breakpoints:** amber note and coral pause chip.
+- **States:** hover lifts with a neutral shadow; selection adds a blue halo and 2px stroke.
 
-### Chips
-- **Style:** paper fill, warm hairline, 99px radius, 11px label.
-- **State:** storage chip pairs a teal drive icon; quiet chip drops the fill.
+### Insert palette
+- Grouped into Values, Control flow, Extras.
+- Each block is a filled tinted row with a 27px icon chip, bold name, and one-line hint — no outline-only squares.
 
-### Cards / Containers
-- **Corner Style:** 18px project card, 20px dialog.
-- **Background:** paper over porcelain.
-- **Shadow Strategy:** rest → lift on hover.
-- **Border:** 1px warm hairline; accent tint on hover.
-- **Internal Padding:** 12–18px; route preview 132px tall.
+### Floating block properties
+- Header with kind icon, role name, path, and close.
+- `StmtForm` fields at 31px height with 12px text.
+- Follows the node via a viewport-fixed portal; closing keeps the node selected.
+
+### Floating terminal
+- Dark terminal in both themes: traffic-light dots, status pill, mode toggle, close, corner resize.
+- Auto-opens on run/step; hidden by default and never restored open on reload.
+- Body uses JetBrains Mono at 11px with output/input/error/system tints.
 
 ### Inputs / Fields
-- **Style:** paper-2 fill, warm border, 9px radius.
-- **Focus:** paper fill, vermilion border, 3px 16% vermilion ring.
-- **Error / Disabled:** danger border and 10% danger fill; disabled at 40% opacity.
+- Paper-2 fill, cool border, 9px radius. Focus: white fill, blue border, 3px blue-soft ring.
 
 ### Navigation
-- **Style:** ink rail, 13px Onest labels, 10px tracked group label, 10px radius items.
-- **States:** muted slate at rest, raised ink hover, 17% vermilion + paper text + vermilion icon when current.
-- **Compact:** labels and wordmark hide; icons center in 64px.
+- Rail surface follows theme (white in light, #060d19 in dark).
+- 38px items, blue-soft active pill, muted slate at rest, 11px tracked section header with a fold chevron.
 
 ### Signature Component — Live Route Connector
-Diagram edges are 1.7px neutral smooth-step routes. The live edge turns vermilion, gains a moving dash pulse, and a 3.4px dot travels the path via SVG motion. Hover turns any edge into a dashed route. Reduced motion keeps the colour change and removes the travelling dot.
+Edges are 1.7px neutral routes. The active edge turns route blue with a moving dash and travelling dot. Hover dashes any edge. Reduced motion keeps colour and drops travel.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep vermilion for the active action or the active route only.
-- **Do** use warm paper and ink navy as the base contrast before adding a line colour.
-- **Do** keep node silhouettes and control positions standard for a flowchart tool.
-- **Do** animate state changes in 150–300ms with `cubic-bezier(0.16, 1, 0.3, 1)`.
-- **Do** respect `prefers-reduced-motion`: keep colour/opacity feedback, remove travel.
+- Keep route blue for the active action or path only.
+- Use blue-tinted surfaces so light mode never reads as an empty white page.
+- Keep node silhouettes and control positions standard.
+- Let floating tools overlap the canvas; never dock them permanently over it.
+- Respect `prefers-reduced-motion`.
 
 ### Don't:
-- **Don't** use monospace for UI labels, buttons, or marketing copy.
-- **Don't** use glass/blur as decoration; blur only separates a modal from the page.
-- **Don't** add a second accent for decoration or gradients inside text.
-- **Don't** put a coloured left border on cards, alerts, or list items.
-- **Don't** animate layout-driving properties; use transforms, opacity, and grid/flex reveal.
+- Don't use neon glows, coloured halos, or "tech" gradients.
+- Don't use monospace for UI labels.
+- Don't put functional text below 11px.
+- Don't add decorative coloured left borders.
+- Don't animate layout properties; use transform, opacity, and grid/flex reveal.

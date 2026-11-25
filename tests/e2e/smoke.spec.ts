@@ -11,7 +11,7 @@ test('create, run, step, export, and import a program', async ({ page }, testInf
   await page.getByRole('button', { name: /add output/i }).click()
 
   await page.locator('.flow-node').filter({ hasText: 'Output' }).first().click()
-  await page.getByLabel(/expression/i).fill('"Hello, world"')
+  await page.locator('.node-card').getByLabel(/expression/i).fill('"Hello, world"')
 
   await page.getByRole('button', { name: /^run$/i }).click()
   await expect(page.locator('.console-entry--output')).toContainText('Hello, world')

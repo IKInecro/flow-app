@@ -7,6 +7,7 @@ import {
   PanelRightClose,
   PanelRightOpen,
   Redo2,
+  Terminal,
   Undo2,
 } from 'lucide-react'
 import {
@@ -21,6 +22,7 @@ import { Inspector } from './inspector/Inspector'
 import { SourcePanel } from '../codegen/SourcePanel'
 import { FileMenu } from './export/FileMenu'
 import { useShortcuts } from './useShortcuts'
+import { useSymbols } from './inspector/useSymbols'
 import { CallStack } from '../run/CallStack'
 import { ConsoleDock } from '../run/ConsoleDock'
 import { VariableWatch } from '../run/VariableWatch'
@@ -57,10 +59,11 @@ export function EditorPage() {
   const consoleOpen = useUiStore((state) => state.consoleOpen)
   const paletteWidth = useUiStore((state) => state.paletteWidth)
   const sideWidth = useUiStore((state) => state.sideWidth)
-  const consoleHeight = useUiStore((state) => state.consoleHeight)
   const setLayout = useUiStore((state) => state.setLayout)
   const togglePalette = useUiStore((state) => state.togglePalette)
   const toggleSide = useUiStore((state) => state.toggleSide)
+  const toggleConsole = useUiStore((state) => state.toggleConsole)
+  const symbols = useSymbols()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -123,7 +126,6 @@ export function EditorPage() {
         {
           '--palette-w': `${paletteWidth}px`,
           '--side-w': `${sideWidth}px`,
-          '--console-h': `${consoleHeight}px`,
         } as CSSProperties
       }
     >
@@ -135,9 +137,24 @@ export function EditorPage() {
           <strong>{program?.meta.name || 'Untitled'}</strong>
           <span className={`editor__save editor__save--${saveState}`}>{SAVE_LABEL[saveState]}</span>
         </div>
+        <datalist id="mf-symbols">
+          {symbols.map((name) => (
+            <option key={name} value={name} />
+          ))}
+        </datalist>
         <div className="editor__actions">
           <FileMenu />
           <LayoutMenu />
+          <button
+            type="button"
+            className="icon-button"
+            aria-label="Toggle console"
+            title="Terminal"
+            aria-pressed={consoleOpen}
+            onClick={toggleConsole}
+          >
+            <Terminal size={17} />
+          </button>
           <button
             type="button"
             className="icon-button"
@@ -183,7 +200,7 @@ export function EditorPage() {
             <PanelResizer
               orientation="vertical"
               value={paletteWidth}
-              min={150}
+              min={170}
               max={340}
               label="Resize shapes panel"
               onResize={(width) => setLayout({ paletteWidth: width })}
@@ -206,8 +223,8 @@ export function EditorPage() {
             <PanelResizer
               orientation="vertical"
               value={sideWidth}
-              min={220}
-              max={440}
+              min={250}
+              max={460}
               invert
               label="Resize right panel"
               onResize={(width) => setLayout({ sideWidth: width })}
@@ -216,17 +233,19 @@ export function EditorPage() {
               <div className="editor__tabs" role="tablist" aria-label="Right panel">
                 {(
                   [
-                    ['properties', 'Node'],
-                    ['functions', 'Functions'],
-                    ['variables', 'Variables'],
-                    ['callstack', 'Stack'],
-                    ['source', 'Code'],
+                    ['properties', 'Node', 'Node properties'],
+                    ['functions', 'Funcs', 'Functions'],
+                    ['variables', 'Vars', 'Variables'],
+                    ['callstack', 'Stack', 'Call stack'],
+                    ['source', 'Code', 'Source code'],
                   ] as const
-                ).map(([tab, label]) => (
+                ).map(([tab, label, title]) => (
                   <button
                     key={tab}
                     type="button"
                     role="tab"
+                    aria-label={title}
+                    title={title}
                     aria-selected={inspectorTab === tab}
                     className={inspectorTab === tab ? 'is-active' : ''}
                     onClick={() => setInspectorTab(tab)}
@@ -271,17 +290,6 @@ export function EditorPage() {
           </button>
         )}
       </div>
-      {consoleOpen ? (
-        <PanelResizer
-          orientation="horizontal"
-          value={consoleHeight}
-          min={120}
-          max={420}
-          invert
-          label="Resize console"
-          onResize={(height) => setLayout({ consoleHeight: height })}
-        />
-      ) : null}
       <ConsoleDock />
     </section>
   )

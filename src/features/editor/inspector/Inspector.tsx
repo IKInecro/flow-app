@@ -1,7 +1,4 @@
-import { useMemo } from 'react'
 import { findStmt, replaceStmt } from '../../../core/model/program'
-import { walkStmts } from '../../../core/model/walk'
-import { getFunction } from '../../../core/model/program'
 import type { Stmt } from '../../../core/model/types'
 import { useProjectStore } from '../store/projectStore'
 import { useUiStore } from '../store/uiStore'
@@ -14,21 +11,6 @@ export function Inspector() {
   const selectedFunction = useUiStore((state) => state.selectedFunction)
   const selectedPath = useUiStore((state) => state.selectedPath)
 
-  const symbols = useMemo(() => {
-    if (!program) return [] as string[]
-    const names = new Set<string>()
-    const fn = getFunction(program, selectedFunction)
-    for (const param of fn?.params ?? []) names.add(param.name)
-    if (fn) {
-      walkStmts(fn.body, '', (stmt) => {
-        if (stmt.kind === 'declare') stmt.names.forEach((name) => names.add(name))
-        if (stmt.kind === 'for') names.add(stmt.variable)
-      })
-    }
-    for (const item of program.functions) names.add(item.name)
-    return Array.from(names)
-  }, [program, selectedFunction])
-
   const found =
     program && selectedPath ? findStmt(program, selectedFunction, selectedPath) : null
 
@@ -40,11 +22,6 @@ export function Inspector() {
   return (
     <aside className="inspector" aria-label="Inspector">
       <h2 className="inspector__title">Properties</h2>
-      <datalist id="mf-symbols">
-        {symbols.map((name) => (
-          <option key={name} value={name} />
-        ))}
-      </datalist>
 
       {found ? (
         <>

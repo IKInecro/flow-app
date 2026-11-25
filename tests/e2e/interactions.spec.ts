@@ -96,3 +96,63 @@ test('panels hide, resize, and remember the workspace', async ({ page }) => {
     '220',
   )
 })
+
+test('block properties float beside the node and the terminal appears on run', async ({ page }) => {
+  test.setTimeout(120_000)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/examples')
+  await page.getByRole('button', { name: /open example hello world/i }).click()
+  await page.waitForSelector('.react-flow__node')
+
+  const node = page.locator('.flow-node[data-kind=output]')
+  await node.click()
+
+  const card = page.getByRole('dialog', { name: 'Block properties' })
+  await expect(card).toBeVisible()
+  const nodeBox = await node.boundingBox()
+  const cardBox = await card.boundingBox()
+  if (!nodeBox || !cardBox) throw new Error('missing geometry')
+  const beside = cardBox.x > nodeBox.x + nodeBox.width || cardBox.x + cardBox.width < nodeBox.x
+  expect(beside).toBe(true)
+
+  await card.getByLabel(/expression/i).fill('"Hi, Marco"')
+  await card.getByLabel(/expression/i).press('Enter')
+  await expect(node.locator('.flow-node__label')).toHaveText('Output "Hi, Marco"')
+
+  await page.getByRole('button', { name: 'Close block properties' }).click()
+  await expect(card).toHaveCount(0)
+  await page.getByRole('button', { name: 'Edit node' }).click()
+  await expect(card).toBeVisible()
+  await expect(card.getByLabel(/expression/i)).toBeFocused()
+
+  await page.getByRole('button', { name: /^run$/i }).click()
+  const terminal = page.getByRole('region', { name: 'Console' })
+  await expect(terminal).toBeVisible()
+  const box = await terminal.boundingBox()
+  if (!box) throw new Error('terminal missing')
+  expect(box.x).toBeGreaterThanOrEqual(0)
+  expect(box.y).toBeGreaterThanOrEqual(0)
+  expect(box.x + box.width).toBeLessThanOrEqual(1440)
+  expect(box.y + box.height).toBeLessThanOrEqual(900)
+  await expect(page.locator('.console-entry--output').first()).toContainText('Hi, Marco')
+})
+
+test('sidebar follows the theme and its navigation can be folded', async ({ page }) => {
+  await page.goto('/')
+  await page.evaluate(() => localStorage.setItem('marcoflow.theme', 'light'))
+  await page.reload()
+  const light = await page.locator('.rail').evaluate((el) => getComputedStyle(el).backgroundColor)
+  expect(light).toBe('rgb(255, 255, 255)')
+
+  await page.evaluate(() => localStorage.setItem('marcoflow.theme', 'dark'))
+  await page.reload()
+  const dark = await page.locator('.rail').evaluate((el) => getComputedStyle(el).backgroundColor)
+  expect(dark).not.toBe(light)
+
+  await page.getByRole('button', { name: 'Collapse navigation' }).click()
+  await expect(page.getByRole('link', { name: 'Projects' })).toHaveCount(0)
+  await page.reload()
+  await expect(page.getByRole('link', { name: 'Projects' })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Expand navigation' }).click()
+  await expect(page.getByRole('link', { name: 'Projects' })).toBeVisible()
+})

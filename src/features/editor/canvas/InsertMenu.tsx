@@ -15,17 +15,17 @@ export interface InsertMenuProps {
 }
 
 export const INSERTABLE: { kind: StmtKind; label: string; hint: string }[] = [
-  { kind: 'declare', label: 'Declare', hint: 'Declare a variable' },
-  { kind: 'assign', label: 'Assign', hint: 'Set a variable' },
-  { kind: 'input', label: 'Input', hint: 'Read from the user' },
+  { kind: 'declare', label: 'Declare', hint: 'New variable' },
+  { kind: 'assign', label: 'Assign', hint: 'Change a value' },
+  { kind: 'input', label: 'Input', hint: 'Read from user' },
   { kind: 'output', label: 'Output', hint: 'Show a value' },
-  { kind: 'if', label: 'If', hint: 'Branching' },
-  { kind: 'while', label: 'While', hint: 'Loop while a condition holds' },
-  { kind: 'do', label: 'Do', hint: 'Loop at least once' },
-  { kind: 'for', label: 'For', hint: 'Loop with a counter' },
-  { kind: 'call', label: 'Call', hint: 'Call a function' },
+  { kind: 'if', label: 'If', hint: 'Branch on condition' },
+  { kind: 'while', label: 'While', hint: 'Repeat while true' },
+  { kind: 'do', label: 'Do', hint: 'Run at least once' },
+  { kind: 'for', label: 'For', hint: 'Counted loop' },
+  { kind: 'call', label: 'Call', hint: 'Run a function' },
   { kind: 'comment', label: 'Comment', hint: 'Leave a note' },
-  { kind: 'breakpoint', label: 'Breakpoint', hint: 'Pause while debugging' },
+  { kind: 'breakpoint', label: 'Breakpoint', hint: 'Pause debugging' },
 ]
 
 export function InsertMenu({ target, onInsert, onClose }: InsertMenuProps): ReactNode {

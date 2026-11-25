@@ -61,7 +61,7 @@ function drawNodes(
       text.setAttribute('y', String(height / 2))
       text.setAttribute('text-anchor', 'middle')
       text.setAttribute('dominant-baseline', 'middle')
-      text.setAttribute('font-family', 'Onest Variable, ui-sans-serif, system-ui, sans-serif')
+      text.setAttribute('font-family', 'Nunito Variable, Nunito, ui-sans-serif, system-ui, sans-serif')
       text.setAttribute('font-size', '12')
       text.setAttribute('font-weight', '600')
       text.setAttribute('fill', '#1f2937')
@@ -98,7 +98,7 @@ export function svgFromElement(
 
   const style = document.createElementNS(SVG_NS, 'style')
   style.textContent = [
-    'text { font-family: Onest Variable, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }',
+    'text { font-family: Nunito Variable, Nunito, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }',
     '.react-flow__edge-path { fill: none; stroke: #94a3b8; stroke-width: 1.6; }',
     '.react-flow__edge-text { fill: #475569; font-size: 11px; font-weight: 600; }',
   ].join('\n')

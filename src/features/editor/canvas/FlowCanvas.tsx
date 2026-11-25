@@ -45,6 +45,7 @@ export function FlowCanvas() {
   const selectedFunction = useUiStore((state) => state.selectedFunction)
   const selectedPath = useUiStore((state) => state.selectedPath)
   const select = useUiStore((state) => state.select)
+  const setNodeCardOpen = useUiStore((state) => state.setNodeCardOpen)
   const activePath = useRuntimeStore((state) => state.activePath)
   const [insertTarget, setInsertTarget] = useState<InsertTarget | null>(null)
   const [dragging, setDragging] = useState(false)
@@ -74,6 +75,7 @@ export function FlowCanvas() {
         },
         draggable: !isMerge && item.kind !== 'start' && item.kind !== 'end',
         selectable: !isMerge,
+        selected: !isMerge && item.path === selectedPath,
         width: item.width,
         height: item.height,
         style: isMerge ? { opacity: 0, pointerEvents: 'none' } : undefined,
@@ -96,7 +98,7 @@ export function FlowCanvas() {
         },
       }
     })
-  }, [layout, selectedFunction, viewState.nodeOffsets, errorPaths, activePath])
+  }, [layout, selectedFunction, selectedPath, viewState.nodeOffsets, errorPaths, activePath])
 
   // React Flow is controlled here: keep its live copy so a node tracks the
   // pointer during the drag, then persist the offset on drop.
@@ -141,9 +143,12 @@ export function FlowCanvas() {
   const handleNodeClick: NodeMouseHandler = useCallback(
     (_event, node) => {
       const path = node.data.path
-      if (typeof path === 'string' && path) select(path)
+      if (typeof path === 'string' && path) {
+        select(path)
+        setNodeCardOpen(true)
+      }
     },
-    [select],
+    [select, setNodeCardOpen],
   )
 
   const selectedNode = layout?.nodes.find((item) => item.path === selectedPath && item.stmt)
@@ -170,6 +175,17 @@ export function FlowCanvas() {
         newline: true,
       }),
     )
+  }
+
+  function editSelected(): void {
+    if (!selectedNode) return
+    setNodeCardOpen(true)
+    window.setTimeout(() => {
+      const field = document.querySelector<HTMLElement>(
+        '.node-card input, .node-card select, .node-card textarea',
+      )
+      field?.focus()
+    }, 30)
   }
 
   function deleteSelected(): void {
@@ -251,7 +267,7 @@ export function FlowCanvas() {
             kind={selectedNode.kind}
             stmt={selectedNode.stmt}
             onInsert={handleInsert}
-            onEdit={() => undefined}
+            onEdit={editSelected}
             onDelete={deleteSelected}
           />
           {insertTarget ? (

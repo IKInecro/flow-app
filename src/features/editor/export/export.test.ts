@@ -57,7 +57,7 @@ test('SVG export keeps labels and edges with font fallbacks', () => {
   expect(height).toBe(600)
   expect(text).toContain('Mulai')
   expect(text).toContain('M 10 10 L 40 40')
-  expect(text).toContain('Onest Variable, ui-sans-serif, system-ui')
+  expect(text).toContain('Nunito Variable, Nunito, ui-sans-serif, system-ui')
   expect(text).not.toContain('is-selected')
 })
 

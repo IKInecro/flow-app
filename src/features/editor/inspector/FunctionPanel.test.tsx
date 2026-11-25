@@ -61,3 +61,19 @@ test('duplicate function names are blocked', async () => {
   const program = useProjectStore.getState().program
   expect(program?.functions.filter((fn) => fn.name.toLowerCase() === 'foo')).toHaveLength(1)
 })
+
+test('adds and edits a parameter on the selected function', async () => {
+  load()
+  render(<FunctionPanel />)
+
+  await userEvent.click(screen.getByRole('button', { name: /add parameter/i }))
+
+  const name = screen.getByLabelText(/parameter 1 name/i)
+  await userEvent.clear(name)
+  await userEvent.type(name, 'size{Enter}')
+  await userEvent.selectOptions(screen.getByLabelText(/parameter 1 type/i), 'Real')
+
+  const params = useProjectStore.getState().program?.functions[0].params
+  expect(params).toHaveLength(1)
+  expect(params?.[0]).toMatchObject({ name: 'size', type: 'Real' })
+})

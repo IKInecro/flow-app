@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import {
+  ChevronDown,
   Command,
   FolderKanban,
   Library,
@@ -45,6 +46,8 @@ export function Sidebar() {
   const setCommandOpen = useUiStore((state) => state.setCommandOpen)
   const railCollapsed = useUiStore((state) => state.railCollapsed)
   const toggleRail = useUiStore((state) => state.toggleRail)
+  const railNavOpen = useUiStore((state) => state.railNavOpen)
+  const toggleRailNav = useUiStore((state) => state.toggleRailNav)
 
   const items = [
     { to: '/', label: t('nav.projects'), icon: FolderKanban, end: true, match: pathname === '/' },
@@ -72,7 +75,10 @@ export function Sidebar() {
   ]
 
   return (
-    <nav className={`rail ${railCollapsed ? 'rail--collapsed' : ''}`} aria-label={t('nav.label')}>
+    <nav
+      className={`rail ${railCollapsed ? 'rail--collapsed' : ''} ${railNavOpen ? '' : 'rail--nav-closed'}`}
+      aria-label={t('nav.label')}
+    >
       <NavLink to="/" className="rail__brand" aria-label={t('app.name')}>
         <BrandMark />
         <span className="rail__brandtext">
@@ -82,21 +88,34 @@ export function Sidebar() {
       </NavLink>
 
       <div className="rail__items">
-        <p className="rail__label">{t('nav.workspace')}</p>
-        {items.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={`rail__item ${item.match ? 'is-active' : ''}`}
-            aria-current={item.match ? 'page' : undefined}
-            aria-label={item.label}
-            title={item.label}
-          >
-            <item.icon size={19} aria-hidden="true" />
-            <span className="rail__text">{item.label}</span>
-          </NavLink>
-        ))}
+        <button
+          type="button"
+          className="rail__section-head"
+          aria-expanded={railNavOpen}
+          aria-label={railNavOpen ? 'Collapse navigation' : 'Expand navigation'}
+          onClick={toggleRailNav}
+        >
+          <span>{t('nav.workspace')}</span>
+          <ChevronDown size={15} aria-hidden="true" />
+        </button>
+        {railNavOpen ? (
+          <div className="rail__list">
+            {items.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={`rail__item ${item.match ? 'is-active' : ''}`}
+                aria-current={item.match ? 'page' : undefined}
+                aria-label={item.label}
+                title={item.label}
+              >
+                <item.icon size={19} aria-hidden="true" />
+                <span className="rail__text">{item.label}</span>
+              </NavLink>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className="rail__foot">
@@ -134,7 +153,7 @@ export function Sidebar() {
           onClick={() => setTheme(resolved === 'dark' ? 'light' : 'dark')}
         >
           {resolved === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
-          <span className="rail__text">{t('nav.theme')}</span>
+          <span className="rail__text">{resolved === 'dark' ? 'Light mode' : 'Dark mode'}</span>
         </button>
       </div>
     </nav>

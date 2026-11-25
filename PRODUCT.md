@@ -8,53 +8,56 @@ web
 
 ## Users
 
-Pelajar, mahasiswa, dan pengajar yang belajar algoritma lewat diagram alur. Mereka biasanya bekerja di laptop/desktop, sering di kelas atau saat mengerjakan tugas, dan butuh menyusun logika tanpa menulis sintaks dulu. The interface ships in English only.
+Students, self-taught learners, and teachers who learn algorithms through flowcharts. They usually work on a laptop or desktop, often in class or while doing assignments, and want to express logic before writing syntax. The interface ships in English only.
 
 ## Product Purpose
 
-MarcoFlow adalah editor diagram alur berbasis browser yang membuat, menyimpan, menjalankan, dan menerjemahkan diagram menjadi kode. Tujuannya membuat logika program terasa nyata: siswa menggambar alur, menekan Jalankan, melihat variabel berubah, lalu membaca kode setara. Sukses berarti pengguna bisa menyelesaikan satu program kecil dalam satu sesi tanpa instalasi, akun, atau server.
+MarcoFlow is a browser-based flowchart editor that creates, saves, runs, and translates diagrams into code. The goal is to make program logic tangible: draw a flow, press Run, watch variables change, then read the equivalent code. Success means finishing a small program in one session with no install, account, or server.
 
 ## Positioning
 
-Semua data tinggal di browser lewat IndexedDB, dan file `.fprg` bisa dibawa keluar-masuk tanpa backend. Diagram, runtime, dan 27 template bahasa hidup dalam satu halaman statis. Tidak ada layanan lain yang dibutuhkan untuk mencoba.
+All data stays in the browser through IndexedDB, and `.fprg` files move in and out without a backend. Diagrams, the runtime, and 27 language templates live in one static page. Nothing else is needed to try it.
 
 ## Operating Context
 
-- Desktop-first; di bawah 768px aplikasi menampilkan ajakan pindah ke desktop dan menonaktifkan editing.
-- Alur kerja: hub proyek → editor kanvas → jalankan/step → console, variabel, call stack → lihat kode.
-- Proyek disimpan otomatis; impor/ekspor `.fprg`; template kustom `.fpgt`.
-- Theme follows the system, with a light/dark toggle and a Settings page. The interface ships in English only.
-- Koneksi internet hanya dibutuhkan untuk memuat aplikasi.
+- Desktop-first; below 768px the app shows a move-to-desktop notice and disables editing.
+- Flow: project hub → canvas editor → run/step → floating terminal, variables, call stack → source view.
+- Projects save automatically; import/export `.fprg`; custom templates `.fpgt`.
+- Theme follows the system, with a light/dark toggle and a Settings page.
+- The insert palette, right inspector, and navigation rail can be folded; panel borders resize by drag.
+- Block properties float beside the selected node; the terminal floats and appears when a program runs.
+- Internet is only needed to load the app.
 
 ## Capabilities and Constraints
 
 - React 19 + TypeScript + Vite, `@xyflow/react`, dagre, Zustand, CodeMirror 6, `idb-keyval`.
-- 27 template bahasa bawaan, ditambah impor template kustom.
-- Auto-layout, insert menu, undo/redo, ekspor SVG/PNG, console, variabel, call stack.
-- Tanpa backend, tanpa autentikasi, tanpa analitik, tanpa environment variable.
-- Aset dan template tidak boleh disalin dari Flowgorithm.
-- Harus tetap jalan sebagai static SPA di Cloudflare Pages dengan CSP self-only.
+- 27 built-in language templates plus custom template import.
+- Auto-layout, insert menu, undo/redo, SVG/PNG export, terminal, variables, call stack.
+- Self-hosted Nunito, Fredoka, and JetBrains Mono; no external font requests.
+- No backend, authentication, analytics, or environment variables.
+- Assets and templates must not be copied from Flowgorithm.
+- Must run as a static SPA on Cloudflare Pages with a self-only CSP.
 
 ## Brand Commitments
 
-- Nama produk: MarcoFlow. Nada bicara: ramah, jelas, tidak menggurui.
+- Product name: MarcoFlow. Voice: friendly, clear, never condescending.
 - English is the only interface language; common technical terms stay in English.
-- Brief pemilik: tampilan harus modern dan halus, memakai Google Fonts, animasi pada konektor dan saat drag, modal dan transisi panel yang mulus; tidak boleh terasa terlalu teknis.
+- Owner brief: modern and polished, smooth connector and drag motion, modal and panel transitions; never feel overly technical. More recently: modern dark blue rather than neon "tech", readable tinted light mode, better typography.
 
 ## Evidence on Hand
 
-- Aplikasi nyata dan seluruh fitur berjalan di `src/`.
-- Contoh program: hello, factorial, bubble sort, fibonacci.
-- Tidak ada testimoni, metrik pengguna, harga, atau klaim komersial; jangan mengarang.
+- The real app and all features run in `src/`.
+- Sample programs: hello, factorial, bubble sort, fibonacci.
+- No testimonials, user metrics, pricing, or commercial claims; do not invent them.
 
 ## Product Principles
 
-1. Diagram tetap pusat; panel lain melayani, tidak bersaing.
-2. Umpan balik harus langsung: setiap aksi terasa, setiap status terbaca.
-3. Bahasa manusia dulu, sintaks belakangan.
-4. Satu sesi, tanpa hambatan masuk.
-5. Data milik pengguna: lokal, portabel, bisa diekspor.
+1. The diagram stays central; other panels serve it and never compete.
+2. Feedback is immediate: every action lands, every status reads.
+3. Human language first, syntax later.
+4. One session, no onboarding wall.
+5. Data belongs to the user: local, portable, exportable.
 
 ## Accessibility & Inclusion
 
-Target WCAG AA: kontras teks minimal 4.5:1, fokus keyboard terlihat, target sentuh memadai, dan gerakan menghormati `prefers-reduced-motion`.
+Target WCAG AA: text contrast at least 4.5:1, visible keyboard focus, adequate hit targets, functional text at 11px or above, and motion respects `prefers-reduced-motion`.

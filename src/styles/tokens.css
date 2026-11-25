@@ -1,48 +1,64 @@
+@font-face {
+  font-family: 'Nunito Variable';
+  src: url('/fonts/nunito-latin.woff2') format('woff2');
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fredoka Variable';
+  src: url('/fonts/fredoka-latin.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
 
-  /* Daylight campus: warm paper, ink navy, vermilion route ink. */
-  --bg: #f1eee7;
-  --bg-grid: #d8d2c6;
-  --surface: #fffdf9;
-  --surface-2: #f7f3ec;
-  --surface-3: #ece6db;
-  --border: #e2dcd1;
-  --border-strong: #cdc5b7;
-  --text: #17202b;
-  --text-muted: #5e6874;
-  --accent: #b53d28;
-  --accent-soft: #fbe6e0;
-  --accent-contrast: #fffaf6;
-  --success: #0a7f6a;
-  --danger: #b33232;
-  --warning: #9c6208;
-  --info: #2456c8;
+  /* Modern blue: cool porcelain, navy ink, a single confident route blue. */
+  --bg: #f2f6fd;
+  --bg-grid: #d8e2f2;
+  --surface: #ffffff;
+  --surface-2: #f7faff;
+  --surface-3: #edf3fd;
+  --border: #e0e8f6;
+  --border-strong: #c6d5ec;
+  --text: #0d1b2f;
+  --text-muted: #566882;
+  --accent: #2f5fd0;
+  --accent-soft: #e9f0ff;
+  --accent-contrast: #ffffff;
+  --success: #0e7c6b;
+  --danger: #bf3a31;
+  --warning: #96620b;
+  --info: #2f5fd0;
 
   /* Signature route inks. */
-  --line-coral: #b53d28;
-  --line-blue: #2456c8;
-  --line-teal: #0a7f6a;
-  --line-amber: #b7790c;
+  --line-coral: #bf3a31;
+  --line-blue: #2f5fd0;
+  --line-teal: #0e7c6b;
+  --line-amber: #96620b;
 
-  /* App chrome. */
-  --rail: #17202b;
-  --rail-raised: #202b38;
-  --rail-text: #f6f2ea;
-  --rail-muted: #a2adb9;
-  --rail-border: rgb(255 255 255 / 10%);
+  /* App chrome follows the theme instead of staying permanently dark. */
+  --rail: #ffffff;
+  --rail-raised: #f3f7ff;
+  --rail-text: #0d1b2f;
+  --rail-muted: #64748b;
+  --rail-border: rgb(13 27 47 / 8%);
 
-  --shadow-sm: 0 1px 2px rgb(23 32 43 / 7%);
-  --shadow-md: 0 2px 6px rgb(23 32 43 / 6%), 0 14px 32px -14px rgb(23 32 43 / 24%);
-  --shadow-lg: 0 30px 70px -24px rgb(23 32 43 / 38%), 0 8px 24px -12px rgb(23 32 43 / 18%);
+  --shadow-sm: 0 1px 2px rgb(13 27 47 / 6%);
+  --shadow-md: 0 2px 6px rgb(13 27 47 / 5%), 0 14px 32px -14px rgb(13 27 47 / 22%);
+  --shadow-lg: 0 30px 70px -24px rgb(13 27 47 / 34%), 0 8px 24px -12px rgb(13 27 47 / 16%);
 
   --radius-sm: 9px;
   --radius-md: 13px;
   --radius-lg: 20px;
   --radius-xl: 28px;
 
-  --font-ui: 'Onest Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Bricolage Grotesque Variable', var(--font-ui);
+  --font-ui: 'Nunito Variable', 'Nunito', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Fredoka Variable', 'Fredoka', var(--font-ui);
   --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -52,32 +68,32 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #0d1218;
-  --bg-grid: #1c2732;
-  --surface: #141b23;
-  --surface-2: #1a232d;
-  --surface-3: #23303c;
-  --border: #263340;
-  --border-strong: #3a4a5b;
-  --text: #f1efe9;
-  --text-muted: #9ba8b4;
-  --accent: #ff7a5f;
-  --accent-soft: #39231e;
-  --accent-contrast: #1a0f0b;
-  --success: #3ac9a8;
-  --danger: #ff6f6f;
-  --warning: #f0b552;
-  --info: #7aa6ff;
+  --bg: #08101f;
+  --bg-grid: #17253c;
+  --surface: #0f1a2d;
+  --surface-2: #142138;
+  --surface-3: #1b2c47;
+  --border: #233550;
+  --border-strong: #344c6e;
+  --text: #edf2fb;
+  --text-muted: #94a5bf;
+  --accent: #7ea2ff;
+  --accent-soft: #162846;
+  --accent-contrast: #071021;
+  --success: #3fc3a5;
+  --danger: #ff7f7f;
+  --warning: #efb75b;
+  --info: #8fb0ff;
 
-  --line-coral: #ff7a5f;
-  --line-blue: #7aa6ff;
-  --line-teal: #3ac9a8;
-  --line-amber: #f0b552;
+  --line-coral: #ff7f7f;
+  --line-blue: #8fb0ff;
+  --line-teal: #3fc3a5;
+  --line-amber: #efb75b;
 
-  --rail: #090e13;
-  --rail-raised: #111922;
-  --rail-text: #f1efe9;
-  --rail-muted: #8b98a5;
+  --rail: #060d19;
+  --rail-raised: #0d1729;
+  --rail-text: #edf2fb;
+  --rail-muted: #93a3bc;
   --rail-border: rgb(255 255 255 / 8%);
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%);

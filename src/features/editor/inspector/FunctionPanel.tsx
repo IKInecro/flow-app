@@ -30,8 +30,14 @@ function renameCalls(node: Stmt, from: string, to: string): Stmt {
 function replaceFunction(program: Program, fn: FunctionDef): Program {
   return {
     ...program,
-    functions: program.functions.map((item) => (item === fn ? fn : item)),
+    functions: program.functions.map((item) =>
+      item.name.toLowerCase() === fn.name.toLowerCase() ? fn : item,
+    ),
   }
+}
+
+function initials(name: string): string {
+  return name.slice(0, 2).toUpperCase()
 }
 
 export function FunctionPanel() {
@@ -167,55 +173,89 @@ export function FunctionPanel() {
 
   return (
     <aside className="functions" aria-label="Function">
-      <h2 className="inspector__title">Function</h2>
-      <ul className="functions__list">
-        {program.functions.map((fn) => (
-          <li key={fn.name}>
-            <button
-              type="button"
-              className={`functions__item ${
-                fn.name === selected?.name ? 'is-active' : ''
-              }`}
-              aria-current={fn.name === selected?.name ? 'true' : undefined}
-              aria-label={fn.name}
-              onClick={() => setSelectedFunction(fn.name)}
-            >
-              {fn.name}
-              <span className="functions__meta">{fn.params.length} param</span>
-            </button>
-          </li>
-        ))}
+      <header className="fn-head">
+        <div>
+          <h2 className="inspector__title">Functions</h2>
+          <p className="fn-head__hint">
+            {program.functions.length} {program.functions.length === 1 ? 'function' : 'functions'}
+          </p>
+        </div>
+      </header>
+
+      <ul className="fn-list">
+        {program.functions.map((fn) => {
+          const active = fn.name === selected?.name
+          return (
+            <li key={fn.name}>
+              <button
+                type="button"
+                className={`fn-item ${active ? 'is-active' : ''}`}
+                aria-current={active ? 'true' : undefined}
+                aria-label={fn.name}
+                onClick={() => setSelectedFunction(fn.name)}
+              >
+                <span className="fn-item__avatar" aria-hidden="true">
+                  {initials(fn.name)}
+                </span>
+                <span className="fn-item__copy">
+                  <strong>{fn.name}</strong>
+                  <small>
+                    {fn.params.length} {fn.params.length === 1 ? 'param' : 'params'}
+                    {fn.returnType !== 'None' ? ` · ${fn.returnType}` : ''}
+                  </small>
+                </span>
+                {active ? <span className="fn-item__dot" aria-hidden="true" /> : null}
+              </button>
+            </li>
+          )
+        })}
       </ul>
 
       {selected ? (
-        <div className="functions__editor">
-          <div className="field">
-            <label htmlFor="mf-function-name">Function name</label>
-            <input
-              id="mf-function-name"
-              value={renameDraft}
-              onChange={(event) => setRenameDraft(event.target.value)}
-              onBlur={rename}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') event.currentTarget.blur()
-              }}
-            />
+        <section className="fn-editor" aria-label="Selected function">
+          <div className="fn-editor__head">
+            <div>
+              <span className="fn-eyebrow">Editing</span>
+              <strong>{selected.name}</strong>
+            </div>
+            <button
+              type="button"
+              className="fn-delete"
+              aria-label="Delete function"
+              title={
+                selected.name.toLowerCase() === 'main'
+                  ? 'Main cannot be deleted'
+                  : 'Delete this function'
+              }
+              disabled={selected.name.toLowerCase() === 'main'}
+              onClick={remove}
+            >
+              <Trash2 size={14} aria-hidden="true" />
+            </button>
           </div>
-          <button
-            type="button"
-            className="button button--ghost functions__delete"
-            aria-label="Delete function"
-            disabled={selected.name.toLowerCase() === 'main'}
-            onClick={remove}
-          >
-            <Trash2 size={15} aria-hidden="true" />
-            Delete function
-          </button>
 
-          <fieldset className="functions__params">
-            <legend>Parameter</legend>
+          <div className="fn-card">
+            <div className="field">
+              <label htmlFor="mf-function-name">Function name</label>
+              <input
+                id="mf-function-name"
+                value={renameDraft}
+                onChange={(event) => setRenameDraft(event.target.value)}
+                onBlur={rename}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') event.currentTarget.blur()
+                }}
+              />
+            </div>
+          </div>
+
+          <fieldset className="fn-params">
+            <legend>
+              Parameters
+              <span>{selected.params.length}</span>
+            </legend>
             {selected.params.map((param, index) => (
-              <div className="functions__param" key={index}>
+              <div className="fn-param" key={index}>
                 <ParamName
                   label={`Parameter ${index + 1} name`}
                   value={param.name}
@@ -234,17 +274,17 @@ export function FunctionPanel() {
                     </option>
                   ))}
                 </select>
-                <label className="functions__array">
+                <label className="fn-param__array">
                   <input
                     type="checkbox"
                     checked={param.isArray}
                     onChange={(event) => updateParam(index, { isArray: event.target.checked })}
                   />
-                  array
+                  <span>Array</span>
                 </label>
                 <button
                   type="button"
-                  className="icon-button"
+                  className="fn-param__delete"
                   aria-label={`Delete parameter ${index + 1}`}
                   onClick={() =>
                     saveFunction({
@@ -253,31 +293,32 @@ export function FunctionPanel() {
                     })
                   }
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={13} aria-hidden="true" />
                 </button>
               </div>
             ))}
-            <button type="button" className="button button--ghost" onClick={addParam}>
-              <Plus size={15} aria-hidden="true" />
+            <button type="button" className="fn-add-param" onClick={addParam}>
+              <Plus size={14} aria-hidden="true" />
               Add parameter
             </button>
           </fieldset>
-        </div>
+        </section>
       ) : null}
 
-      <div className="functions__add">
+      <div className="fn-add">
         <div className="field">
           <label htmlFor="mf-new-function">New function</label>
           <input
             id="mf-new-function"
             value={newName}
+            placeholder="e.g. PrintTotal"
             onChange={(event) => setNewName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter') add()
             }}
           />
         </div>
-        <button type="button" className="button button--primary" onClick={add}>
+        <button type="button" className="button button--primary fn-add__button" onClick={add}>
           <Plus size={15} aria-hidden="true" />
           Add function
         </button>

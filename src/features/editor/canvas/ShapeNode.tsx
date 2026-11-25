@@ -1,25 +1,10 @@
-import {
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  Box,
-  Braces,
-  CircleDot,
-  CornerUpRight,
-  Equal,
-  FileText,
-  Flag,
-  GitBranch,
-  ListOrdered,
-  PenLine,
-  Play,
-  RefreshCw,
-  Repeat,
-  StickyNote,
-  TriangleAlert,
-  type LucideIcon,
-} from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Handle, Position, type Node, type NodeProps } from '@xyflow/react'
+import { NodeCard } from '../inspector/NodeCard'
+import { useUiStore } from '../store/uiStore'
 import { categoryForKind, shapeForKind, shapePath } from './shapePaths'
+import { kindMeta } from './nodeMeta'
 
 export interface ShapeNodeData extends Record<string, unknown> {
   label: string
@@ -34,35 +19,51 @@ export interface ShapeNodeData extends Record<string, unknown> {
 
 export type ShapeNodeType = Node<ShapeNodeData, 'shape'>
 
-const KIND_META: Record<string, { label: string; icon: LucideIcon }> = {
-  start: { label: 'Start', icon: Play },
-  end: { label: 'End', icon: Flag },
-  declare: { label: 'Declare', icon: Braces },
-  assign: { label: 'Set value', icon: Equal },
-  input: { label: 'Read input', icon: ArrowDownToLine },
-  output: { label: 'Display', icon: ArrowUpFromLine },
-  if: { label: 'Condition', icon: GitBranch },
-  while: { label: 'Loop', icon: Repeat },
-  do: { label: 'Loop', icon: RefreshCw },
-  for: { label: 'Loop', icon: ListOrdered },
-  call: { label: 'Function call', icon: CornerUpRight },
-  comment: { label: 'Note', icon: StickyNote },
-  breakpoint: { label: 'Pause', icon: CircleDot },
-  turtle: { label: 'Turtle', icon: PenLine },
-  file: { label: 'File', icon: FileText },
-  unsupported: { label: 'Unsupported', icon: TriangleAlert },
-}
-
 export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
   const shape = shapeForKind(data.kind)
   const category = categoryForKind(data.kind)
   const path = shapePath(shape, data.width, data.height)
   const label = data.label
-  const meta = KIND_META[data.kind] ?? { label: 'Block', icon: Box }
+  const meta = kindMeta(data.kind)
   const Icon = meta.icon
+  const cardOpen = useUiStore((state) => state.nodeCardOpen)
+  const setNodeCardOpen = useUiStore((state) => state.setNodeCardOpen)
+  const nodeRef = useRef<HTMLDivElement | null>(null)
+  const [anchor, setAnchor] = useState<{ left: number; top: number } | null>(null)
+  const showCard = Boolean(selected && cardOpen)
+
+  useEffect(() => {
+    if (!showCard) {
+      setAnchor(null)
+      return
+    }
+    let frame = 0
+    function place(): void {
+      const rect = nodeRef.current?.getBoundingClientRect()
+      if (!rect) {
+        frame = window.requestAnimationFrame(place)
+        return
+      }
+      const width = 262
+      const gap = 14
+      let left = rect.right + gap
+      if (left + width > window.innerWidth - 14) left = rect.left - width - gap
+      if (left < 14) left = 14
+      const top = Math.min(Math.max(12, rect.top), Math.max(12, window.innerHeight - 330))
+      setAnchor((current) =>
+        current && Math.abs(current.left - left) < 0.5 && Math.abs(current.top - top) < 0.5
+          ? current
+          : { left, top },
+      )
+      frame = window.requestAnimationFrame(place)
+    }
+    frame = window.requestAnimationFrame(place)
+    return () => window.cancelAnimationFrame(frame)
+  }, [showCard])
 
   return (
     <div
+      ref={nodeRef}
       className={`flow-node flow-node--${category} flow-node--kind-${data.kind} ${selected ? 'is-selected' : ''} ${data.active ? 'is-active' : ''}`}
       style={{ width: data.width, height: data.height }}
       data-kind={data.kind}
@@ -97,6 +98,23 @@ export function ShapeNode({ data, selected }: NodeProps<ShapeNodeType>) {
       {data.kind !== 'end' ? (
         <Handle type="source" position={Position.Bottom} className="flow-handle" />
       ) : null}
+      {showCard && anchor
+        ? createPortal(
+            <div
+              className="node-card-portal"
+              style={{ left: anchor.left, top: anchor.top }}
+              onClick={(event) => event.stopPropagation()}
+              onPointerDown={(event) => event.stopPropagation()}
+            >
+              <NodeCard
+                functionName={data.functionName}
+                path={data.path}
+                onClose={() => setNodeCardOpen(false)}
+              />
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   )
 }
