@@ -1,5 +1,6 @@
-import { Pause, Play, RotateCcw, SkipForward, Square } from 'lucide-react'
+import { Eraser, Pause, Play, RotateCcw, SkipForward, Square } from 'lucide-react'
 import { useProjectStore } from '../editor/store/projectStore'
+import { useUiStore } from '../editor/store/uiStore'
 import { useRuntimeStore } from './runtimeStore'
 
 const SPEEDS = [
@@ -28,11 +29,32 @@ export function RunToolbar() {
   const pauseRun = useRuntimeStore((state) => state.pauseRun)
   const resumeRun = useRuntimeStore((state) => state.resumeRun)
   const stopRun = useRuntimeStore((state) => state.stopRun)
+  const resetRun = useRuntimeStore((state) => state.resetRun)
+  const entries = useRuntimeStore((state) => state.entries)
+  const openConsole = useUiStore((state) => state.openConsole)
 
   const idle = status === 'idle' || status === 'done' || status === 'error'
   const running = status === 'running'
   const paused = status === 'paused'
   const active = running || paused || status === 'awaiting-input'
+  const hasHistory = status !== 'idle' || entries.length > 0
+
+  function run(): void {
+    if (!program) return
+    openConsole()
+    void startRun(program)
+  }
+
+  function step(): void {
+    if (!program) return
+    openConsole()
+    void stepRun(program)
+  }
+
+  function resume(): void {
+    openConsole()
+    void resumeRun()
+  }
 
   return (
     <div className={`run-pill run-pill--${status}`} role="toolbar" aria-label="Run controls">
@@ -46,7 +68,7 @@ export function RunToolbar() {
           type="button"
           className="run-pill__button run-pill__button--primary"
           disabled={!program}
-          onClick={() => program && void startRun(program)}
+          onClick={run}
         >
           {status === 'idle' ? <Play size={15} aria-hidden="true" /> : <RotateCcw size={15} aria-hidden="true" />}
           {status === 'idle' ? 'Run' : 'Run again'}
@@ -65,7 +87,7 @@ export function RunToolbar() {
           <button
             type="button"
             className="run-pill__button run-pill__button--primary"
-            onClick={() => void resumeRun()}
+            onClick={resume}
           >
             <Play size={15} aria-hidden="true" />
             Resume
@@ -74,7 +96,7 @@ export function RunToolbar() {
             type="button"
             className="run-pill__button"
             disabled={!program}
-            onClick={() => program && void stepRun(program)}
+            onClick={step}
           >
             <SkipForward size={15} aria-hidden="true" />
             Step
@@ -87,10 +109,22 @@ export function RunToolbar() {
           type="button"
           className="run-pill__button"
           disabled={!program}
-          onClick={() => program && void stepRun(program)}
+          onClick={step}
         >
           <SkipForward size={15} aria-hidden="true" />
           Step
+        </button>
+      ) : null}
+
+      {hasHistory ? (
+        <button
+          type="button"
+          className="run-pill__button"
+          title="Clear the console, variables, and highlight"
+          onClick={resetRun}
+        >
+          <Eraser size={14} aria-hidden="true" />
+          Reset
         </button>
       ) : null}
 

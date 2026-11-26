@@ -143,3 +143,37 @@ test('stop returns to idle without leaving the generator open', async () => {
   await controller.resume()
   expect(controller.getState().status).toBe('idle')
 })
+
+test('reset clears the console, variables, and waiting input', async () => {
+  const controller = createRunController(() => undefined)
+  await controller.start(inputProgram())
+  expect(controller.getState().status).toBe('awaiting-input')
+
+  controller.reset()
+
+  const state = controller.getState()
+  expect(state.status).toBe('idle')
+  expect(state.entries).toEqual([])
+  expect(state.variables).toEqual([])
+  expect(state.callStack).toEqual([])
+  expect(state.activePath).toBeNull()
+  expect(state.pendingInput).toBeUndefined()
+  expect(state.error).toBeUndefined()
+})
+
+test('reset after an error lets the next run start clean', async () => {
+  const broken = appendStmt(createProgram('Error'), 'Main', {
+    kind: 'output',
+    expression: '1 / 0',
+    newline: true,
+  })
+  const controller = createRunController(() => undefined)
+  await controller.start(broken)
+  expect(controller.getState().status).toBe('error')
+
+  controller.reset()
+  await controller.start(hello())
+
+  expect(controller.getState().status).toBe('done')
+  expect(outputTexts(controller.getState())).toEqual(['Hello'])
+})

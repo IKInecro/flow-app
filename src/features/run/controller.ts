@@ -54,6 +54,7 @@ export interface RunController {
   pause(): void
   resume(): Promise<void>
   stop(): void
+  reset(): void
   submitInput(text: string): Promise<void>
   setSpeed(ms: number): void
   getState(): RuntimeState
@@ -78,6 +79,10 @@ export function createRunController(
   let queuedInput: string | null = null
   let lastEvent: RuntimeEvent['type'] | null = null
   let speed = 0
+
+  function freshState(): RuntimeState {
+    return { ...INITIAL_RUNTIME_STATE, entries: [], variables: [], callStack: [] }
+  }
 
   function publish(): void {
     onChange({ ...state, entries: [...state.entries] })
@@ -199,7 +204,7 @@ export function createRunController(
 
   function ensureGenerator(program: Program, options: StartOptions): void {
     if (generator) void generator.return()
-    state = { ...INITIAL_RUNTIME_STATE, entries: [] }
+    state = freshState()
     inputSlot = ''
     queuedInput = null
     lastEvent = null
@@ -252,6 +257,18 @@ export function createRunController(
       queuedInput = null
       lastEvent = null
       patch({ status: 'idle', activePath: null, pendingInput: undefined })
+      publish()
+    },
+
+    reset() {
+      if (generator) {
+        void generator.return()
+        generator = null
+      }
+      inputSlot = ''
+      queuedInput = null
+      lastEvent = null
+      state = freshState()
       publish()
     },
 

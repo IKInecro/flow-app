@@ -132,6 +132,34 @@ test('a connector inserts a chosen block and accepts a dropped one', async ({ pa
   await expect(page.locator('.flow-node')).toHaveCount(5)
 })
 
+test('reset clears a failed run and the console reopens on the next run', async ({ page }) => {
+  test.setTimeout(120_000)
+  await page.goto('/')
+  await page.getByRole('button', { name: /new project/i }).click()
+  await page.waitForSelector('.react-flow__node')
+  await page.getByLabel('Run speed').selectOption('0')
+  await page.locator('.palette__item[aria-label="Declare"]').click()
+
+  await page.getByRole('button', { name: 'Run', exact: true }).click()
+  await expect(page.locator('.console-entry--error')).toHaveCount(1)
+  await expect(page.locator('.console__status')).toHaveText('Failed')
+
+  await page.getByRole('button', { name: 'Reset console' }).click()
+  await expect(page.locator('.console-entry')).toHaveCount(0)
+  await expect(page.locator('.console__status')).toHaveText('Ready')
+  await expect(page.locator('.run-pill')).toHaveClass(/run-pill--idle/)
+
+  await page.getByRole('button', { name: 'Run', exact: true }).click()
+  await expect(page.locator('.console-entry--error')).toHaveCount(1)
+  await page.getByRole('button', { name: 'Reset', exact: true }).click()
+  await expect(page.locator('.console-entry')).toHaveCount(0)
+
+  await page.getByLabel('Close console').click()
+  await expect(page.locator('.console')).toHaveClass(/is-hidden/)
+  await page.getByRole('button', { name: 'Run', exact: true }).click()
+  await expect(page.locator('.console')).not.toHaveClass(/is-hidden/)
+})
+
 test('block properties float beside the node and the terminal appears on run', async ({ page }) => {
   test.setTimeout(120_000)
   await page.setViewportSize({ width: 1440, height: 900 })

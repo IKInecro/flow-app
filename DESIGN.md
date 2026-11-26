@@ -175,8 +175,9 @@ Controls 9px, tiles and menus 10–13px, panels 12–14px, cards 18–20px, hero
 - Follows the node via a viewport-fixed portal; closing keeps the node selected.
 
 ### Floating terminal
-- Dark terminal in both themes: traffic-light dots, status pill, mode toggle, close, corner resize.
-- Auto-opens on run/step; hidden by default and never restored open on reload.
+- Dark terminal in both themes: traffic-light dots, status pill, mode toggle, reset, close, corner resize.
+- Auto-opens on run/step/resume; hidden by default and never restored open on reload.
+- Reset clears output, variables, call stack, pending input, error, and the active highlight, returning the run to Ready without rerunning. Available in the terminal header and as a Reset button in the run pill once a run has history.
 - Body uses JetBrains Mono at 11px with output/input/error/system tints.
 
 ### Inputs / Fields

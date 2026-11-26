@@ -14,7 +14,7 @@
     if (resolved !== 'light' && resolved !== 'dark') resolved = 'dark'
     root.dataset.theme = resolved
     root.style.colorScheme = resolved
-  } catch (error) {
+  } catch {
     root.dataset.theme = 'dark'
   }
 })()

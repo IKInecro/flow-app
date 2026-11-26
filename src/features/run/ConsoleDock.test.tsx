@@ -37,6 +37,25 @@ test('renders output and input bubbles with their colors', () => {
   expect(input).toHaveClass('console-entry--input')
 })
 
+test('reset clears the console and returns it to ready', async () => {
+  useRuntimeStore.setState({
+    status: 'error',
+    entries: [{ kind: 'error', text: 'A declaration needs a variable name.', path: '0' }],
+    variables: [{ functionName: 'Main', name: 'n', type: 'Integer', value: '0' }],
+    callStack: [{ functionName: 'Main' }],
+    error: { message: 'boom', function: 'Main', path: '0', callStack: [] },
+  })
+
+  render(<ConsoleDock />)
+  await userEvent.click(screen.getByRole('button', { name: 'Reset console' }))
+
+  expect(useRuntimeStore.getState().status).toBe('idle')
+  expect(useRuntimeStore.getState().entries).toEqual([])
+  expect(useRuntimeStore.getState().variables).toEqual([])
+  expect(screen.getByText(/run a program to see its output/i)).toBeInTheDocument()
+})
+
+
 test('plain mode renders every line in a pre', async () => {
   useRuntimeStore.setState({
     entries: [

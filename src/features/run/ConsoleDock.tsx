@@ -6,7 +6,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from 'react'
-import { GripHorizontal, Terminal, ToggleLeft, ToggleRight, X } from 'lucide-react'
+import { Eraser, GripHorizontal, Terminal, ToggleLeft, ToggleRight, X } from 'lucide-react'
 import { useUiStore } from '../editor/store/uiStore'
 import { useRuntimeStore } from './runtimeStore'
 
@@ -67,6 +67,7 @@ export function ConsoleDock() {
   const pendingInput = useRuntimeStore((state) => state.pendingInput)
   const submitInput = useRuntimeStore((state) => state.submitInput)
   const stopRun = useRuntimeStore((state) => state.stopRun)
+  const resetRun = useRuntimeStore((state) => state.resetRun)
   const consoleMode = useUiStore((state) => state.consoleMode)
   const setConsoleMode = useUiStore((state) => state.setConsoleMode)
   const open = useUiStore((state) => state.consoleOpen)
@@ -143,6 +144,11 @@ export function ConsoleDock() {
     const text = draft
     setDraft('')
     await submitInput(text)
+  }
+
+  function reset(): void {
+    setDraft('')
+    resetRun()
   }
 
   function startDrag(event: PointerEvent<HTMLElement>): void {
@@ -259,6 +265,15 @@ export function ConsoleDock() {
         </span>
         <span className={`console__status console__status--${status}`}>{STATUS[status] ?? status}</span>
         <div className="console__actions">
+          <button
+            type="button"
+            className="console__reset"
+            aria-label="Reset console"
+            title="Clear the run and start fresh"
+            onClick={reset}
+          >
+            <Eraser size={14} aria-hidden="true" />
+          </button>
           <button
             type="button"
             className="console__toggle"

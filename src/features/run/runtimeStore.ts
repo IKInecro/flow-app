@@ -15,6 +15,7 @@ interface RuntimeStore extends RuntimeState {
   pauseRun: () => void
   resumeRun: () => Promise<void>
   stopRun: () => void
+  resetRun: () => void
   submitInput: (text: string) => Promise<void>
   setSpeed: (ms: number) => void
 }
@@ -54,6 +55,10 @@ export const useRuntimeStore = create<RuntimeStore>((set, get) => ({
 
   stopRun() {
     getRunController().stop()
+  },
+
+  resetRun() {
+    getRunController().reset()
   },
 
   async submitInput(text) {
