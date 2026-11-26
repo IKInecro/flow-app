@@ -4,8 +4,8 @@ import { getStorageStatus, getStorageWarning, listProjects } from '../../shared/
 import { useTheme, type Theme } from '../../shared/theme/theme'
 
 const THEMES: { value: Theme; label: string; hint: string; icon: typeof Sun }[] = [
-  { value: 'light', label: 'Light', hint: 'Warm paper, dark ink', icon: Sun },
-  { value: 'dark', label: 'Dark', hint: 'Low light, same routes', icon: Moon },
+  { value: 'light', label: 'Light', hint: 'Porcelain, navy ink', icon: Sun },
+  { value: 'dark', label: 'Dark', hint: 'Deep navy, soft ink', icon: Moon },
   { value: 'system', label: 'System', hint: 'Follow your device', icon: Monitor },
 ]
 

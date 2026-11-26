@@ -1,10 +1,10 @@
 ---
 name: MarcoFlow
-description: Modern blue wayfinding for flowcharts that become code
+description: Deep navy wayfinding for flowcharts that become code
 colors:
   route-blue: "#2f5fd0"
   route-blue-soft: "#e9f0ff"
-  route-blue-dark: "#7ea2ff"
+  route-blue-dark: "#7d9be8"
   ink-navy: "#0d1b2f"
   porcelain: "#f2f6fd"
   paper: "#ffffff"
@@ -12,11 +12,17 @@ colors:
   paper-3: "#edf3fd"
   border-cool: "#e0e8f6"
   text-muted: "#566882"
+  midnight: "#050b18"
+  navy-panel: "#0a1528"
+  navy-panel-2: "#0e1c34"
+  navy-panel-3: "#142642"
+  navy-border: "#1d3050"
+  navy-muted: "#92a6c5"
   line-teal: "#0e7c6b"
   line-amber: "#96620b"
   line-coral: "#bf3a31"
   nav-light: "#ffffff"
-  nav-dark: "#060d19"
+  nav-dark: "#030913"
 typography:
   display:
     fontFamily: "Fredoka Variable, Nunito Variable, sans-serif"
@@ -74,11 +80,11 @@ components:
 
 **Creative North Star: "Modern Blue Wayfinding"**
 
-MarcoFlow looks like a clean transit map for a software campus: cool porcelain ground, navy ink, soft white panels, and one confident blue route. It stays a working tool first — dense panels, standard flowchart silhouettes, obvious controls — and lets colour, rounded type, and floating tools carry the character.
+MarcoFlow looks like a clean transit map for a software campus at night: a deep navy ground, layered slate-blue panels, soft ink text, and one restrained blue route. It stays a working tool first — dense panels, standard flowchart silhouettes, obvious controls — and lets colour, rounded type, and floating tools carry the character.
 
 **Key Characteristics:**
-- Cool blue-tinted ground with white work surfaces in light mode; deep navy ground with slate-blue panels in dark mode.
-- One route blue for action, selection, focus, and live connectors.
+- Deep navy is the default: midnight ground, layered navy panels, soft ink. Light mode keeps the porcelain version as an opt-in.
+- One soft route blue for action, selection, focus, and live connectors.
 - Teal, amber, and coral carry diagram meaning only.
 - Rounded Nunito/Fredoka typography keeps the product friendly without feeling technical.
 - Floating node properties and a floating terminal keep the canvas unobstructed.
@@ -89,20 +95,22 @@ MarcoFlow looks like a clean transit map for a software campus: cool porcelain g
 The palette is blue-led and low-glow. No neon, no chromatic halos, no gradients inside text.
 
 ### Primary
-- **Route Blue** (#2f5fd0 light, #7ea2ff dark): primary buttons, active tab, focus ring, live connector.
-- **Route Blue Soft** (#e9f0ff light, #162846 dark): active pill and selection surfaces.
+- **Route Blue** (#2f5fd0 light, #7d9be8 dark): primary buttons, active tab, focus ring, live connector.
+- **Route Blue Soft** (#e9f0ff light, #12264a dark): active pill and selection surfaces.
 
 ### Diagram inks
-- **Teal** (#0e7c6b / #3fc3a5): start station and success.
-- **Amber** (#96620b / #efb75b): branches and notes.
-- **Coral** (#bf3a31 / #ff7f7f): end station, breakpoints, destructive actions.
+- **Teal** (#0e7c6b / #46c2a5): start station and success.
+- **Amber** (#96620b / #e6b76a): branches and notes.
+- **Coral** (#bf3a31 / #ff8a86): end station, breakpoints, destructive actions.
 
 ### Neutral
-- **Ink Navy** (#0d1b2f): primary text in light mode.
-- **Porcelain** (#f2f6fd): app ground; never plain grey or warm cream.
-- **Paper** (#ffffff): palette, inspector, cards, floating tools.
-- **Cool Border** (#e0e8f6 / #233550): hairlines and panel separation.
-- **Muted Slate** (#566882 / #94a5bf): supporting copy at AA.
+- **Midnight** (#050b18): the default app ground and page background in dark mode.
+- **Navy Panel** (#0a1528): palette, inspector, cards, floating tools in dark mode; steps up through #0e1c34 and #142642 for raised and selected surfaces.
+- **Ink Navy** (#0d1b2f): primary text in light mode; soft ink (#e8effc) in dark mode.
+- **Porcelain** (#f2f6fd): light-mode app ground; never plain grey or warm cream.
+- **Paper** (#ffffff): light-mode palette, inspector, cards, floating tools.
+- **Cool Border** (#e0e8f6 / #1d3050): hairlines and panel separation.
+- **Muted Slate** (#566882 / #92a6c5): supporting copy at AA.
 
 ### Named Rules
 **The One Route Rule.** Only the active path, primary action, and current selection wear route blue.
@@ -175,7 +183,7 @@ Controls 9px, tiles and menus 10–13px, panels 12–14px, cards 18–20px, hero
 - Paper-2 fill, cool border, 9px radius. Focus: white fill, blue border, 3px blue-soft ring.
 
 ### Navigation
-- Drawer surface follows theme (white in light, #060d19 in dark).
+- Drawer surface follows theme (white in light, #030913 in dark).
 - 40px items, blue-soft active pill, muted slate at rest, 11px tracked section header with a fold chevron.
 - Hide slides the drawer completely off-screen; the 28×96px edge handle is the only chrome left at the viewport edge.
 

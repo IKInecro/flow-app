@@ -20,9 +20,10 @@ export function resolveTheme(theme: Theme): ResolvedTheme {
 }
 
 function storedTheme(): Theme {
-  if (typeof localStorage === 'undefined') return 'system'
+  // Deep navy is the product default; "System" stays an explicit choice.
+  if (typeof localStorage === 'undefined') return 'dark'
   const value = localStorage.getItem(STORAGE_KEY)
-  return isTheme(value) ? value : 'system'
+  return isTheme(value) ? value : 'dark'
 }
 
 let current: Theme = storedTheme()
