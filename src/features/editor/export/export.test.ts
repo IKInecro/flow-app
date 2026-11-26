@@ -61,6 +61,59 @@ test('SVG export keeps labels and edges with font fallbacks', () => {
   expect(text).not.toContain('is-selected')
 })
 
+test('SVG export rebuilds every connector layer and applies the viewport transform', () => {
+  const container = document.createElement('div')
+  container.className = 'canvas'
+  container.getBoundingClientRect = () => rect(0, 0, 800, 600)
+
+  const flow = document.createElement('div')
+  flow.className = 'react-flow'
+  flow.getBoundingClientRect = () => rect(0, 0, 800, 600)
+
+  const viewport = document.createElement('div')
+  viewport.className = 'react-flow__viewport'
+  viewport.style.transform = 'translate(12px, 24px) scale(1.5)'
+
+  const edges = document.createElement('div')
+  edges.className = 'react-flow__edges'
+  const markerLayer = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  markerLayer.setAttribute('class', 'react-flow__marker')
+  edges.append(markerLayer)
+
+  for (const [d, arrow] of [
+    ['M 10 10 L 40 40', true],
+    ['M 60 60 L 90 90', false],
+  ] as const) {
+    const layer = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+    path.setAttribute('class', 'react-flow__edge-path flow-edge__line')
+    path.setAttribute('d', d)
+    if (arrow) path.setAttribute('marker-end', "url('#raw-marker')")
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+    label.setAttribute('class', 'flow-edge__label')
+    label.setAttribute('x', '50')
+    label.setAttribute('y', '70')
+    label.textContent = 'Yes'
+    layer.append(path, label)
+    edges.append(layer)
+  }
+
+  viewport.append(edges)
+  flow.append(viewport)
+  container.append(flow)
+  document.body.append(container)
+
+  const { text } = svgFromElement(container)
+
+  expect(text).toContain('M 10 10 L 40 40')
+  expect(text).toContain('M 60 60 L 90 90')
+  expect(text).toContain('translate(12 24) scale(1.5)')
+  expect(text).toContain('marcoflow-arrow')
+  expect(text).toContain('Yes')
+  expect(text).toContain('M 0 0 L 10 5 L 0 10 z')
+  expect(text).not.toContain('raw-marker')
+})
+
 test('fprg filename defaults to the program name and keeps explicit names', () => {
   const program = createProgram('Hello World')
   expect(fprgFilename(program)).toBe('hello-world.fprg')
