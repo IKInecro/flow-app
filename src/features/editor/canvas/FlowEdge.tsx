@@ -1,9 +1,17 @@
+import { useState, type DragEvent } from 'react'
 import { BaseEdge, getSmoothStepPath, type EdgeProps } from '@xyflow/react'
 import type { FlowEdgeRoute } from '../../../core/layout/layout'
+import type { EdgeInsertTarget } from '../../../core/layout/edgeInsert'
+import type { StmtKind } from '../../../core/model/types'
+import { INSERTABLE } from './InsertMenu'
+
+export const BLOCK_DRAG_TYPE = 'application/x-marcoflow-block'
 
 export interface FlowEdgeData extends Record<string, unknown> {
   live?: boolean
   route?: FlowEdgeRoute
+  insert?: EdgeInsertTarget
+  onDropInsert?: (kind: StmtKind, target: EdgeInsertTarget) => void
 }
 
 type Point = [number, number]
@@ -47,6 +55,9 @@ export function FlowEdge({
   data,
 }: EdgeProps) {
   const route = (data as FlowEdgeData | undefined)?.route
+  const insert = (data as FlowEdgeData | undefined)?.insert
+  const onDropInsert = (data as FlowEdgeData | undefined)?.onDropInsert
+  const [over, setOver] = useState(false)
   let path: string
   let labelX: number
   let labelY: number
@@ -98,8 +109,24 @@ export function FlowEdge({
 
   const live = Boolean((data as FlowEdgeData | undefined)?.live)
 
+  function allowDrop(event: DragEvent<SVGPathElement>): void {
+    if (!insert || !onDropInsert) return
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'copy'
+  }
+
+  function drop(event: DragEvent<SVGPathElement>): void {
+    event.preventDefault()
+    setOver(false)
+    if (!insert || !onDropInsert) return
+    const kind = event.dataTransfer.getData(BLOCK_DRAG_TYPE) as StmtKind
+    if (!INSERTABLE.some((item) => item.kind === kind)) return
+    onDropInsert(kind, insert)
+  }
+
   return (
     <>
+      {over ? <path d={path} className="flow-edge__glow" aria-hidden="true" /> : null}
       <BaseEdge
         id={id}
         path={path}
@@ -113,6 +140,16 @@ export function FlowEdge({
             <animateMotion dur="1.1s" repeatCount="indefinite" path={path} />
           </circle>
         </>
+      ) : null}
+      {insert ? (
+        <path
+          d={path}
+          className={`flow-edge__hit ${over ? 'is-over' : ''}`}
+          onDragEnter={() => setOver(true)}
+          onDragLeave={() => setOver(false)}
+          onDragOver={allowDrop}
+          onDrop={drop}
+        />
       ) : null}
       {label ? (
         <text

@@ -1,12 +1,13 @@
+import { useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import {
   ChevronDown,
+  ChevronRight,
   Command,
   FolderKanban,
   Library,
   Moon,
   PanelLeftClose,
-  PanelLeftOpen,
   Settings,
   Sun,
   Workflow,
@@ -49,6 +50,24 @@ export function Sidebar() {
   const railNavOpen = useUiStore((state) => state.railNavOpen)
   const toggleRailNav = useUiStore((state) => state.toggleRailNav)
 
+  useEffect(() => {
+    if (railCollapsed) return
+    const onKey = (event: KeyboardEvent): void => {
+      if (event.key !== 'Escape') return
+      const target = event.target as HTMLElement | null
+      if (target?.closest('input, textarea, select, [contenteditable="true"]')) return
+      // An open menu, popover, or modal owns Escape. Closed `<details>` menus
+      // stay mounted and still catch keys, so match the explicit open states.
+      const layerOpen = document.querySelector(
+        '.edge-insert, .insert-menu, .overlay, [aria-modal="true"], details.file-menu[open]',
+      )
+      if (layerOpen) return
+      toggleRail()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [railCollapsed, toggleRail])
+
   const items = [
     { to: '/', label: t('nav.projects'), icon: FolderKanban, end: true, match: pathname === '/' },
     {
@@ -75,87 +94,101 @@ export function Sidebar() {
   ]
 
   return (
-    <nav
-      className={`rail ${railCollapsed ? 'rail--collapsed' : ''} ${railNavOpen ? '' : 'rail--nav-closed'}`}
-      aria-label={t('nav.label')}
-    >
-      <NavLink to="/" className="rail__brand" aria-label={t('app.name')}>
-        <BrandMark />
-        <span className="rail__brandtext">
-          <strong>{t('app.name')}</strong>
-          <small>{t('app.tagline')}</small>
-        </span>
-      </NavLink>
+    <>
+      <nav
+        id="app-sidebar"
+        className={`rail ${railCollapsed ? 'rail--hidden' : ''} ${railNavOpen ? '' : 'rail--nav-closed'}`}
+        aria-label={t('nav.label')}
+        aria-hidden={railCollapsed || undefined}
+        inert={railCollapsed || undefined}
+      >
+        <NavLink to="/" className="rail__brand" aria-label={t('app.name')}>
+          <BrandMark />
+          <span className="rail__brandtext">
+            <strong>{t('app.name')}</strong>
+            <small>{t('app.tagline')}</small>
+          </span>
+        </NavLink>
 
-      <div className="rail__items">
+        <div className="rail__items">
+          <button
+            type="button"
+            className="rail__section-head"
+            aria-expanded={railNavOpen}
+            aria-label={railNavOpen ? 'Collapse navigation' : 'Expand navigation'}
+            onClick={toggleRailNav}
+          >
+            <span>{t('nav.workspace')}</span>
+            <ChevronDown size={15} aria-hidden="true" />
+          </button>
+          {railNavOpen ? (
+            <div className="rail__list">
+              {items.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  className={`rail__item ${item.match ? 'is-active' : ''}`}
+                  aria-current={item.match ? 'page' : undefined}
+                  aria-label={item.label}
+                  title={item.label}
+                >
+                  <item.icon size={19} aria-hidden="true" />
+                  <span className="rail__text">{item.label}</span>
+                </NavLink>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        <div className="rail__foot">
+          <button
+            type="button"
+            className="rail__utility rail__collapse"
+            aria-label="Hide sidebar"
+            title="Hide sidebar"
+            onClick={toggleRail}
+          >
+            <PanelLeftClose size={18} aria-hidden="true" />
+            <span className="rail__text">Hide menu</span>
+          </button>
+          <button
+            type="button"
+            className="rail__utility"
+            aria-label={t('top.command')}
+            title={t('top.command')}
+            onClick={() => setCommandOpen(true)}
+          >
+            <Command size={18} aria-hidden="true" />
+            <span className="rail__text">{t('nav.command')}</span>
+            <kbd className="rail__kbd">⌘K</kbd>
+          </button>
+          <button
+            type="button"
+            className="rail__utility"
+            aria-label={t('top.theme')}
+            title={t('top.theme')}
+            onClick={() => setTheme(resolved === 'dark' ? 'light' : 'dark')}
+          >
+            {resolved === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+            <span className="rail__text">{resolved === 'dark' ? 'Light mode' : 'Dark mode'}</span>
+          </button>
+        </div>
+      </nav>
+
+      {railCollapsed ? (
         <button
           type="button"
-          className="rail__section-head"
-          aria-expanded={railNavOpen}
-          aria-label={railNavOpen ? 'Collapse navigation' : 'Expand navigation'}
-          onClick={toggleRailNav}
-        >
-          <span>{t('nav.workspace')}</span>
-          <ChevronDown size={15} aria-hidden="true" />
-        </button>
-        {railNavOpen ? (
-          <div className="rail__list">
-            {items.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={`rail__item ${item.match ? 'is-active' : ''}`}
-                aria-current={item.match ? 'page' : undefined}
-                aria-label={item.label}
-                title={item.label}
-              >
-                <item.icon size={19} aria-hidden="true" />
-                <span className="rail__text">{item.label}</span>
-              </NavLink>
-            ))}
-          </div>
-        ) : null}
-      </div>
-
-      <div className="rail__foot">
-        <button
-          type="button"
-          className="rail__utility rail__collapse"
-          aria-label={railCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          title={railCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          aria-pressed={railCollapsed}
+          className="rail-edge"
+          aria-label="Show sidebar"
+          aria-controls="app-sidebar"
+          title="Show sidebar"
           onClick={toggleRail}
         >
-          {railCollapsed ? (
-            <PanelLeftOpen size={18} aria-hidden="true" />
-          ) : (
-            <PanelLeftClose size={18} aria-hidden="true" />
-          )}
-          <span className="rail__text">{railCollapsed ? 'Expand' : 'Collapse'}</span>
+          <ChevronRight size={15} aria-hidden="true" />
+          <span>Menu</span>
         </button>
-        <button
-          type="button"
-          className="rail__utility"
-          aria-label={t('top.command')}
-          title={t('top.command')}
-          onClick={() => setCommandOpen(true)}
-        >
-          <Command size={18} aria-hidden="true" />
-          <span className="rail__text">{t('nav.command')}</span>
-          <kbd className="rail__kbd">⌘K</kbd>
-        </button>
-        <button
-          type="button"
-          className="rail__utility"
-          aria-label={t('top.theme')}
-          title={t('top.theme')}
-          onClick={() => setTheme(resolved === 'dark' ? 'light' : 'dark')}
-        >
-          {resolved === 'dark' ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
-          <span className="rail__text">{resolved === 'dark' ? 'Light mode' : 'Dark mode'}</span>
-        </button>
-      </div>
-    </nav>
+      ) : null}
+    </>
   )
 }

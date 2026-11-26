@@ -84,18 +84,52 @@ test('panels hide, resize, and remember the workspace', async ({ page }) => {
   await divider.focus()
   await divider.press('ArrowRight')
   await divider.press('ArrowRight')
-  await expect(divider).toHaveAttribute('aria-valuenow', '220')
+  await expect(divider).toHaveAttribute('aria-valuenow', '272')
 
-  await page.getByLabel('Collapse sidebar').click()
-  await expect(page.locator('.rail')).toHaveCSS('width', '78px')
+  await page.getByLabel('Hide sidebar').click()
+  await expect(page.locator('.rail')).toHaveClass(/rail--hidden/)
+  await expect(page.getByRole('button', { name: 'Show sidebar' })).toBeVisible()
+  const main = await page.locator('.shell__main').boundingBox()
+  if (!main) throw new Error('shell missing')
+  expect(main.x).toBeLessThan(20)
 
   await page.reload()
   await page.waitForSelector('.react-flow__node')
-  await expect(page.locator('.rail')).toHaveCSS('width', '78px')
+  await expect(page.locator('.rail')).toHaveClass(/rail--hidden/)
+  await expect(page.getByRole('button', { name: 'Show sidebar' })).toBeVisible()
   await expect(page.getByRole('separator', { name: 'Resize shapes panel' })).toHaveAttribute(
     'aria-valuenow',
-    '220',
+    '272',
   )
+})
+
+test('a connector inserts a chosen block and accepts a dropped one', async ({ page }) => {
+  test.setTimeout(120_000)
+  await page.goto('/examples')
+  await page.getByRole('button', { name: /open example hello world/i }).click()
+  await page.waitForSelector('.react-flow__node')
+
+  await page.locator('.flow-edge__hit').first().click({ force: true })
+  await page.getByRole('button', { name: 'Insert block on connector' }).click()
+  await page.getByRole('menuitem', { name: 'Assign' }).click()
+  await expect(page.locator('.flow-node')).toHaveCount(4)
+
+  await page.locator('.flow-edge__hit').nth(1).evaluate((edge) => {
+    const rect = edge.getBoundingClientRect()
+    const transfer = new DataTransfer()
+    transfer.setData('application/x-marcoflow-block', 'comment')
+    const init = {
+      bubbles: true,
+      cancelable: true,
+      dataTransfer: transfer,
+      clientX: rect.x,
+      clientY: rect.y + rect.height / 2,
+    }
+    edge.dispatchEvent(new DragEvent('dragenter', init))
+    edge.dispatchEvent(new DragEvent('dragover', init))
+    edge.dispatchEvent(new DragEvent('drop', init))
+  })
+  await expect(page.locator('.flow-node')).toHaveCount(5)
 })
 
 test('block properties float beside the node and the terminal appears on run', async ({ page }) => {

@@ -23,7 +23,7 @@ export const LAYOUT_DEFAULTS: LayoutState = {
   paletteOpen: true,
   sideOpen: true,
   consoleOpen: false,
-  paletteWidth: 196,
+  paletteWidth: 248,
   sideWidth: 280,
   consoleWidth: 600,
   consoleHeight: 240,
@@ -47,7 +47,7 @@ export function readLayout(): LayoutState {
       sideOpen: saved.sideOpen ?? LAYOUT_DEFAULTS.sideOpen,
       // The terminal is summoned by running or by the toolbar, never on reload.
       consoleOpen: LAYOUT_DEFAULTS.consoleOpen,
-      paletteWidth: clamp(saved.paletteWidth ?? LAYOUT_DEFAULTS.paletteWidth, 170, 340),
+      paletteWidth: clamp(saved.paletteWidth ?? LAYOUT_DEFAULTS.paletteWidth, 200, 380),
       sideWidth: clamp(saved.sideWidth ?? LAYOUT_DEFAULTS.sideWidth, 250, 460),
       consoleWidth: clamp(saved.consoleWidth ?? LAYOUT_DEFAULTS.consoleWidth, 360, 900),
       consoleHeight: clamp(saved.consoleHeight ?? LAYOUT_DEFAULTS.consoleHeight, 160, 560),
@@ -140,7 +140,7 @@ export const useUiStore = create<UiState>((set) => ({
         sideOpen: patch.sideOpen ?? state.sideOpen,
         consoleOpen: patch.consoleOpen ?? state.consoleOpen,
         paletteWidth:
-          patch.paletteWidth !== undefined ? clamp(patch.paletteWidth, 170, 340) : state.paletteWidth,
+          patch.paletteWidth !== undefined ? clamp(patch.paletteWidth, 200, 380) : state.paletteWidth,
         sideWidth: patch.sideWidth !== undefined ? clamp(patch.sideWidth, 250, 460) : state.sideWidth,
         consoleWidth:
           patch.consoleWidth !== undefined ? clamp(patch.consoleWidth, 360, 900) : state.consoleWidth,

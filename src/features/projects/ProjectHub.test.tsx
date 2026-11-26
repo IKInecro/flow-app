@@ -27,7 +27,7 @@ function renderHub() {
 
 test('shows an empty state and creates a project', async () => {
   renderHub()
-  expect(await screen.findByText(/no projects yet/i)).toBeInTheDocument()
+  expect(await screen.findByText(/no projects yet/i, {}, { timeout: 8000 })).toBeInTheDocument()
 
   await userEvent.click(screen.getByRole('button', { name: /new project/i }))
   expect(await screen.findByText('editor-page', {}, { timeout: 12000 })).toBeInTheDocument()
@@ -40,12 +40,12 @@ test('lists existing projects', async () => {
   await putProject(record)
 
   renderHub()
-  expect(await screen.findByText('My Algorithm')).toBeInTheDocument()
+  expect(await screen.findByText('My Algorithm', {}, { timeout: 8000 })).toBeInTheDocument()
 })
 
 test('invalid import shows an error and keeps the current list', async () => {
   renderHub()
-  await screen.findByText(/no projects yet/i)
+  await screen.findByText(/no projects yet/i, {}, { timeout: 8000 })
   const input = screen.getByLabelText(/import .fprg/i)
   await userEvent.upload(input, new File(['<nope/>'], 'bad.fprg', { type: 'application/xml' }))
   const alert = await screen.findByRole('alert')

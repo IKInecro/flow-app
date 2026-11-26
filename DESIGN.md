@@ -126,9 +126,9 @@ Fredoka gives panel titles and the wordmark a soft, geometric voice; Nunito keep
 
 ## Layout
 
-The shell is a 236px navigation rail (78px collapsed) beside a fluid work area. The rail's navigation group folds under its own header, and the rail itself follows light/dark theme.
+The shell is a 248px navigation drawer beside a fluid work area. Hiding it slides the whole drawer off-screen (`margin-left: -248px`) so the work area takes the full viewport; a 28×96px edge handle at the left middle reopens it, and Esc closes it again. The rail's navigation group folds under its own header, and the drawer follows light/dark theme.
 
-The editor is a flex row: a 196px insert palette (170–340px), fluid canvas, and 280px inspector (250–460px). Every vertical border is a draggable 8px resizer with a visible grip; each panel can be hidden and reopened from its floating edge tab or the Layout menu. Widths persist in `marcoflow.layout`.
+The editor is a flex row inside an 8px inset: a 248px insert palette (200–380px), fluid canvas, and 280px inspector (250–460px). Panels and canvas are separate 16px cards. Every join is a draggable 8px resizer with a visible grip; each panel can be hidden and reopened from its floating edge tab or the Layout menu. Widths persist in `marcoflow.layout`.
 
 The console is **not** a bottom dock. It is a 600×240px floating terminal that rises when a program runs, can be dragged by its header, resized from its corner, and closed until the next run. Block properties are a 262px card that floats beside the selected node and follows it while panning or dragging.
 
@@ -156,8 +156,10 @@ Controls 9px, tiles and menus 10–13px, panels 12–14px, cards 18–20px, hero
 - **States:** hover lifts with a neutral shadow; selection adds a blue halo and 2px stroke.
 
 ### Insert palette
-- Grouped into Values, Control flow, Extras.
-- Each block is a filled tinted row with a 27px icon chip, bold name, and one-line hint — no outline-only squares.
+- Grouped into Recent, Values, Control flow, Extras, with a search field that also matches plain-language terms (loop, print, debug).
+- Each block is a filled tinted row with a 43×29px shape preview, bold name, one-line hint, and a drag grip. The preview draws the real block silhouette, not a generic icon.
+- The panel fills the editor height; the header, search, hint, and footer stay put while the block list scrolls. Recent blocks (last four) persist in `marcoflow.recentBlocks`.
+- Clicking a block adds it after the selected node (or at the end). Dragging a block onto any connector inserts it on that path.
 
 ### Floating block properties
 - Header with kind icon, role name, path, and close.
@@ -173,8 +175,9 @@ Controls 9px, tiles and menus 10–13px, panels 12–14px, cards 18–20px, hero
 - Paper-2 fill, cool border, 9px radius. Focus: white fill, blue border, 3px blue-soft ring.
 
 ### Navigation
-- Rail surface follows theme (white in light, #060d19 in dark).
-- 38px items, blue-soft active pill, muted slate at rest, 11px tracked section header with a fold chevron.
+- Drawer surface follows theme (white in light, #060d19 in dark).
+- 40px items, blue-soft active pill, muted slate at rest, 11px tracked section header with a fold chevron.
+- Hide slides the drawer completely off-screen; the 28×96px edge handle is the only chrome left at the viewport edge.
 
 ### Connectors
 - Sequential steps connect bottom to top on one axis; no dog-legs.
@@ -182,6 +185,8 @@ Controls 9px, tiles and menus 10–13px, panels 12–14px, cards 18–20px, hero
 - A loop's `No` exit leaves the left vertex, drops in a lane outside the body, and joins the merge below it. The return line climbs a separate lane on the right and enters the header's right vertex.
 - Loop bodies and merges are centred on their header, so nesting adds depth instead of drifting right a column per level.
 - Lanes stagger when loops nest, and a lane follows its header when the header is dragged.
+- Every connector has a 26px invisible hit stroke. Hovering shows the route; clicking drops a 30px `+` at that point, which opens a compact insert menu. The menu anchors inside the canvas (start/end/above variants) and choosing a block inserts on that path.
+- Drag a palette block over a connector to see a blue route glow, then drop to insert on the same path. Empty branches append into the matching side; loop return lanes append to the body; loop exits and final edges insert after the control.
 
 ### Signature Component — Live Route Connector
 Edges are 1.7px neutral routes. The active edge turns route blue with a moving dash and travelling dot. Hover dashes any edge. Reduced motion keeps colour and drops travel.

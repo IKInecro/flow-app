@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HardDrive, Plus } from 'lucide-react'
+import { ArrowRight, HardDrive, Plus } from 'lucide-react'
 import { parseFprg } from '../../core/fprg/parse'
 import {
   createProjectRecord,
@@ -95,8 +95,24 @@ export function ProjectHub() {
         <div className="hub__intro">
           <h1>Your projects</h1>
           <p className="hub__subtitle">
-            Draw the flow, run it step by step, then read the code. Everything is stored in this browser.
+            Draw the flow, run it step by step, then read the equivalent code. Everything stays in
+            this browser.
           </p>
+          <div className="hub__actions">
+            <button type="button" className="button button--primary" onClick={() => void handleNew()}>
+              <Plus size={16} aria-hidden="true" />
+              New project
+            </button>
+            <ImportButton onFile={(file) => void handleImport(file)} />
+            <button
+              type="button"
+              className="button button--ghost"
+              onClick={() => navigate('/examples')}
+            >
+              Browse examples
+              <ArrowRight size={15} aria-hidden="true" />
+            </button>
+          </div>
           <div className="hub__chips" aria-label="Storage status">
             <span className="hub__chip">
               <HardDrive size={13} aria-hidden="true" />
@@ -106,15 +122,17 @@ export function ProjectHub() {
               {loading ? 'Loading…' : `${projects.length} ${projects.length === 1 ? 'project' : 'projects'}`}
             </span>
           </div>
-          <div className="hub__actions">
-            <button type="button" className="button button--primary" onClick={() => void handleNew()}>
-              <Plus size={16} aria-hidden="true" />
-              New project
-            </button>
-            <ImportButton onFile={(file) => void handleImport(file)} />
-          </div>
         </div>
-        <RouteArt />
+        <div className="hub__art">
+          <RouteArt />
+          <span className="hub__art-caption">
+            <strong>Draft</strong>
+            <span aria-hidden="true">→</span>
+            <strong>Run</strong>
+            <span aria-hidden="true">→</span>
+            <strong>Read the code</strong>
+          </span>
+        </div>
       </header>
 
       {warning ? (
@@ -130,14 +148,22 @@ export function ProjectHub() {
       ) : null}
 
       {loading ? (
-        <div className="hub__grid" aria-label="Loading projects">
-          {[0, 1, 2].map((index) => (
-            <div className="project-card project-card--skeleton" key={index} aria-hidden="true">
-              <div className="project-card__preview" />
-              <div className="skeleton-line" />
-              <div className="skeleton-line skeleton-line--short" />
+        <div className="hub__section">
+          <div className="section-head">
+            <div>
+              <h2>Recent projects</h2>
+              <p className="section-head__sub">Loading your workspace…</p>
             </div>
-          ))}
+          </div>
+          <div className="hub__grid" aria-label="Loading projects">
+            {[0, 1, 2, 3].map((index) => (
+              <div className="project-card project-card--skeleton" key={index} aria-hidden="true">
+                <div className="project-card__preview" />
+                <div className="skeleton-line" />
+                <div className="skeleton-line skeleton-line--short" />
+              </div>
+            ))}
+          </div>
         </div>
       ) : projects.length === 0 ? (
         <div className="hub__empty">
@@ -148,15 +174,32 @@ export function ProjectHub() {
               <circle cx="28" cy="10" r="3.4" />
             </svg>
           </span>
-          <p>No projects yet. Create one or open an example.</p>
-          <button type="button" className="button button--primary" onClick={() => void handleNew()}>
-            Start your first project
-          </button>
+          <div className="hub__empty-copy">
+            <h2>Start with a blank canvas</h2>
+            <p>No projects yet. Build your first flow or borrow a working example.</p>
+          </div>
+          <div className="hub__empty-actions">
+            <button type="button" className="button button--primary" onClick={() => void handleNew()}>
+              <Plus size={16} aria-hidden="true" />
+              Start your first project
+            </button>
+            <button
+              type="button"
+              className="button button--ghost"
+              onClick={() => navigate('/examples')}
+            >
+              Browse examples
+              <ArrowRight size={15} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       ) : (
         <div className="hub__section">
           <div className="section-head">
-            <h2>Recent</h2>
+            <div>
+              <h2>Recent projects</h2>
+              <p className="section-head__sub">Pick up where you left off.</p>
+            </div>
             <span>{projects.length} {projects.length === 1 ? 'project' : 'projects'}</span>
           </div>
           <div className="hub__grid">

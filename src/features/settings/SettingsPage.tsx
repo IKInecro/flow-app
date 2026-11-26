@@ -39,7 +39,6 @@ export function SettingsPage() {
   return (
     <section className="page settings">
       <header className="settings__head">
-        <p className="settings__eyebrow">Workspace</p>
         <h1>Settings</h1>
         <p className="settings__lede">
           Personalize how MarcoFlow looks. Nothing here leaves this browser.

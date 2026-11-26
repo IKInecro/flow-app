@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
+import { Plus, X } from 'lucide-react'
 import {
   Background,
   BackgroundVariant,
@@ -24,18 +25,33 @@ import {
 import type { InsertPosition } from '../../../core/model/program'
 import type { StmtKind } from '../../../core/model/types'
 import { layoutFunction } from '../../../core/layout/layout'
+import { insertPointForEdge, type EdgeInsertTarget } from '../../../core/layout/edgeInsert'
 import { checkProgram } from '../../../core/lang/validate'
 import { useProjectStore } from '../store/projectStore'
 import { useUiStore } from '../store/uiStore'
 import { useRuntimeStore } from '../../run/runtimeStore'
 import { RunToolbar } from '../../run/RunToolbar'
-import { FlowEdge } from './FlowEdge'
-import { InsertMenu, type InsertTarget } from './InsertMenu'
+import { FlowEdge, type FlowEdgeData } from './FlowEdge'
+import { INSERTABLE, InsertMenu, type InsertTarget } from './InsertMenu'
+import { kindMeta } from './nodeMeta'
 import { ShapeToolbar } from './NodeToolbar'
 import { ShapeNode, type ShapeNodeData } from './ShapeNode'
 
 const nodeTypes = { shape: ShapeNode }
 const edgeTypes = { flow: FlowEdge }
+
+interface EdgeMenuState {
+  x: number
+  y: number
+  above: boolean
+  align: 'start' | 'center' | 'end'
+  open: boolean
+  target: EdgeInsertTarget
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value))
+}
 
 export function FlowCanvas() {
   const program = useProjectStore((state) => state.program)
@@ -48,7 +64,9 @@ export function FlowCanvas() {
   const setNodeCardOpen = useUiStore((state) => state.setNodeCardOpen)
   const activePath = useRuntimeStore((state) => state.activePath)
   const [insertTarget, setInsertTarget] = useState<InsertTarget | null>(null)
+  const [edgeMenu, setEdgeMenu] = useState<EdgeMenuState | null>(null)
   const [dragging, setDragging] = useState(false)
+  const canvasRef = useRef<HTMLDivElement | null>(null)
 
   const errorPaths = useMemo(() => {
     if (!program) return new Set<string>()
@@ -64,7 +82,8 @@ export function FlowCanvas() {
 
   const nodes = useMemo<Node<ShapeNodeData>[]>(() => {
     if (!layout) return []
-    return layout.nodes.map((item) => {      const offset = viewState.nodeOffsets[item.path]
+    return layout.nodes.map((item) => {
+      const offset = viewState.nodeOffsets[item.path]
       const isMerge = item.kind === 'merge'
       return {
         id: item.id,
@@ -105,6 +124,30 @@ export function FlowCanvas() {
   const [liveNodes, setLiveNodes, handleNodesChange] = useNodesState<Node<ShapeNodeData>>(nodes)
   useEffect(() => setLiveNodes(nodes), [nodes, setLiveNodes])
 
+  const insertAt = useCallback(
+    (target: EdgeInsertTarget, kind: StmtKind) => {
+      commit((current) =>
+        target.point.kind === 'append'
+          ? appendStmt(current, target.functionName, createStmt(kind))
+          : insertStmt(
+              current,
+              target.functionName,
+              target.point.path,
+              target.point.position,
+              createStmt(kind),
+            ),
+      )
+    },
+    [commit],
+  )
+
+  const handleEdgeDropInsert = useCallback(
+    (kind: StmtKind, target: EdgeInsertTarget) => {
+      insertAt(target, kind)
+    },
+    [insertAt],
+  )
+
   const edges = useMemo<Edge[]>(() => {
     if (!layout) return []
     const nodePaths = new Map(layout.nodes.map((item) => [item.id, item.path]))
@@ -114,6 +157,8 @@ export function FlowCanvas() {
     return layout.edges.map((item) => {
       const live = Boolean(activePath) && nodePaths.get(item.source) === activePath
       const intoMerge = mergeIds.has(item.target)
+      const point = insertPointForEdge(item, layout.nodes)
+      const insert = point ? { functionName: selectedFunction, point } : undefined
       return {
         id: item.id,
         source: item.source,
@@ -122,7 +167,12 @@ export function FlowCanvas() {
         targetHandle: item.targetHandle,
         type: 'flow',
         label: item.label,
-        data: { live, route: item.route },
+        interactionWidth: 28,
+        data: {
+          live,
+          route: item.route,
+          ...(insert ? { insert, onDropInsert: handleEdgeDropInsert } : {}),
+        },
         markerEnd: intoMerge
           ? undefined
           : {
@@ -133,7 +183,7 @@ export function FlowCanvas() {
             },
       }
     })
-  }, [layout, activePath])
+  }, [layout, activePath, selectedFunction, handleEdgeDropInsert])
 
   const handleDragStop: OnNodeDrag = useCallback(
     (_event, node) => {
@@ -159,6 +209,32 @@ export function FlowCanvas() {
     [select, setNodeCardOpen],
   )
 
+  const handleEdgeClick = useCallback((event: MouseEvent, edge: Edge) => {
+    const data = edge.data as FlowEdgeData | undefined
+    if (!data?.insert) return
+    const bounds = canvasRef.current?.getBoundingClientRect()
+    if (!bounds) return
+    const x = clamp(event.clientX - bounds.left, 36, bounds.width - 36)
+    const y = clamp(event.clientY - bounds.top, 44, bounds.height - 44)
+    setEdgeMenu({
+      x,
+      y,
+      above: y > bounds.height * 0.58,
+      align: x < 176 ? 'start' : x > bounds.width - 176 ? 'end' : 'center',
+      open: false,
+      target: data.insert,
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!edgeMenu) return
+    const onKey = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') setEdgeMenu(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [edgeMenu])
+
   const selectedNode = layout?.nodes.find((item) => item.path === selectedPath && item.stmt)
 
   function handleInsert(position: InsertPosition): void {
@@ -173,6 +249,13 @@ export function FlowCanvas() {
     commit((current) =>
       insertStmt(current, target.functionName, target.path, target.position, createStmt(kind)),
     )
+  }
+
+  function runEdgeInsert(kind: StmtKind): void {
+    if (!edgeMenu) return
+    const target = edgeMenu.target
+    setEdgeMenu(null)
+    insertAt(target, kind)
   }
 
   function addFirstOutput(): void {
@@ -212,7 +295,7 @@ export function FlowCanvas() {
   }
 
   return (
-    <div className={`canvas ${dragging ? 'is-dragging' : ''}`}>
+    <div ref={canvasRef} className={`canvas ${dragging ? 'is-dragging' : ''}`}>
       <div className="canvas__hud" role="status">
         <span className={`canvas__hud-dot ${activePath ? 'is-live' : ''}`} aria-hidden="true" />
         <strong>{selectedFunction}</strong>
@@ -230,7 +313,11 @@ export function FlowCanvas() {
           setDragging(false)
         }}
         onNodeClick={handleNodeClick}
-        onPaneClick={() => select(null)}
+        onEdgeClick={handleEdgeClick}
+        onPaneClick={() => {
+          select(null)
+          setEdgeMenu(null)
+        }}
         fitView
         fitViewOptions={{ padding: 0.24, maxZoom: 1.1 }}
         minZoom={0.2}
@@ -257,6 +344,59 @@ export function FlowCanvas() {
           }}
         />
       </ReactFlow>
+
+      {edgeMenu ? (
+        <div
+          className={`edge-insert ${edgeMenu.open ? 'is-open' : ''} ${
+            edgeMenu.above ? 'edge-insert--above' : ''
+          } edge-insert--${edgeMenu.align}`}
+          style={{ left: edgeMenu.x, top: edgeMenu.y }}
+        >
+          {edgeMenu.open ? (
+            <div className="edge-insert__panel" role="menu" aria-label="Insert block on connector">
+              <header className="edge-insert__head">
+                <span>Insert on connector</span>
+                <button
+                  type="button"
+                  className="edge-insert__close"
+                  aria-label="Close insert menu"
+                  onClick={() => setEdgeMenu(null)}
+                >
+                  <X size={14} aria-hidden="true" />
+                </button>
+              </header>
+              <div className="edge-insert__grid">
+                {INSERTABLE.map((item) => {
+                  const Icon = kindMeta(item.kind).icon
+                  return (
+                    <button
+                      key={item.kind}
+                      type="button"
+                      role="menuitem"
+                      className="edge-insert__item"
+                      title={item.hint}
+                      onClick={() => runEdgeInsert(item.kind)}
+                    >
+                      <Icon size={15} aria-hidden="true" />
+                      <span>{item.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="edge-insert__plus"
+              aria-label="Insert block on connector"
+              title="Insert block here"
+              onClick={() => setEdgeMenu((current) => (current ? { ...current, open: true } : current))}
+            >
+              <Plus size={16} strokeWidth={2.6} aria-hidden="true" />
+            </button>
+          )}
+        </div>
+      ) : null}
 
       <RunToolbar />
 

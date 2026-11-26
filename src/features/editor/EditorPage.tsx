@@ -200,8 +200,8 @@ export function EditorPage() {
             <PanelResizer
               orientation="vertical"
               value={paletteWidth}
-              min={170}
-              max={340}
+              min={200}
+              max={380}
               label="Resize shapes panel"
               onResize={(width) => setLayout({ paletteWidth: width })}
             />
